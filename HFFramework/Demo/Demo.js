@@ -94,6 +94,7 @@ class Demo extends Component {
                         <HFHeading level={4} text='[图像.占位图]' style={{alignSelf:'flex-start',marginBottom:10}}/>
                         <HFImage/>
                         <HFHeading level={4} text='[图像.定宽,自适应高度]' style={{alignSelf:'flex-start',marginBottom:10}}/>
+                        <HFParagraph numberOfLines={2} indentation={0} text='自适应仅对远程图片有效,本地图片请按尺寸设置'/>
                         <HFImage ratioWidth={100} uri="https://facebook.github.io/react/img/logo_og.png"/>
                         <HFImage ratioWidth={150} uri="https://facebook.github.io/react/img/logo_og.png"/>
                         <HFImage ratioWidth={200} uri="https://facebook.github.io/react/img/logo_og.png"/>
