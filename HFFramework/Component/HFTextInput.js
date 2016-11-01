@@ -3,18 +3,19 @@
  *
  * 输入框,在安卓下也可以显示(x)清空按钮
  *
- * this.props.inputStyle                    : 输入框的样式
- * this.props.placeholder                   : 文字占位符
- * this.props.keyboardType                  : 键盘类型('default', 'email-address', 'numeric', 'phone-pad', 'ascii-capable', 'numbers-and-punctuation', 'url', 'number-pad', 'name-phone-pad', 'decimal-pad', 'twitter', 'web-search')
- * this.props.maxLength                     : 最大长度
- * this.props.autoFocus                     : 默认焦点
- * this.props.onChange                      : 文本改变后方法
- * this.props.value                         : 文本值
- * this.props.underlineColorAndroid         :
- * this.props.enablesReturnKeyAutomatically :
- * this.props.clearCallback                 : 执行清空按钮后的回调方法,字符串型,一般用于将按钮置为灰色
+ * inputStyle                       : 输入框的样式
+ * placeholder                      : 文字占位符
+ * keyboardType                     : 键盘类型('default', 'email-address', 'numeric', 'phone-pad', 'ascii-capable', 'numbers-and-punctuation', 'url', 'number-pad', 'name-phone-pad', 'decimal-pad', 'twitter', 'web-search')
+ * maxLength                        : 最大长度
+ * autoFocus                        : 默认焦点
+ * onChange                         : 文本改变后方法
+ * value                            : 文本值
+ * underlineColorAndroid            :
+ * enablesReturnKeyAutomatically    :
+ * clearCallback                    : 执行清空按钮后的回调方法,字符串型,一般用于将按钮置为灰色
+ * flagInputCanAccess               : 当前输入  框激活时,是否可以对文本进行复制和粘贴(对大文本输入可能有用)
  * ================================================================================================
- * clearButtonMode                 : 始终是never,统一用按钮处理清空功能
+ * clearButtonMode                  : 始终是never,统一用按钮处理清空功能
  * ================================================================================================
  * TextInput详解
  *
