@@ -4,13 +4,14 @@
 
 'use strict';
 import React, {Component} from 'react';
-import {HFBaseStyle, HFConfiguration, View, ScrollView, RefreshControl, StyleSheet} from './../Framework';
+import {HFBaseStyle, HFConfiguration, View, ScrollView, RefreshControl, DeviceEventEmitter, StyleSheet} from './../Framework';
 
 import RenderIf from './../Utility/RenderIf';
 
 class HFPageBody extends Component {
 
     static defaultProps = {
+        ref: 'hfPageBody',
         flagNoScroll: false,
         pagePaddingBottom: 0,
     };
@@ -25,6 +26,29 @@ class HFPageBody extends Component {
         this.state = {
             refreshing: false,
         };
+    }
+
+    componentWillMount() {
+        var self = this;
+        this.hfPageBodyListener = DeviceEventEmitter.addListener('HFPageBody', function (type, value) {
+            if (type == 'HFTextInputScroll') {// 接收HFTextInputScroll的监听,当焦点聚焦到输入框时,将输入框滚动到指定的高度
+                // 当前页面是可以滚动的
+                if ((self.props.flagNoScroll == null || !self.props.flagNoScroll) && self.refs[self.props.ref]) {
+                    self.refs[self.props.ref].scrollTo({
+                        x: 0,
+                        y: value,
+                        animated: true
+                    });
+                }
+            }
+        })
+    }
+
+    componentWillUnmount() {
+        if (this.hfPageBodyListener != null) {
+            this.hfPageBodyListener.remove();
+            this.hfPageBodyListener = null;
+        }
     }
 
     onRefresh() {

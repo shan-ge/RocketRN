@@ -40,7 +40,7 @@
 
 'use strict';
 import React, {Component} from 'react';
-import {HFImage, HFConfiguration, HFBaseStyle, TouchableOpacity, View, TextInput, StyleSheet} from './../Framework';
+import {HFImage, HFConfiguration, HFBaseStyle, TouchableOpacity, View, TextInput, DeviceEventEmitter, StyleSheet} from './../Framework';
 
 import RenderIf from './../Utility/RenderIf';
 
@@ -56,7 +56,7 @@ export default class HFTextInput extends Component {
         placeholder: '请输入...',
         keyboardType: 'default',
         underlineColorAndroid: 'transparent',
-        imageSource: require('./../Image/Icon/phone_green.png')
+        imageSource: require('./../Image/Icon/phone_green.png'),
     };
 
     static propTypes = {
@@ -77,7 +77,8 @@ export default class HFTextInput extends Component {
             isLoading: false,
             error: false,
             iconSource: this.props.value && this.props.value != null && this.props.value != '' ? require('./../Image/Icon/clear.png') : null,
-            inputValue: this.props.value
+            inputValue: this.props.value,
+            inputLayoutY: 0,
         };
     }
 
@@ -118,6 +119,13 @@ export default class HFTextInput extends Component {
         }
     }
 
+    handlerInputPress(event) {
+        // 通知HFPageBody,以将视图滚动到指定高度
+        if (HFConfiguration.textInputFocusMarginTop[HFConfiguration.dpiIndex] >= 0) {
+            DeviceEventEmitter.emit('HFPageBody', 'HFTextInputScroll', this.state.inputLayoutY - HFConfiguration.textInputFocusMarginTop[HFConfiguration.dpiIndex]);
+        }
+    }
+
     /**
      * 取得输入框的值
      * 用法 let val = this.refs.inputRef.getValue();
@@ -129,7 +137,10 @@ export default class HFTextInput extends Component {
 
     render() {
         return (
-            <View style={[styles.container,HFBaseStyle.textInputView,this.props.style]}>
+            <View
+                style={[styles.container,HFBaseStyle.textInputView,this.props.style]}
+                onLayout={(event)=>{this.setState({inputLayoutY:event.nativeEvent.layout.y})}}
+            >
                 {RenderIf(this.props.flagImage && !this.props.multiline)(
                     <HFImage
                         style={[styles.image, this.props.imageStyle]}
@@ -150,6 +161,7 @@ export default class HFTextInput extends Component {
                     underlineColorAndroid={this.props.underlineColorAndroid}
                     enablesReturnKeyAutomatically={this.props.enablesReturnKeyAutomatically}
                     onChange={this.handlerChange.bind(this)}
+                    onFocus={this.handlerInputPress.bind(this)}
                 />
                 <TouchableOpacity style={[styles.button,this.props.iconStyle]}
                                   underlayColor='white'

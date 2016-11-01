@@ -100,6 +100,7 @@ var Configuration = {
     textInputFontColor: '#333333',
     textInputFontSize: textInputFontSize,// ldpi,mdpi,hdpi,xhdpi,xxhdpi
     textInputViewHeight: [40, 40, 40, 45, 50],// ldpi,mdpi,hdpi,xhdpi,xxhdpi
+    textInputFocusMarginTop: [100, 100, 100, 100, 100],// 当焦点聚焦到输入框时,页面会自动滚动,该值等于将输入框放置在距离HFPageBody显示区域的上边距(如果设置为负数,则不自动滚动)
     // 图像
     imageIconSize: [20, 20, 20, 22, 25],// ldpi,mdpi,hdpi,xhdpi,xxhdpi
 };
