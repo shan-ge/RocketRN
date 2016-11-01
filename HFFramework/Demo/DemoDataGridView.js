@@ -3,11 +3,11 @@
  * 后发App框架示例
  */
 import React, {Component} from 'react';
-import {HFPage, HFText, HFDataListView, HFHugeButton, HFConfiguration, View, StyleSheet} from './../Framework';
+import {HFPage, HFText, HFDataGridView, HFHugeButton, HFConfiguration, View, StyleSheet} from './../Framework';
 
 import Configuration from './../Configuration';
 
-class DemoDataListView extends Component {
+class DemoDataGridView extends Component {
 
     constructor(props) {
         super(props);
@@ -20,15 +20,15 @@ class DemoDataListView extends Component {
                 flagNoScroll={true}
                 flagNavigation={true}
                 navigator={this.props.navigator}
-                navigation={{title:'普通列表视图',flagLeft:true}}
+                navigation={{title:'网格列表视图',flagLeft:true}}
                 innerView={
-                    <HFDataListView
+                    <HFDataGridView
                             flagReadCache={false}
                             fetchUrl='/product/insurancePackList'
                             fetchParam={{}}
                             renderRowView={()=>{
                                 return (
-                                    <View>
+                                    <View style={{width:100,height:100,margin:5,backgroundColor:'red'}}>
                                         <HFText text="后发"/>
                                     </View>
                                 );
@@ -59,4 +59,4 @@ const styles = StyleSheet.create({
     },
 });
 
-module.exports = DemoDataListView;
+module.exports = DemoDataGridView;

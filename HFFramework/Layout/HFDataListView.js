@@ -79,7 +79,7 @@ class HFDataListView extends Component {
             return null;
         }
         if (this.props.renderRowView) {
-            return this.props.renderRowView();
+            return this.props.renderRowView(event, dataRow, sectionID, rowID, key);
         } else {
             return null;
         }
@@ -98,7 +98,7 @@ class HFDataListView extends Component {
 
     render() {
         return (
-            <View ref={this.props.ref||'dataListView'} style={[styles.outerView,this.props.style]}>
+            <View style={[styles.outerView,this.props.style]}>
                 {RenderIf(this.state.allDatas == null || this.state.allDatas.length == 0)(
                     <HFDataEmptyView
                         onRefresh={this.fetchData.bind(this)}
@@ -108,12 +108,12 @@ class HFDataListView extends Component {
                 )}
                 {RenderIf(this.state.allDatas != null && this.state.allDatas.length > 0)(
                     <ListView
-                        ref="listView"
                         style={styles.outerView}
+                        contentContainerStyle={this.props.contentContainerStyle}
                         enableEmptySections={true}
                         dataSource={this.state.dataSource}
                         renderRow={(dataRow, sectionID, rowID)=>this.renderRowView(this, dataRow, sectionID, rowID, 'dataRow_' + rowID)}
-                        renderSeparator={(sectionID,rowID)=>this.renderDataRowSeparator(this,'separator'+'_'+rowID)}
+                        renderSeparator={(sectionID, rowID)=>this.renderDataRowSeparator(this,'separator'+'_'+rowID)}
                         refreshControl={
                             <RefreshControl
                                 refreshing={this.state.refreshing}

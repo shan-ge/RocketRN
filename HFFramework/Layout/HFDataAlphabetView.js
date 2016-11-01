@@ -74,7 +74,7 @@ class HFDataAlphabetView extends Component {
             return null;
         }
         if (this.props.renderRowView) {
-            return this.props.renderRowView();
+            return this.props.renderRowView(event, dataRow, sectionID, rowID, key);
         } else {
             return null;
         }
