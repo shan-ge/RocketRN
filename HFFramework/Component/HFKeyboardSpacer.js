@@ -167,18 +167,20 @@ export default class HFKeyboardSpacer extends Component {
                                 resizeMode={Image.resizeMode.stretch}
                             />
                             {RenderIf(this.state.flagInputCanAccess && this.state.flagCanCopy)(
-                                <HFTextButton onPress={()=>this.copyContent()} text="复制" fontSizeDiff={1}
+                                <HFTextButton onPress={()=>this.copyContent()} text="复制"
+                                              fontSizeDiff={-1}
                                               style={{width:50,height:38,marginLeft:10}}
                                               textStyle={{color:HFConfiguration.mainColor}}/>
                             )}
                             {RenderIf(this.state.flagInputCanAccess && this.state.copiedString != null && this.state.copiedString != '')(
                                 <HFTextButton onPress={()=>this.setContent()} text={"粘贴:" + this.state.copiedString}
-                                              fontSizeDiff={1}
+                                              fontSizeDiff={-1}
                                               numberOfLines={1}
                                               style={{flex:1,height:38,marginLeft:10,marginRight:10}}
                                               textStyle={{color:HFConfiguration.mainColor,alignSelf:'flex-start'}}/>
                             )}
-                            <HFTextButton onPress={()=>dismissKeyboard()} text="关闭" fontSizeDiff={1}
+                            <HFTextButton onPress={()=>dismissKeyboard()} text="关闭"
+                                          fontSizeDiff={-1}
                                           style={{width:50,height:38,marginRight:10}}
                                           textStyle={{color:HFConfiguration.mainColor}}/>
                         </View>
