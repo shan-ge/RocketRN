@@ -65,6 +65,9 @@ const Framework = {
     get HFWebView() {
         return require('./Layout/HFWebView');
     },
+    get HFDataEmptyView() {
+        return require('./Layout/HFDataEmptyView');
+    },
     /**
      * 组件工具
      */

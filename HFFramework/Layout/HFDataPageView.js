@@ -67,7 +67,7 @@ class HFDataPageView extends Component {
                 } else if (res && res['status'] == 0) {
                     callback([]);
                 } else {
-                    Toast.showShortCenter('加载列表失败!');
+                    Toast.showShortCenter('未能加载列表,' + res['message']);
                     callback([]);
                 }
             }).catch(e => {
@@ -78,6 +78,11 @@ class HFDataPageView extends Component {
 
     renderRowView(event, dataRow, sectionID, rowID, key) {
         if (dataRow == null) {
+            return null;
+        }
+        if (this.props.renderRowView) {
+            return this.props.renderRowView();
+        } else {
             return null;
         }
     }

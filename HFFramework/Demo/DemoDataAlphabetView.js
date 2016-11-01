@@ -20,11 +20,11 @@ class DemoDataAlphabetView extends Component {
                 flagNoScroll={true}
                 flagNavigation={true}
                 navigator={this.props.navigator}
-                navigation={{title:'列表视图',flagLeft:true}}
+                navigation={{title:'索引列表视图',flagLeft:true}}
                 innerView={
                     <HFDataAlphabetView
                             flagReadCache={false}
-                            fetchUrl='/product/insurancePackList'
+                            fetchUrl='/treatment/findAllMedicineList'
                             fetchParam={{}}
                             renderRowView={()=>{
                                 return (

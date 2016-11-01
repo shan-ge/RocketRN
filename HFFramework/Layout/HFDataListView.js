@@ -5,7 +5,7 @@
 
 'use strict';
 import React, {Component} from 'react';
-import {HFSeparator, HFBaseStyle, HFConfiguration, HFImage, HFImageButton, View, ListView, RefreshControl, DeviceEventEmitter, TouchableOpacity, StyleSheet} from './../Framework';
+import {HFSeparator, HFBaseStyle, HFConfiguration, HFImage, HFImageButton, HFDataEmptyView, View, ListView, ScrollView, RefreshControl, DeviceEventEmitter, TouchableOpacity, StyleSheet} from './../Framework';
 
 import Toast from '@remobile/react-native-toast';
 
@@ -47,26 +47,31 @@ class HFDataListView extends Component {
     }
 
     fetchData() {
-        var fetchUrl = this.props.fetchUrl;
-        Api.get(fetchUrl, this.props.fetchParam, this.props.flagReadCache)
-            .then(res => {
-                if (res && res['status'] == 1) {
-                    let allDatas = res['data'];
-                    if (allDatas) {
-                        let ds = this.state.ds;
-                        this.setState({
-                            allDatas: allDatas,
-                            dataSource: ds.cloneWithRows(allDatas),
-                        });
+        var self = this;
+        return new Promise(function (resolve, reject) {
+            var fetchUrl = self.props.fetchUrl;
+            Api.get(fetchUrl, self.props.fetchParam, self.props.flagReadCache)
+                .then(res => {
+                    if (res && res['status'] == 1) {
+                        let allDatas = res['data'];
+                        if (allDatas) {
+                            let ds = self.state.ds;
+                            self.setState({
+                                allDatas: allDatas,
+                                dataSource: ds.cloneWithRows(allDatas),
+                            });
+                        }
+                    } else if (res && res['status'] == 0) {
+                        Toast.showShortCenter('列表为空!');
+                    } else {
+                        Toast.showShortCenter('未能加载列表,' + res['message']);
                     }
-                } else if (res && res['status'] == 0) {
-                    Toast.showShortCenter('列表为空!');
-                } else {
-                    Toast.showShortCenter('加载列表失败!');
-                }
-            }).catch(e => {
-            Toast.showShortCenter('加载列表失败!');
-        })
+                    resolve();
+                }).catch(e => {
+                Toast.showShortCenter('加载列表失败!');
+                resolve();
+            })
+        });
     }
 
     renderRowView(event, dataRow, sectionID, rowID, key) {
@@ -94,14 +99,22 @@ class HFDataListView extends Component {
     render() {
         return (
             <View ref={this.props.ref||'dataListView'} style={[styles.outerView,this.props.style]}>
-                <ListView
-                    ref="listView"
-                    style={styles.outerView}
-                    enableEmptySections={true}
-                    dataSource={this.state.dataSource}
-                    renderRow={(dataRow, sectionID, rowID)=>this.renderRowView(this, dataRow, sectionID, rowID, 'dataRow_' + rowID)}
-                    renderSeparator={(sectionID,rowID)=>this.renderDataRowSeparator(this,'separator'+'_'+rowID)}
-                    refreshControl={
+                {RenderIf(this.state.allDatas == null || this.state.allDatas.length == 0)(
+                    <HFDataEmptyView
+                        onRefresh={this.fetchData.bind(this)}
+                        renderEmptyView={this.props.renderEmptyView}
+                        emptyImageSource={this.props.emptyImageSource}
+                        emptyImageWidthHeightRatio={this.props.emptyImageWidthHeightRatio}/>
+                )}
+                {RenderIf(this.state.allDatas != null && this.state.allDatas.length > 0)(
+                    <ListView
+                        ref="listView"
+                        style={styles.outerView}
+                        enableEmptySections={true}
+                        dataSource={this.state.dataSource}
+                        renderRow={(dataRow, sectionID, rowID)=>this.renderRowView(this, dataRow, sectionID, rowID, 'dataRow_' + rowID)}
+                        renderSeparator={(sectionID,rowID)=>this.renderDataRowSeparator(this,'separator'+'_'+rowID)}
+                        refreshControl={
                             <RefreshControl
                                 refreshing={this.state.refreshing}
                                 onRefresh={this.fetchData.bind(this)}
@@ -111,7 +124,8 @@ class HFDataListView extends Component {
                                 colors={[HFConfiguration.mainColor]}
                             />
                         }
-                />
+                    />
+                )}
             </View>
         );
     }

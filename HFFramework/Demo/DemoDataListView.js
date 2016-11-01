@@ -20,11 +20,11 @@ class DemoDataListView extends Component {
                 flagNoScroll={true}
                 flagNavigation={true}
                 navigator={this.props.navigator}
-                navigation={{title:'列表视图',flagLeft:true}}
+                navigation={{title:'普通列表视图',flagLeft:true}}
                 innerView={
                     <HFDataListView
                             flagReadCache={false}
-                            fetchUrl='/product/insurancePackList'
+                            fetchUrl='/product/insurancePackList1'
                             fetchParam={{}}
                             renderRowView={()=>{
                                 return (

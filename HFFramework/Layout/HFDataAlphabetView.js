@@ -5,7 +5,7 @@
 
 'use strict';
 import React, {Component} from 'react';
-import {HFSeparator, HFBaseStyle, HFConfiguration, HFImage, HFImageButton, View, ListView, DeviceEventEmitter, TouchableOpacity, StyleSheet} from './../Framework';
+import {HFSeparator, HFBaseStyle, HFConfiguration, HFDataEmptyView, View, ListView, DeviceEventEmitter, TouchableOpacity, StyleSheet} from './../Framework';
 
 import Toast from '@remobile/react-native-toast';
 var AlphabetListView = require('react-native-alphabetlistview');
@@ -35,7 +35,6 @@ class HFDataAlphabetView extends Component {
         this.state = {
             hasMoreData: false,
             allDatas: [],
-            queryDatas: [],
         };
     }
 
@@ -44,30 +43,39 @@ class HFDataAlphabetView extends Component {
     }
 
     fetchData() {
-        var fetchUrl = this.props.fetchUrl;
-        Api.get(fetchUrl, this.props.fetchParam, this.props.flagReadCache)
-            .then(res => {
-                if (res && res['status'] == 1) {
-                    let allDatas = res['data'];
-                    if (allDatas) {
-                        //
-                        this.setState({
-                            allDatas: allDatas,
-                            queryDatas: allDatas,
-                        });
+        var self = this;
+        return new Promise(function (resolve, reject) {
+            var fetchUrl = self.props.fetchUrl;
+            Api.get(fetchUrl, self.props.fetchParam, self.props.flagReadCache)
+                .then(res => {
+                    if (res && res['status'] == 1) {
+                        let allDatas = res['data'];
+                        if (allDatas) {
+                            //
+                            self.setState({
+                                allDatas: allDatas,
+                            });
+                        }
+                    } else if (res && res['status'] == 0) {
+                        Toast.showShortCenter('列表为空!');
+                    } else {
+                        Toast.showShortCenter('未能加载列表,' + res['message']);
                     }
-                } else if (res && res['status'] == 0) {
-                    Toast.showShortCenter('列表为空!');
-                } else {
-                    Toast.showShortCenter('加载列表失败!');
-                }
-            }).catch(e => {
-            Toast.showShortCenter('加载列表失败!');
-        })
+                    resolve();
+                }).catch(e => {
+                Toast.showShortCenter('加载列表失败!');
+                resolve();
+            })
+        });
     }
 
     renderRowView(event, dataRow, sectionID, rowID, key) {
         if (dataRow == null) {
+            return null;
+        }
+        if (this.props.renderRowView) {
+            return this.props.renderRowView();
+        } else {
             return null;
         }
     }
@@ -91,19 +99,28 @@ class HFDataAlphabetView extends Component {
     render() {
         return (
             <View ref={this.props.ref||'dataAlphabetView'} style={[styles.outerView,this.props.style]}>
-                <AlphabetListView
-                    ref="alphabetListView"
-                    style={styles.outerView}
-                    enableEmptySections={true}
-                    data={this.state.queryDatas}
-                    cell={Cell}
-                    cellProps={{medicineImageUrlPrefix:this.state.medicineImageUrlPrefix,exceptMedicineIds: this.props.exceptMedicineIds}}
-                    onCellSelect={(dataRow)=>{this.handlerDataRowPress(this,dataRow)}}
-                    sectionListItem={SectionItem}
-                    sectionHeader={SectionHeader}
-                    cellHeight={80.25}
-                    sectionHeaderHeight={0}
-                />
+                {RenderIf(this.state.allDatas == null || this.state.allDatas.length == 0)(
+                    <HFDataEmptyView
+                        onRefresh={this.fetchData.bind(this)}
+                        renderEmptyView={this.props.renderEmptyView}
+                        emptyImageSource={this.props.emptyImageSource}
+                        emptyImageWidthHeightRatio={this.props.emptyImageWidthHeightRatio}/>
+                )}
+                {RenderIf(this.state.allDatas != null && this.state.allDatas.length > 0)(
+                    <AlphabetListView
+                        ref="alphabetListView"
+                        style={styles.outerView}
+                        enableEmptySections={true}
+                        data={this.state.allDatas}
+                        cell={Cell}
+                        cellProps={{medicineImageUrlPrefix:this.state.medicineImageUrlPrefix,exceptMedicineIds: this.props.exceptMedicineIds}}
+                        onCellSelect={(dataRow)=>{this.handlerDataRowPress(this, dataRow)}}
+                        sectionListItem={SectionItem}
+                        sectionHeader={SectionHeader}
+                        cellHeight={80}
+                        sectionHeaderHeight={30}
+                    />
+                )}
             </View>
         );
     }
