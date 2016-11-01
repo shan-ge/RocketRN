@@ -93,6 +93,8 @@
 |  可分页列表 | HFDataPageView | 数据类型Page,有分页的包装List |
 |  可索引列表 | HFDataAlphabetView | 数据类型Map,可按索引显示.如A-Z |
 |  网格视图 | HFDataGridView | 每行显示指定数量的视图,类似九宫格等 |
+|  空视图 | HFDataEmptyView | 列表为空时,显示的视图 |
+|  行视图 | HFDataRowView | 列表的行视图 |
 |  网页视图 | HFWebView | 网页的包装 |
 |  待.. | 补.. | 充.. |
 

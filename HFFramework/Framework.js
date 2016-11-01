@@ -68,6 +68,9 @@ const Framework = {
     get HFDataEmptyView() {
         return require('./Layout/HFDataEmptyView');
     },
+    get HFDataRowView() {
+        return require('./Layout/HFDataRowView');
+    },
     /**
      * 组件工具
      */
