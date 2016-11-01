@@ -14,6 +14,7 @@ import {HFHeading,
     HFHugeButton,
     HFMediumButton,
     HFImageButton,
+    HFTextButton,
     HFConfiguration,
     HFParagraph,
     HFTextInput,
@@ -87,7 +88,7 @@ class Demo extends Component {
                         <HFParagraph numberOfLines={2} text='有缩进的,段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落'/>
                         <HFParagraph numberOfLines={3} indentation={0} text='无缩进的,段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落'/>
                         <HFImage/>
-                        <HFImage ratioWidth={500} style={{width:200,height:200}} uri="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQfCPyLIgrw3oEuIisrlnms646SmKWysDW9uxTzBkfohjQoDlhc"/>
+                        <HFImage ratioWidth={300} uri="https://facebook.github.io/react/img/logo_og.png"/>
                         <HFSeparator/>
                         <HFHeading level={1} text='[输入框]' style={{alignSelf:'flex-start',marginBottom:10}}/>
                         <HFTextInput placeholder='请输入账号...' flagImage={true}/>
@@ -97,9 +98,11 @@ class Demo extends Component {
                         <HFTextInput multiline={true} style={{height:100}} inputStyle={{height:80}}/>
                         <HFSeparator/>
                         <HFHeading level={1} text='[按钮]' style={{alignSelf:'flex-start',marginBottom:10}}/>
+                        <HFTextButton text="文本按钮" style={{marginTop:HFConfiguration.buttonImageMarginTop}}/>
                         <HFImageButton flagLeftText={true} flagRightText={true} leftText="左" rightText="右" source={require('./Image/demo_nav.png')}/>
-                        <HFMediumButton text="完成"/>
+                         <HFMediumButton text="完成"/>
                         <HFHugeButton text="下一页"/>
+                        <HFTextButton disabled={true} text="文本按钮" style={{marginTop:HFConfiguration.buttonImageMarginTop}}/>
                         <HFImageButton disabled={true} flagLeftText={true} flagRightText={true} leftText="左" rightText="右" source={require('./Image/demo_nav.png')}/>
                         <HFMediumButton disabled={true} text="完成"/>
                         <HFHugeButton disabled={true} text="下一页"/>

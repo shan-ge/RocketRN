@@ -1,12 +1,7 @@
 /**
- * Created by shange on 16/8/10. 输入框 左侧label image图片模块
+ * Created by shange on 16/8/10. 图片按钮 左侧label image图片模块
  *
  * 图标按钮,一般是点击切换按钮图片所使用
- *
- * this.props.style         : 按钮样式
- * this.props.onPress       : 按钮事件
- * this.props.iconStyle     : 按钮图片样式
- * this.props.source        : 按钮图片来源 require('../../Image/icon_password_hide.png')
  */
 
 'use strict';

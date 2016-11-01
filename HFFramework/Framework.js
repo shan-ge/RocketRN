@@ -131,6 +131,9 @@ const Framework = {
     get HFImageButton() {
         return require('./Component/HFImageButton');
     },
+    get HFTextButton() {
+        return require('./Component/HFTextButton');
+    },
     /**
      * 方法类工具
      */

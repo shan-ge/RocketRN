@@ -4,11 +4,8 @@
 
 'use strict';
 import React, {Component} from 'react';
-import {HFBaseStyle, HFConfiguration, Image, StyleSheet} from './../Framework';
+import {HFBaseStyle, HFConfiguration, Image, ActivityIndicator, StyleSheet} from './../Framework';
 
-var self;
-var imageRef;
-var ratioWidth, ratioHeight;
 class HFImage extends Component {
 
     static defaultProps = {
@@ -38,30 +35,16 @@ class HFImage extends Component {
             source: null,
             imageLoading: false,
         };
-        self = this;
-        ratioWidth = this.props.ratioWidth;
-        ratioHeight = this.props.ratioHeight;
     }
 
     componentWillMount() {
         if (this.props.uri != null) {
-            Image.prefetch(this.props.uri);
-        }
-    }
-
-    render() {
-        let source = this.props.source;
-        if (source == null) {
-            if (this.props.uri != null) {
-                source = {uri: this.props.uri};
-                var _width = HFConfiguration.windowWidth;
-                // 如果是远程图片,以此来获取图片的真实尺寸并匹配屏幕.如果是本地图片需要自己定义尺寸.
+            let self = this;
+            let ratioWidth = this.props.ratioWidth;
+            let ratioHeight = this.props.ratioHeight;
+            Image.prefetch(this.props.uri).then(()=> {
                 Image.getSize(this.props.uri, (w, h)=> {
                     let ratio = w / h;
-                    if (w > _width) {
-                        w = _width;
-                        h = parseInt(w / ratio);
-                    }
                     // 注意,此二者不会同时生效
                     if (ratioWidth != null && ratioWidth > 0) {// 若定宽,则高度按比例自适应
                         h = parseInt(ratioWidth / ratio);
@@ -70,21 +53,32 @@ class HFImage extends Component {
                         w = parseInt(ratioHeight * ratio);
                         h = ratioHeight;
                     }
-                    /*
-                     if (self && imageRef) {
-                     self.setState({
-                     imageWidth: w,
-                     imageHeight: h,
-                     });
-                     }
-                     imageRef.setNativeProps({
-                     style: {
-                     width: w,
-                     height: h,
-                     }
-                     });
-                     */
+                    let _width = HFConfiguration.windowWidth;
+                    if (w > _width) {
+                        w = _width;
+                        h = parseInt(w / ratio);
+                    }
+                    if (self) {
+                        self.setState({
+                            imageWidth: w,
+                            imageHeight: h,
+                        });
+                    }
+                }, error=> {
+                    //console.error('获取图片尺寸失败');
                 });
+            }, error=> {
+                //console.error('缓存图片失败');
+            });
+        }
+    }
+
+    render() {
+        let source = this.props.source;
+        if (source == null) {
+            if (this.props.uri != null) {
+                source = {uri: this.props.uri};
+                // 如果是远程图片,以此来获取图片的真实尺寸并匹配屏幕.如果是本地图片需要自己定义尺寸.
             } else {
                 // 既没有source,又没有uri.显示占位符
                 let flagNoPlaceholder = this.props.flagNoPlaceholder;
@@ -95,30 +89,25 @@ class HFImage extends Component {
                 }
             }
         }
-        // 如果加载失败,则显示占位图
         return (
             <Image
-                ref={ref=>imageRef = ref}
                 source={source}
                 resizeMode="contain"
                 style={[styles.image,{width:this.state.imageWidth,height:this.state.imageHeight},this.props.style]}
-                onLoadStart={(event) => this.setState({imageLoading: true})}
-                onLoadEnd={(event)=>{
-                    this.setState({imageLoading: false});
-                    /*
-                    let flagNoPlaceholder = this.props.flagNoPlaceholder;
-                    if (flagNoPlaceholder == null || !flagNoPlaceholder) {
-                        imageRef.setNativeProps({source: require('./../Image/no_image.png')});
-                    }
-                    */
-                }}
-            />
+                onLoadStart={() => this.setState({imageLoading: true})}
+                onLoad={() => this.setState({imageLoading: false})}
+            >
+                <ActivityIndicator animating={this.state.imageLoading} size="small"/>
+            </Image>
         )
     }
 }
 
 const styles = StyleSheet.create({
-    image: {}
+    image: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
 });
 
 module.exports = HFImage;
