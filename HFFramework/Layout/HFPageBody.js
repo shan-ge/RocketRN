@@ -47,7 +47,6 @@ class HFPageBody extends Component {
     componentWillUnmount() {
         if (this.hfPageBodyListener != null) {
             this.hfPageBodyListener.remove();
-            this.hfPageBodyListener = null;
         }
     }
 

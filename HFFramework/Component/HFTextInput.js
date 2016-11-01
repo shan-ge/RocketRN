@@ -43,6 +43,7 @@ import React, {Component} from 'react';
 import {HFImage, HFConfiguration, HFBaseStyle, TouchableOpacity, View, TextInput, DeviceEventEmitter, StyleSheet} from './../Framework';
 
 import RenderIf from './../Utility/RenderIf';
+import UUIDGenerator from 'react-native-uuid-generator';
 
 export default class HFTextInput extends Component {
 
@@ -52,6 +53,7 @@ export default class HFTextInput extends Component {
         autoFocus: false,
         secureTextEntry: false,
         enablesReturnKeyAutomatically: true,
+        flagInputCanAccess: false,// 当前输入框激活时,是否可以对文本进行复制和粘贴(对大文本输入可能有用)
         maxLength: 9999,
         placeholder: '请输入...',
         keyboardType: 'default',
@@ -65,6 +67,7 @@ export default class HFTextInput extends Component {
         autoFocus: React.PropTypes.bool,
         secureTextEntry: React.PropTypes.bool,
         enablesReturnKeyAutomatically: React.PropTypes.bool,
+        flagInputCanAccess: React.PropTypes.bool,
         maxLength: React.PropTypes.number,
         placeholder: React.PropTypes.string,
         keyboardType: React.PropTypes.string,
@@ -73,13 +76,46 @@ export default class HFTextInput extends Component {
 
     constructor(props) {
         super(props);
+        let value = this.props.value;
         this.state = {
             isLoading: false,
             error: false,
-            iconSource: this.props.value && this.props.value != null && this.props.value != '' ? require('./../Image/Icon/clear.png') : null,
-            inputValue: this.props.value,
+            iconSource: value && value != null && value != '' ? require('./../Image/Icon/clear.png') : null,
+            inputValue: value && value != null && value != '' ? value : '',
             inputLayoutY: 0,
+            textInputUUID: null,
+            flagInputCanAccess: this.props.flagInputCanAccess,
         };
+    }
+
+    componentWillMount() {
+        let self = this;
+        UUIDGenerator.getRandomUUID().then((uuid) => {
+            self.setState({
+                textInputUUID: uuid
+            });
+        });
+        // 与键盘扩展区的互动
+        this.hfTextInputListener = DeviceEventEmitter.addListener('HFTextInput', function (type, value) {
+            if (self.state.flagInputCanAccess && type.indexOf('HFKeyboardSpacer.setContent') == 0) {// 从扩展区粘贴
+                let uuid = type.substring('HFKeyboardSpacer.setContent'.length, type.length);
+                if (uuid == self.state.textInputUUID) {
+                    self.setState({
+                        inputValue: self.state.inputValue + value,
+                        iconSource: require('./../Image/Icon/clear.png')
+                    });
+                }
+            } else if (self.state.flagInputCanAccess && type == 'HFKeyboardSpacer.getContent') {
+                DeviceEventEmitter.emit('HFKeyboardSpacer', 'HFTextInputValue', self.props.secureTextEntry ? null : self.state.inputValue);
+            }
+        })
+    }
+
+    componentWillUnmount() {
+        this._listeners.forEach(listener => listener.remove());
+        if (this.hfTextInputListener != null) {
+            this.hfTextInputListener.remove();
+        }
     }
 
     handlerToggleClear(event) {
@@ -117,12 +153,25 @@ export default class HFTextInput extends Component {
         if (onChange) {
             onChange(event);
         }
+        if (this.state.flagInputCanAccess) {
+            // 通知键盘扩展区,可以复制
+            DeviceEventEmitter.emit('HFKeyboardSpacer', 'HFTextInputFlagCopy', !this.props.secureTextEntry && val != null && val != '');
+        }
     }
 
-    handlerInputPress(event) {
+    handlerInputFocus(event) {
         // 通知HFPageBody,以将视图滚动到指定高度
         if (HFConfiguration.textInputFocusMarginTop[HFConfiguration.dpiIndex] >= 0) {
             DeviceEventEmitter.emit('HFPageBody', 'HFTextInputScroll', this.state.inputLayoutY - HFConfiguration.textInputFocusMarginTop[HFConfiguration.dpiIndex]);
+        }
+        // 通知扩展区是否允许复制和粘贴
+        DeviceEventEmitter.emit('HFKeyboardSpacer', 'HFTextInputAccess', this.state.flagInputCanAccess);
+        //
+        if (this.state.flagInputCanAccess) {
+            // 通知键盘弹出层,传递当前的组件引用(密码输入框不能复制)
+            DeviceEventEmitter.emit('HFKeyboardSpacer', 'HFTextInputUUID', this.state.textInputUUID);
+            // 通知键盘扩展区,可以复制
+            DeviceEventEmitter.emit('HFKeyboardSpacer', 'HFTextInputFlagCopy', !this.props.secureTextEntry && this.state.inputValue != null && this.state.inputValue != '');
         }
     }
 
@@ -154,6 +203,7 @@ export default class HFTextInput extends Component {
                     value={this.state.inputValue}
                     multiline={this.props.multiline}
                     placeholder={this.props.placeholder}
+                    placeholderTextColor='#cccccc'
                     secureTextEntry={this.props.secureTextEntry}
                     keyboardType={this.props.keyboardType}
                     maxLength={this.props.maxLength}
@@ -161,7 +211,7 @@ export default class HFTextInput extends Component {
                     underlineColorAndroid={this.props.underlineColorAndroid}
                     enablesReturnKeyAutomatically={this.props.enablesReturnKeyAutomatically}
                     onChange={this.handlerChange.bind(this)}
-                    onFocus={this.handlerInputPress.bind(this)}
+                    onFocus={this.handlerInputFocus.bind(this)}
                 />
                 <TouchableOpacity style={[styles.button,this.props.iconStyle]}
                                   underlayColor='white'

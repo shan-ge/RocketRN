@@ -126,6 +126,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-uuid-generator')
     compile project(':react-native-vector-icons')
     compile project(':react-native-fetch-blob')
     compile project(':@remobile/react-native-toast')

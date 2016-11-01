@@ -101,11 +101,11 @@ class Demo extends Component {
                         <HFImage ratioWidth={300} uri="https://facebook.github.io/react/img/logo_og.png"/>
                         <HFSeparator/>
                         <HFHeading level={1} text='[输入框]' style={{alignSelf:'flex-start',marginBottom:10}}/>
-                        <HFTextInput placeholder='请输入账号...' flagImage={true}/>
+                        <HFTextInput placeholder='请输入账号...' keyboardType="numeric" maxLength={11} flagImage={true}/>
                         <HFSeparator style={{marginTop:0,marginBottom:0}}/>
                         <HFTextInput placeholder='请输入密码...' secureTextEntry={true} flagImage={true} imageSource={require('./Image/lock_green.png')}/>
                         <HFSeparator style={{marginTop:0,marginBottom:0}}/>
-                        <HFTextInput multiline={true} style={{height:100}} inputStyle={{height:80}}/>
+                        <HFTextInput multiline={true} flagInputCanAccess={true} value="这个输入框的文本,可以在键盘区域进行复制和粘贴" style={{height:100}} inputStyle={{height:80}}/>
                         <HFSeparator/>
                         <HFHeading level={1} text='[按钮]' style={{alignSelf:'flex-start',marginBottom:10}}/>
                         <HFTextButton text="这是一段可响应点击事件的文本" style={{marginTop:HFConfiguration.buttonImageMarginTop}} onPress={()=>this.toCall()}/>

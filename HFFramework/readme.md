@@ -1,7 +1,5 @@
 # 后发移动端react-native前端框架
 
---------
-
 ## 组件版本
 - React ```15.3.2```
 - ReactNative ```0.36.0```
@@ -31,10 +29,12 @@
 - 附件上传 ```npm install --save react-native-fetch-blob```
 - 消息提示 ```npm install --save @remobile/react-native-toast```
 - 应用缓存 ```npm install --save react-native-storage```
+- UUID生成器 ```npm install --save react-native-uuid-generator``` <font color=gray>只在真机下才真正生效</font>
 
 ## 当前版本需要特别加入到git的文件(详见.gitignore)
 - node_modules/react-native-swipeout/index.js
 - node_modules/react-native-gifted-spinner/GiftedSpinner.js
+- node_modules/react-native-uuid-generator/index.js
 
 --------
 
@@ -64,7 +64,7 @@
 |  名称 | 路径 | 功能说明 |
 |  -------- | -------- | -------- |
 |  **图像** | HFImage | 可本地可远程,自适应尺寸,有加载动画,获取图像失败则显示占位图 |
-|  **文本** | HFText | 从配置中获取字体样式,缩放控制 |
+|  **文本** | HFText | 从配置中获取字体样式,缩放控制.字体大小通过偏移量fontSizeDiff来设置其它尺寸 |
 |  视图 | HFView | 可统一设置内外边距 |
 |  文本段落 | HFParagraph | 显示一段文字 |
 |  提示框 | HFAlert | 弹出一个提示框 |

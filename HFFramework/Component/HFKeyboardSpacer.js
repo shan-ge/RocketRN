@@ -4,7 +4,7 @@
  */
 
 import React, { Component, PropTypes } from 'react';
-import {HFText, Keyboard, LayoutAnimation, View, Platform, TouchableOpacity, Image, Dimensions, StyleSheet} from './../Framework';
+import {HFTextButton, HFText, HFConfiguration, Keyboard, LayoutAnimation, View, Platform, TouchableOpacity, Image, Clipboard, Dimensions, DeviceEventEmitter, StyleSheet} from './../Framework';
 import dismissKeyboard from 'react-native/Libraries/Utilities/dismissKeyboard';
 import RenderIf from './../Utility/RenderIf';
 
@@ -39,10 +39,38 @@ export default class HFKeyboardSpacer extends Component {
         this.state = {
             keyboardSpace: 0,
             isKeyboardOpened: false,
+            flagInputCanAccess: false,// 是否允许访问TextInput.若否,则复制和粘贴均不显示
+            flagCanCopy: false,
+            copiedString: '',
+            textInputUUID: null,
         };
         this._listeners = null;
         this.updateKeyboardSpace = this.updateKeyboardSpace.bind(this);
         this.resetKeyboardSpace = this.resetKeyboardSpace.bind(this);
+    }
+
+    componentWillMount() {
+        this.regetClipboardContent();
+        //
+        var self = this;
+        this.hfKeyboardSpacerListener = DeviceEventEmitter.addListener('HFKeyboardSpacer', function (type, value) {
+            if (type == 'HFTextInputUUID') {// 获取当前激活状态的输入框
+                self.setState({textInputUUID: value});
+            } else if (type == 'HFTextInputAccess') {// 获取当前激活状态输入框的配置,是否可以显示复制和粘贴
+                self.setState({flagInputCanAccess: value});
+            } else if (type == 'HFTextInputValue') {// 获取当前激活状态输入框的值,并设置到剪贴板中
+                if (value != null && value != '') {
+                    Clipboard.setString(value);
+                    self.setState({
+                        copiedString: value,
+                    });
+                }
+            } else if (type == 'HFTextInputFlagCopy') {// 判断当前激活状态输入框的值,是否可以复制
+                self.setState({
+                    flagCanCopy: value,
+                });
+            }
+        })
     }
 
     componentDidMount() {
@@ -62,6 +90,9 @@ export default class HFKeyboardSpacer extends Component {
 
     componentWillUnmount() {
         this._listeners.forEach(listener => listener.remove());
+        if (this.hfKeyboardSpacerListener != null) {
+            this.hfKeyboardSpacerListener.remove();
+        }
     }
 
     updateKeyboardSpace(frames) {
@@ -75,7 +106,7 @@ export default class HFKeyboardSpacer extends Component {
             keyboardSpace: spaceHeight,
             isKeyboardOpened: true
         }, this.props.onToggle(true, spaceHeight));
-        // 自动滚动
+        // 自动滚动(已废弃)
         if (Platform.OS == 'ios' && this.props.scrollView != null) {
             if (spaceHeight > 0) {
                 this.props.scrollView.scrollTo({
@@ -87,6 +118,7 @@ export default class HFKeyboardSpacer extends Component {
                 this.props.scrollView.scrollTo({x: 0, y: 0, animated: true});
             }
         }
+        this.regetClipboardContent();
     }
 
     resetKeyboardSpace() {
@@ -95,9 +127,28 @@ export default class HFKeyboardSpacer extends Component {
             keyboardSpace: 0,
             isKeyboardOpened: false
         }, this.props.onToggle(false, 0));
-        // 上划滚动层
+        // 上划滚动层(已废弃)
         if (Platform.OS == 'ios' && this.props.scrollView) {
             this.props.scrollView.scrollTo({x: 0, y: 0, animated: true});
+        }
+    }
+
+    // 密码输入框不可复制
+    copyContent() {
+        DeviceEventEmitter.emit('HFTextInput', 'HFKeyboardSpacer.getContent', null);
+        this.regetClipboardContent();
+    }
+
+    setContent() {
+        this.setState({flagCanCopy: true});
+        DeviceEventEmitter.emit('HFTextInput', 'HFKeyboardSpacer.setContent' + this.state.textInputUUID, this.state.copiedString);
+    }
+
+    async regetClipboardContent() {
+        try {
+            var content = await Clipboard.getString();
+            this.setState({copiedString: content});
+        } catch (e) {
         }
     }
 
@@ -115,16 +166,21 @@ export default class HFKeyboardSpacer extends Component {
                                 source={require('./../Image/Icon/logo.png')}
                                 resizeMode={Image.resizeMode.stretch}
                             />
-                            <TouchableOpacity
-                                style={{marginRight:10}}
-                                underlayColor='white'
-                                activeOpacity={0.4}
-                                onPress={()=>{
-                                    dismissKeyboard();
-                                }}
-                            >
-                                <HFText style={{fontSize:18,color:'#00cf92'}} text='完成'/>
-                            </TouchableOpacity>
+                            {RenderIf(this.state.flagInputCanAccess && this.state.flagCanCopy)(
+                                <HFTextButton onPress={()=>this.copyContent()} text="复制" fontSizeDiff={1}
+                                              style={{width:50,height:38,marginLeft:10}}
+                                              textStyle={{color:HFConfiguration.mainColor}}/>
+                            )}
+                            {RenderIf(this.state.flagInputCanAccess && this.state.copiedString != null && this.state.copiedString != '')(
+                                <HFTextButton onPress={()=>this.setContent()} text={"粘贴:" + this.state.copiedString}
+                                              fontSizeDiff={1}
+                                              numberOfLines={1}
+                                              style={{flex:1,height:38,marginLeft:10,marginRight:10}}
+                                              textStyle={{color:HFConfiguration.mainColor,alignSelf:'flex-start'}}/>
+                            )}
+                            <HFTextButton onPress={()=>dismissKeyboard()} text="关闭" fontSizeDiff={1}
+                                          style={{width:50,height:38,marginRight:10}}
+                                          textStyle={{color:HFConfiguration.mainColor}}/>
                         </View>
                     </View>
                 )}

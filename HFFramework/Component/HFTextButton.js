@@ -31,6 +31,7 @@ class HFTextButton extends Component {
             >
                 <HFText fontSizeDiff={this.props.fontSizeDiff}
                         text={this.props.text}
+                        numberOfLines={this.props.numberOfLines}
                         style={[styles.text,{fontSize:HFConfiguration.buttonFontSize[HFConfiguration.dpiIndex] + this.props.fontSizeDiff},this.props.disabled && styles.disabled,!(this.props.disabled) && styles.enabled,this.props.textStyle]}
                 />
             </TouchableOpacity>
