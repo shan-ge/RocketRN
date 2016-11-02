@@ -24,11 +24,12 @@ class DemoDataGridView extends Component {
                 innerView={
                     <HFDataGridView
                             flagReadCache={false}
+                            columnCount={3}
                             fetchUrl='/product/insurancePackList'
                             fetchParam={{}}
                             renderRowView={()=>{
                                 return (
-                                    <View style={{width:100,height:100,margin:5,backgroundColor:'red'}}>
+                                    <View style={{height:100,backgroundColor:'white'}}>
                                         <HFText text="后发"/>
                                     </View>
                                 );

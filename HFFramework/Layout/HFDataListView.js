@@ -5,23 +5,37 @@
 
 'use strict';
 import React, {Component} from 'react';
-import {HFSeparator, HFBaseStyle, HFConfiguration, HFImage, HFImageButton, HFDataEmptyView, View, ListView, ScrollView, RefreshControl, DeviceEventEmitter, TouchableOpacity, StyleSheet} from './../Framework';
+import {HFSeparator,
+    HFBaseStyle,
+    HFConfiguration,
+    HFImage,
+    HFImageButton,
+    HFDataEmptyView,
+    View,
+    ListView,
+    RefreshControl,
+    DeviceEventEmitter,
+    TouchableOpacity,
+    StyleSheet} from './../Framework';
 
 import Toast from '@remobile/react-native-toast';
 
 import Api from './../Utility/Api';
 import RenderIf from './../Utility/RenderIf';
 
+var TimerIndex, TimerCount = 0;
 class HFDataListView extends Component {
 
     static defaultProps = {
         flagReadCache: false,// 是否读取缓存
+        flagIsGrid: false,// 是否网格视图
         emptyImageSource: require('./../Image/no_history.png'),
         emptyImageWidthHeightRatio: 1080 / 551,// 空视图的宽高比,宽度由框架来控制,开发者只给出比例即可
     };
 
     static propTypes = {
         flagReadCache: React.PropTypes.bool,// 是否读取缓存
+        flagIsGrid: React.PropTypes.bool,// 是否网格视图
         fetchUrl: React.PropTypes.string.isRequired,// 请求的链接(必须)
         emptyImageWidthHeightRatio: React.PropTypes.number,// 空视图图片的宽高比
         // 视图
@@ -36,6 +50,7 @@ class HFDataListView extends Component {
         this.state = {
             refreshing: false,
             hasMoreData: false,
+            dataGridRowStyle: this.props.dataGridRowStyle,
             ds: ds,
             allDatas: allDatas,
             dataSource: ds.cloneWithRows(allDatas),
@@ -43,7 +58,38 @@ class HFDataListView extends Component {
     }
 
     componentWillMount() {
+        // 请求数据
         this.fetchData();
+        // 网格视图经测试经常无法正常渲染,由下面方法解决
+        if (this.props.flagIsGrid) {
+            if (TimerIndex) {
+                clearInterval(TimerIndex);
+            }
+            TimerCount = 0;
+            TimerIndex = setInterval(() => {
+                // 如果不在这个页面了,这个值就是undefined
+                if (TimerCount <= 9) {
+                    TimerCount++;
+                    if (this.refs.dataListView) {
+                        this.refs.dataListView.scrollTo({
+                            x: 0,
+                            y: (TimerCount % 2 == 0 ? 0.5 : 0),
+                            animated: true
+                        });
+                    }
+                } else {
+                    if (TimerIndex) {
+                        clearInterval(TimerIndex);
+                    }
+                }
+            }, 200);
+        }
+    }
+
+    componentWillUnMount() {
+        if (this.props.flagIsGrid && TimerIndex) {
+            clearInterval(TimerIndex);
+        }
     }
 
     fetchData() {
@@ -76,12 +122,16 @@ class HFDataListView extends Component {
 
     renderRowView(event, dataRow, sectionID, rowID, key) {
         if (dataRow == null) {
-            return null;
+            return <View style={[styles.innerView,this.state.dataGridRowStyle,{height:100}]}/>;
         }
         if (this.props.renderRowView) {
-            return this.props.renderRowView(event, dataRow, sectionID, rowID, key);
+            return (
+                <View style={[styles.innerView,this.state.dataGridRowStyle]}>
+                    {this.props.renderRowView(event, dataRow, sectionID, rowID, key)}
+                </View>
+            );
         } else {
-            return null;
+            return <View style={[styles.innerView,this.state.dataGridRowStyle,{height:100}]}/>;
         }
     }
 
@@ -108,6 +158,7 @@ class HFDataListView extends Component {
                 )}
                 {RenderIf(this.state.allDatas != null && this.state.allDatas.length > 0)(
                     <ListView
+                        ref="dataListView"
                         style={styles.outerView}
                         contentContainerStyle={this.props.contentContainerStyle}
                         enableEmptySections={true}
@@ -136,6 +187,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignSelf: 'stretch',
     },
+    innerView: {}
 });
 
 module.exports = HFDataListView;

@@ -29,7 +29,7 @@
 - 附件上传 ```npm install --save react-native-fetch-blob```
 - 消息提示 ```npm install --save @remobile/react-native-toast```
 - 应用缓存 ```npm install --save react-native-storage```
-- UUID生成器 ```npm install --save react-native-uuid-generator``` <font color=gray>只在真机下才真正生效</font>
+- UUID生成器 ```npm install --save react-native-uuid-generator```
 
 ## 当前版本需要特别加入到git的文件(详见.gitignore)
 - node_modules/react-native-swipeout/index.js

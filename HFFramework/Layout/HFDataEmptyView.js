@@ -34,24 +34,29 @@ class HFDataEmptyView extends Component {
             let result = this.props.onRefresh();
             if (result) {
                 result.then(()=> {
-                    self.setState({
-                        refreshing: false
-                    });
+                    if (this.refs.dataEmptyView) {
+                        self.setState({
+                            refreshing: false
+                        });
+                    }
                 });
+            }
+        } else {
+            if (this.refs.dataEmptyView) {
                 this.setState({
                     refreshing: false
                 });
             }
-        } else {
-            this.setState({
-                refreshing: false
-            });
         }
     }
 
     render() {
         if (this.props.renderEmptyView) {
-            return this.props.renderEmptyView;
+            return (
+                <View ref="dataEmptyView" style={styles.outerView}>
+                    {this.props.renderEmptyView}
+                </View>
+            );
         } else {
             let w = HFConfiguration.windowWidth;
             let h = parseInt(HFConfiguration.windowWidth / this.props.emptyImageWidthHeightRatio);
@@ -59,6 +64,7 @@ class HFDataEmptyView extends Component {
             pt = pt > 0 ? pt : 0;
             return (
                 <ScrollView
+                    ref="dataEmptyView"
                     style={styles.outerView}
                     refreshControl={
                             <RefreshControl

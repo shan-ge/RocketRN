@@ -47,7 +47,7 @@ var Configuration = {
     navigationFontSize: [16, 16, 16, 17, 18],// ldpi,mdpi,hdpi,xhdpi,xxhdpi
     navigationFontColor: '#ffffff',
     navigationBackground: mainColor,
-    // 页面
+    // 页面(不会影响数据展示页DataView)
     pageBackground: '#f0f0f0',
     pageBodyPadding: [
         [10, 16, 50, 16],// ldpi

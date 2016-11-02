@@ -6,6 +6,7 @@
 import React, {Component} from 'react';
 import {HFDataListView, HFBaseStyle, HFConfiguration, View, ScrollView, StyleSheet} from './../Framework';
 
+var TimerIndex, TimerCount = 0;
 class HFDataGridView extends Component {
 
     static defaultProps = {
@@ -36,14 +37,43 @@ class HFDataGridView extends Component {
         }
     }
 
+    componentWillMount() {
+        if (TimerIndex) {
+            clearInterval(TimerIndex);
+        }
+        TimerCount = 0;
+        TimerIndex = setInterval(() => {
+            // 如果不在这个页面了,这个值就是undefined
+            if (TimerCount <= 9) {
+                TimerCount++;
+                if (this.refs.dataGridView) {
+                    this.setState({
+                        gridRowWidth: this.state.gridRowWidth + (TimerCount % 2 == 0 ? 100 : -100)
+                    });
+                }
+            } else {
+                if (TimerIndex) {
+                    clearInterval(TimerIndex);
+                }
+            }
+        }, 1000);
+    }
+
+    componentWillUnMount() {
+        if (TimerIndex) {
+            clearInterval(TimerIndex);
+        }
+    }
+
     render() {
         return (
             <HFDataListView
+                ref="dataGridView"
                 flagNoSeparator={true}
-                flagIsGrid={true}
                 style={[styles.outerView,this.props.style]}
                 contentContainerStyle={[styles.listView,this.props.style]}
                 dataGridRowStyle={[styles.dataGridRowStyle,{width:this.state.gridRowWidth},this.props.dataGridRowStyle]}
+                gridRowWidth={this.state.gridRowWidth}
                 fetchUrl={this.props.fetchUrl}
                 flagReadCache={this.props.flagReadCache}
                 emptyImageSource={this.props.emptyImageSource}
