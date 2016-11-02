@@ -29,6 +29,7 @@ import DemoDataPageView from './DemoDataPageView';
 import DemoDataAlphabetView from './DemoDataAlphabetView';
 import DemoDataListView from './DemoDataListView';
 import DemoDataGridView from './DemoDataGridView';
+import DemoWebView from './DemoWebView';
 
 class Demo extends Component {
 
@@ -60,7 +61,7 @@ class Demo extends Component {
             })
         } else if (type == 'WebView') {
             this.props.navigator.push({
-                component: DemoDataListView,
+                component: DemoWebView,
             })
         }
     }
