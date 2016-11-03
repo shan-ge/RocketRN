@@ -88,9 +88,9 @@
 |  -------- | -------- | -------- |
 |  导航 | HFNavigation | 页面导航控制器 |
 |  页面 | HFPage | 页面大框架,相当于<html/> |
-|  页面-头部 | HFPageHeader | 页面头部,相当于<header/> |
-|  页面-内容 | HFPageBody | 页面内容,相当于<body/> |
-|  页面-尾部 | HFPageFooter | 页面尾部,<footer/> |
+|  页面-头部 | HFPageHeader | 页面头部,相当于html中的\<header/\> |
+|  页面-内容 | HFPageBody | 页面内容,相当于html中的\<body/\> |
+|  页面-尾部 | HFPageFooter | 页面尾部,相当于html中的\<footer/\> |
 |  普通列表 | HFDataListView | 数据类型List,一次加载完毕 |
 |  可分页列表 | HFDataPageView | 数据类型Page,有分页的包装List |
 |  可索引列表 | HFDataAlphabetView | 数据类型Map,可按索引显示.如A-Z |
