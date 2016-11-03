@@ -39,6 +39,10 @@ class HFConfirm extends Component {
         }
     }
 
+    onCancel() {
+        Dialog.confirmCancel();
+    }
+
     render() {
         return (
             <View>
@@ -72,7 +76,7 @@ class HFConfirm extends Component {
                                     text={this.props.cancelText}
                                     style={styles.button}
                                     textStyle={styles.cancelText}
-                                    onPress={this.onPress.bind(this)}
+                                    onPress={this.onCancel.bind(this)}
                                 />
                                 <View style={styles.buttonSeparator}/>
                                 <HFTextButton
