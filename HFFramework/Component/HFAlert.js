@@ -106,7 +106,7 @@ var styles = StyleSheet.create({
     button: {
         justifyContent: 'center',
         alignItems: 'center',
-        alignSelf: 'center',
+        alignSelf: 'stretch',
         marginBottom: HFConfiguration.viewMargin[HFConfiguration.dpiIndex][2],
     },
     buttonText: {
