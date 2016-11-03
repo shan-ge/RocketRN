@@ -5,6 +5,7 @@
  *
  * flagLeft             :   {true|false}    是否显示左侧按钮
  * leftText             :   ''              左侧按钮文字
+ * leftImageSource      :   {require()}     左侧按钮显示图片
  * onLeftButtonPress    :   {()=>{}}        左侧按钮点击事件
  * leftDisabled         :   {true|false}    左侧按钮是否可用
  *
@@ -60,12 +61,16 @@ class HFNavigation extends Component {
                         disabled={this.props.leftDisabled}
                         onPress={this.onLeftButtonPress.bind(this)}
                     >
-                        {RenderIf(this.props.leftText != null)(
-                            <HFText style={[styles.text,HFBaseStyle.navigationText]} text={this.props.leftText}/>
-                        )}
-                        {RenderIf(this.props.leftText == null)(
+                        {RenderIf(this.props.leftImageSource == null && this.props.leftText == null)(
                             <HFImage source={require('./../Image/Icon/left.png')}
                                      style={[styles.image,HFBaseStyle.navigationImage]}/>
+                        )}
+                        {RenderIf(this.props.leftImageSource != null)(
+                            <HFImage source={this.props.leftImageSource}
+                                     style={[styles.image,HFBaseStyle.navigationImage]}/>
+                        )}
+                        {RenderIf(this.props.leftText != null)(
+                            <HFText style={[styles.text,HFBaseStyle.navigationText]} text={this.props.leftText}/>
                         )}
                     </TouchableOpacity>
                 )}
@@ -81,12 +86,12 @@ class HFNavigation extends Component {
                         disabled={this.props.rightDisabled}
                         onPress={this.props.onRightButtonPress!=null?this.props.onRightButtonPress.bind(this):()=>{}}
                     >
-                        {RenderIf(this.props.rightText != null)(
-                            <HFText style={[styles.text,HFBaseStyle.navigationText]} text={this.props.rightText}/>
-                        )}
                         {RenderIf(this.props.rightImageSource != null)(
                             <HFImage source={this.props.rightImageSource}
                                      style={[styles.image,HFBaseStyle.navigationImage]}/>
+                        )}
+                        {RenderIf(this.props.rightText != null)(
+                            <HFText style={[styles.text,HFBaseStyle.navigationText]} text={this.props.rightText}/>
                         )}
                     </TouchableOpacity>
                 )}
@@ -110,13 +115,14 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'flex-start',
         justifyContent: 'center',
-        paddingLeft: 16
+        paddingLeft: 16,
     },
     right: {
         flex: 1,
+        flexDirection: 'row',
         alignItems: 'flex-end',
         justifyContent: 'center',
-        paddingRight: 16,
+        paddingRight: 10,
     },
     title: {
         flex: 4,
@@ -130,6 +136,8 @@ const styles = StyleSheet.create({
     image: {
         width: 25,
         height: 25,
+        alignSelf: 'flex-start',
+        marginRight: 5,
     }
 });
 

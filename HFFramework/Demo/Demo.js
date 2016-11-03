@@ -68,14 +68,20 @@ class Demo extends Component {
         }
     }
 
-    toCall() {
+    toAlert() {
         Dialog.alert('点我干啥?');
+    }
+
+    toConfirm() {
+        Dialog.confirm('你瞅啥?', function () {
+            Dialog.alert('你屌,我服!', '好的');
+        }, '瞅你咋地');
     }
 
     render() {
         return (
             <HFPage
-                navigation={{navigator:this.props.navigator,title:HFConfiguration.appName,flagRight:true,rightImageSource:require('./Image/demo_nav.png')}}
+                navigation={{navigator:this.props.navigator,title:HFConfiguration.appName,flagRight:true,rightText:'弹层',rightImageSource:require('./Image/demo_nav.png')}}
                 onRefresh={()=>{
                     Dialog.alert('您刚刷新了数据...');
                 }}
@@ -112,14 +118,14 @@ class Demo extends Component {
                         <HFTextInput multiline={true} flagInputCanAccess={true} value="这个输入框的文本,可以在键盘区域进行复制和粘贴" style={{height:100}} inputStyle={{height:80}}/>
                         <HFSeparator/>
                         <HFHeading level={1} text='[按钮]' style={{alignSelf:'flex-start',marginBottom:10}}/>
-                        <HFTextButton text="这是一段可响应点击事件的文本" style={{marginTop:HFConfiguration.buttonImageMarginTop}} onPress={()=>this.toCall()}/>
-                        <HFImageButton flagLeftText={true} flagRightText={true} leftText="左" rightText="右" source={require('./Image/demo_nav.png')} onPress={()=>this.toCall()}/>
-                        <HFMediumButton text="完成" onPress={()=>this.toCall()}/>
+                        <HFTextButton text="这是一段可响应点击事件的文本" style={{marginTop:HFConfiguration.buttonImageMarginTop}} onPress={this.toAlert}/>
+                        <HFImageButton flagLeftText={true} flagRightText={true} leftText="左" rightText="右" source={require('./Image/demo_nav.png')} onPress={this.toAlert}/>
+                        <HFMediumButton text="提示确认" onPress={this.toConfirm}/>
                         <HFHugeButton text="下一页" onPress={()=>this.toPage('NextPage')}/>
-                        <HFTextButton disabled={true} text="这是一段可响应点击事件的文本" style={{marginTop:HFConfiguration.buttonImageMarginTop}}/>
-                        <HFImageButton disabled={true} flagLeftText={true} flagRightText={true} leftText="左" rightText="右" source={require('./Image/demo_nav.png')}/>
-                        <HFMediumButton disabled={true} text="完成"/>
-                        <HFHugeButton disabled={true} text="下一页"/>
+                        <HFTextButton disabled={true} text="这是一段可响应点击事件的文本" style={{marginTop:HFConfiguration.buttonImageMarginTop}} onPress={this.toAlert}/>
+                        <HFImageButton disabled={true} flagLeftText={true} flagRightText={true} leftText="左" rightText="右" source={require('./Image/demo_nav.png')} onPress={this.toAlert}/>
+                        <HFMediumButton disabled={true} text="提示确认" onPress={this.toConfirm}/>
+                        <HFHugeButton disabled={true} text="下一页" onPress={()=>this.toPage('NextPage')}/>
                         <HFSeparator/>
                         <HFHeading level={1} text='[视图]' style={{alignSelf:'flex-start',marginBottom:10}}/>
                         <HFHugeButton text="分页列表视图" onPress={()=>this.toPage('PageView')}/>

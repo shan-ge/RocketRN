@@ -60,6 +60,12 @@ class HFPage extends Component {
             alertButtonText: '我知道了',
             alertCallback: null,
             // confirm
+            confirmVisible: false,
+            confirmTitle: '提示',
+            confirmText: '提醒内容',
+            confirmButtonText: '确认',
+            confirmCancelText: '取消',
+            confirmCallback: null,
         };
     }
 
@@ -75,10 +81,10 @@ class HFPage extends Component {
         // 监听器
         this.hfPageListener = DeviceEventEmitter.addListener('HFPage', function (type, value) {
             // 如果当前页面是活动的,则就在当前页面显示弹出层
-            if (type == 'HFAlert') {
-                Handler.load(Constants.storageKeyPageId)
-                    .then(data=> {
-                        if (data == self.state.pageId) {
+            Handler.load(Constants.storageKeyPageId)
+                .then(data=> {
+                    if (data == self.state.pageId) {
+                        if (type == 'HFAlert') {
                             self.setState({
                                 alertVisible: true,
                                 alertTitle: value['title'] || '提示',
@@ -86,18 +92,26 @@ class HFPage extends Component {
                                 alertButtonText: value['buttonText'] || '我知道了',
                                 alertCallback: value['callback'],
                             });
-                        }
-                    });
-            } else if (type == 'HFAlertCancel') {
-                Handler.load(Constants.storageKeyPageId)
-                    .then(data=> {
-                        if (data == self.state.pageId) {
+                        } else if (type == 'HFAlertCancel') {
                             self.setState({
                                 alertVisible: false,
                             });
+                        } else if (type == 'HFConfirm') {
+                            self.setState({
+                                confirmVisible: true,
+                                confirmTitle: value['title'] || '提示',
+                                confirmText: value['text'] || '提醒内容',
+                                confirmButtonText: value['buttonText'] || '确定',
+                                confirmCancelText: value['cancelText'] || '取消',
+                                confirmCallback: value['callback'],
+                            });
+                        } else if (type == 'HFConfirmCancel') {
+                            self.setState({
+                                confirmVisible: false,
+                            });
                         }
-                    });
-            }
+                    }
+                });
         })
     }
 
@@ -160,15 +174,14 @@ class HFPage extends Component {
                     callback={this.state.alertCallback}
                 />
                 {/** 确认提示框 **/}
-                {/**
-                 <HFConfirm
-                 visible={this.props.visible}
-                 title={this.props.title}
-                 text={this.props.text}
-                 pageKey="Emergency"
-                 type='confirm'
-                 />
-                 **/}
+                <HFConfirm
+                    visible={this.state.confirmVisible}
+                    title={this.state.confirmTitle}
+                    text={this.state.confirmText}
+                    buttonText={this.state.confirmButtonText}
+                    cancelText={this.state.confirmCancelText}
+                    callback={this.state.confirmCallback}
+                />
                 {/** 弹出层 **/}
                 {/** 键盘(只有在键盘弹出时才显示) **/}
                 <HFKeyboardSpacer/>

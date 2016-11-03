@@ -1,5 +1,5 @@
 /**
- * Created by shange on 16/8/26. HFImage的包装页面
+ * Created by shange on 2016/11/02. 提示框
  */
 
 'use strict';
@@ -38,7 +38,6 @@ class HFAlert extends Component {
     }
 
     render() {
-        let w = HFConfiguration.windowWidth - 150;
         return (
             <View>
                 <Modal
@@ -46,7 +45,8 @@ class HFAlert extends Component {
                     transparent={true}
                     visible={this.props.visible}
                     onShow={() => {}}
-                    onRequestClose={() => {}}>
+                    onRequestClose={() => {}}
+                >
                     <View style={styles.outerView}>
                         <View
                             style={[styles.subView,this.props.style]}>
@@ -67,7 +67,7 @@ class HFAlert extends Component {
                                 numberOfLines={1}
                                 fontSizeDiff={-1}
                                 text={this.props.buttonText}
-                                style={[styles.button]}
+                                style={styles.button}
                                 textStyle={styles.buttonText}
                                 onPress={this.onPress.bind(this)}
                             />
@@ -77,8 +77,7 @@ class HFAlert extends Component {
             </View>
         );
     }
-}
-;
+};
 
 var styles = StyleSheet.create({
     outerView: {
@@ -89,7 +88,7 @@ var styles = StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0.5)',
     },
     subView: {
-        minWidth: 200,
+        minWidth: 250,
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',

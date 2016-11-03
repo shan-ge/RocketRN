@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     hr: {
         height: 0.7,
         alignSelf: 'stretch',
-        backgroundColor: HFConfiguration.viewHorizontalRowColor,
+        backgroundColor: HFConfiguration.separatorLineColor,
     }
 });
 

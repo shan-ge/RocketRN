@@ -57,7 +57,7 @@ var Configuration = {
         [10, 16, 50, 16]// xxhdpi
     ],
     // 视图
-    viewHorizontalRowColor: '#dddddd',// 分割线颜色
+    separatorLineColor: '#dddddd',// 分隔线颜色
     viewMargin: [
         [10, 0, 10, 0],// ldpi
         [10, 0, 10, 0],// mdpi

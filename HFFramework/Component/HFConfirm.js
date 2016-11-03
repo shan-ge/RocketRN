@@ -1,150 +1,148 @@
 /**
- * Created by zhang on 2016/8/5.
+ * Created by shange on 2016/11/03. 确认提示框
  */
 
 'use strict';
-import React, { Component } from 'react';
-import {
-    View,
-    Text,
-    Image,
-    Modal,
-    Navigator,
-    TextInput,
+import React,{Component} from 'react';
+import {HFHeading, HFParagraph, HFText, HFTextButton, HFSeparator, HFConfiguration, Modal, View, StyleSheet} from './../Framework';
 
-    StyleSheet,
-    Dimensions,
-    TouchableHighlight,
-    DeviceEventEmitter
-} from 'react-native';
+import Dialog from './../Utility/Dialog';
 
 class HFConfirm extends Component {
+
+    static defaultProps = {
+        visible: false,
+        title: '提示',
+        text: '提醒内容',
+        buttonText: '确定',
+        cancelText: '取消',
+    };
+
+    static propTypes = {
+        visible: React.PropTypes.bool,
+        title: React.PropTypes.string,
+        text: React.PropTypes.string,
+        buttonText: React.PropTypes.string,
+        cancelText: React.PropTypes.string,
+        callback: React.PropTypes.func,
+    };
 
     constructor(props) {
         super(props);
         this.state = {};
     }
 
-    _onPress(value) {
-        DeviceEventEmitter.emit(this.props.pageKey, this.props.type, value)
+    onPress() {
+        Dialog.confirmCancel();
+        if (this.props.callback) {
+            this.props.callback();
+        }
     }
 
     render() {
         return (
-            <View ref={this.props.ref}>
-                <View style={styles.container}>
-                    <Modal
-                        animationType='fade'
-                        transparent={true}
-                        visible={this.props.show}
-                        onRequestClose={() => {}}
-                    >
-                        <View style={styles.modalStyle}>
-                            <View style={styles.subView}>
-                                <View style={styles.titleBox}>
-                                    <Text style={styles.titleText}>
-                                        {this.props.titleText?this.props.titleText:'请确认'}
-                                    </Text>
-                                </View>
-                                <View style={styles.horizontalLine}/>
-                                <View style={styles.buttonView}>
-                                    <TouchableHighlight underlayColor='transparent'
-                                                        style={styles.buttonStyle}
-                                                        onPress={this._onPress.bind(this,false)}
-                                    >
-                                        <Text style={[styles.buttonText,{color:'#999999'}]}>
-                                            {this.props.leftButtonText?this.props.leftButtonText:'取消'}
-                                        </Text>
-                                    </TouchableHighlight>
-                                    <View style={styles.verticalLine}/>
-                                    <TouchableHighlight underlayColor='transparent'
-                                                        style={styles.buttonStyle}
-                                                        onPress={this._onPress.bind(this,true)}
-                                    >
-                                        <Text style={styles.buttonText}>
-                                            {this.props.rightButtonText?this.props.rightButtonText:'确定'}
-                                        </Text>
-                                    </TouchableHighlight>
-                                </View>
+            <View>
+                <Modal
+                    animationType='fade'
+                    transparent={true}
+                    visible={this.props.visible}
+                    onShow={() => {}}
+                    onRequestClose={() => {}}
+                >
+                    <View style={styles.outerView}>
+                        <View
+                            style={[styles.subView,this.props.style]}>
+                            <HFHeading
+                                level={2}
+                                numberOfLines={1}
+                                text={this.props.title}
+                                style={{alignSelf:'center',color:HFConfiguration.textFontColor2,marginTop:HFConfiguration.viewMargin[HFConfiguration.dpiIndex][0]}}
+                            />
+                            <HFSeparator/>
+                            <HFParagraph
+                                numberOfLines={10}
+                                text={this.props.text}
+                                style={styles.text}
+                            />
+                            <HFSeparator style={{marginBottom:0}}/>
+                            <View style={styles.buttonView}>
+                                <HFTextButton
+                                    numberOfLines={1}
+                                    fontSizeDiff={-1}
+                                    text={this.props.cancelText}
+                                    style={styles.button}
+                                    textStyle={styles.cancelText}
+                                    onPress={this.onPress.bind(this)}
+                                />
+                                <View style={styles.buttonSeparator}/>
+                                <HFTextButton
+                                    numberOfLines={1}
+                                    fontSizeDiff={-1}
+                                    text={this.props.buttonText}
+                                    style={styles.button}
+                                    textStyle={styles.buttonText}
+                                    onPress={this.onPress.bind(this)}
+                                />
                             </View>
                         </View>
-                    </Modal>
-                </View>
+                    </View>
+                </Modal>
             </View>
         );
     }
-
 }
-// Modal属性
-// 1.animationType bool  控制是否带有动画效果
-// 2.onRequestClose  Platform.OS==='android'? PropTypes.func.isRequired : PropTypes.func
-// 3.onShow function方法
-// 4.transparent bool  控制是否带有透明效果
-// 5.visible  bool 控制是否显示
+;
 
-// css样式
-const styles = StyleSheet.create({
-    container: {
+var styles = StyleSheet.create({
+    outerView: {
         flex: 1,
-        backgroundColor: 'rgba(0,0,0,.5)',
-    },
-    // modal的样式
-    modalStyle: {
-        backgroundColor: 'rgba(0,0,0,.5)',
+        alignSelf: 'stretch',
         alignItems: 'center',
         justifyContent: 'center',
-        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.5)',
     },
-    // modal上子View的样式
     subView: {
-        marginLeft: 60,
-        marginRight: 60,
-        backgroundColor: '#fff',
-        alignSelf: 'stretch',
+        minWidth: 250,
+        flexDirection: 'column',
+        alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 10,
+        backgroundColor: '#ffffff',
+        borderRadius: 5,
         borderWidth: 0.5,
-        borderColor: '#ccc',
+        borderColor: '#e4e4e4',
+        marginLeft: 80,
+        marginRight: 80,
     },
-    // 标题
-    titleBox: {
-        height: 80,
-        justifyContent: 'center',
-        alignItems: 'center'
+    text: {
+        marginLeft: 10,
+        marginRight: 10,
     },
-    titleText: {
-        fontSize: 14,
-        color: '#333',
-
-    },
-    // 水平的分割线
-    horizontalLine: {
-        height: 0.5,
-        backgroundColor: '#ccc',
-    },
-    // 按钮
     buttonView: {
+        alignSelf: 'stretch',
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between',
     },
-    buttonStyle: {
+    button: {
         flex: 1,
-        height: 40,
-        alignItems: 'center',
+        marginTop: 10,
+        marginLeft: 20,
+        marginRight: 20,
         justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        marginBottom: HFConfiguration.viewMargin[HFConfiguration.dpiIndex][2],
     },
-    // 竖直的分割线
-    verticalLine: {
-        width: 0.5,
-        height: 40,
-        backgroundColor: '#ccc',
+    buttonSeparator: {
+        width: 1,
+        height: 45,
+        backgroundColor: HFConfiguration.separatorLineColor,
     },
-    // 按钮的样式
     buttonText: {
-        fontSize: 16,
-        color: '#00cf92',
-        textAlign: 'center',
-
+        color: HFConfiguration.mainColor,
+    },
+    cancelText: {
+        color: HFConfiguration.textFontColor2,
     },
 });
 
