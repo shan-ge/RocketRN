@@ -4,88 +4,115 @@
 
 'use strict';
 import React,{Component} from 'react';
-import {
-    View,
-    Text,
-    Modal,
-    StyleSheet,
-    TouchableOpacity
-} from "react-native"
-import HFHorizontalRow from './HFSeparator';
+import {HFHeading, HFParagraph, HFText, HFTextButton, HFSeparator, HFConfiguration, Modal, View, StyleSheet} from './../Framework';
 
-export default class HFAlert extends Component {
+import Dialog from './../Utility/Dialog';
+
+class HFAlert extends Component {
+
+    static defaultProps = {
+        visible: false,
+        title: '提示',
+        text: '提醒内容',
+        buttonText: '我知道了',
+    };
+
+    static propTypes = {
+        visible: React.PropTypes.bool,
+        title: React.PropTypes.string,
+        text: React.PropTypes.string,
+        buttonText: React.PropTypes.string,
+        callback: React.PropTypes.func,
+    };
+
     constructor(props) {
         super(props);
         this.state = {};
     }
 
+    onPress() {
+        Dialog.alertCancel();
+        if (this.props.callback) {
+            this.props.callback();
+        }
+    }
+
     render() {
+        let w = HFConfiguration.windowWidth - 150;
         return (
-            <View ref={this.props.ref}>
+            <View>
                 <Modal
                     animationType='fade'
                     transparent={true}
-                    visible={this.props.alertVisible}
+                    visible={this.props.visible}
                     onShow={() => {}}
                     onRequestClose={() => {}}>
-                    <View style={styles.alertView}>
-                        <View style={[styles.alertSubView,this.props.alertSubView]}>
-                            <Text style={styles.alertText}>{this.props.alertText}</Text>
-                            <HFHorizontalRow/>
-                            <TouchableOpacity style={styles.buttonPress} onPress={this.props.buttonPress}>
-                                <Text
-                                    style={styles.alertButtonText}>{this.props.alertButtonText ? this.props.alertButtonText : '好的'}</Text>
-                            </TouchableOpacity>
+                    <View style={styles.outerView}>
+                        <View
+                            style={[styles.subView,this.props.style]}>
+                            <HFHeading
+                                level={2}
+                                numberOfLines={1}
+                                text={this.props.title}
+                                style={{alignSelf:'center',color:HFConfiguration.textFontColor2,marginTop:HFConfiguration.viewMargin[HFConfiguration.dpiIndex][0]}}
+                            />
+                            <HFSeparator/>
+                            <HFParagraph
+                                numberOfLines={10}
+                                text={this.props.text}
+                                style={styles.text}
+                            />
+                            <HFSeparator/>
+                            <HFTextButton
+                                numberOfLines={1}
+                                fontSizeDiff={-1}
+                                text={this.props.buttonText}
+                                style={[styles.button]}
+                                textStyle={styles.buttonText}
+                                onPress={this.onPress.bind(this)}
+                            />
                         </View>
                     </View>
                 </Modal>
             </View>
         );
     }
-};
+}
+;
 
 var styles = StyleSheet.create({
-    alertView: {
+    outerView: {
         flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.5)',
+        alignSelf: 'stretch',
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: 'rgba(0,0,0,0.5)',
     },
-    alertSubView: {
-        height: 130,
-        marginLeft: 60,
-        marginRight: 60,
+    subView: {
+        minWidth: 200,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: '#ffffff',
-        alignSelf: 'stretch',
-        justifyContent: 'space-between',
         borderRadius: 5,
         borderWidth: 0.5,
         borderColor: '#e4e4e4',
-        flexDirection: 'column'
+        marginLeft: 80,
+        marginRight: 80,
     },
-    alertText: {
-        flex: 1,
-        height: 30,
-        lineHeight: 25,
-        fontSize: 16,
-        margin: 16,
-        marginTop: 25,
-        fontWeight: '200',
-        color: '#666666',
+    text: {
+        marginLeft: 10,
+        marginRight: 10,
+    },
+    button: {
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
+        marginBottom: HFConfiguration.viewMargin[HFConfiguration.dpiIndex][2],
     },
-    alertButtonText: {
-        flex: 1,
-        height: 35,
-        fontSize: 16,
-        marginTop: 15,
-        fontWeight: '300',
-        color: '#00cf92',
+    buttonText: {
+        color: HFConfiguration.mainColor,
     },
-    buttonPress: {
-        justifyContent: 'center',
-        alignItems: 'center',
-    }
 });
+
+module.exports = HFAlert;

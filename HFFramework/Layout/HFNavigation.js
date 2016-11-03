@@ -3,12 +3,12 @@
  *
  * title                :   ''              标题
  *
- * flagLeft       :   {true|false}    是否显示左侧按钮
+ * flagLeft             :   {true|false}    是否显示左侧按钮
  * leftText             :   ''              左侧按钮文字
  * onLeftButtonPress    :   {()=>{}}        左侧按钮点击事件
  * leftDisabled         :   {true|false}    左侧按钮是否可用
  *
- * flagRight      :   {true|false}    是否显示右侧按钮
+ * flagRight            :   {true|false}    是否显示右侧按钮
  * rightText            :   ''              右侧按钮文字
  * rightImageSource     :   {require()}     右侧按钮显示图片
  * onRightButtonPress   :   {()=>{}}        右侧按钮点击事件
@@ -44,7 +44,9 @@ class HFNavigation extends Component {
             this.props.onLeftButtonPress();
         } else {
             if (this.props.navigator) {
-                this.props.navigator.pop();
+                // 没用pop,是为了防止setState时报警
+                // NavigatorConfig.js
+                this.props.navigator.jumpBack();
             }
         }
     }

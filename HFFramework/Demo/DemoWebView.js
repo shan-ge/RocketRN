@@ -18,9 +18,7 @@ class DemoWebView extends Component {
         return (
             <HFPage
                 flagNoScroll={true}
-                flagNavigation={true}
-                navigator={this.props.navigator}
-                navigation={{title:'网页视图',flagLeft:true,flagRight:true,rightText:'刷新',onRightButtonPress:function(){alert('刷新网页');}}}
+                navigation={{navigator:this.props.navigator,title:'网页视图',flagLeft:true,flagRight:true,rightText:'刷新',onRightButtonPress:function(){alert('刷新网页');}}}
                 innerView={
                     <HFWebView uri='http://static.hf.com/'/>
                 }

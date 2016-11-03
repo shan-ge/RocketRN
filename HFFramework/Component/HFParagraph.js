@@ -10,7 +10,7 @@ class HFParagraph extends Component {
     static defaultProps = {
         fontSizeDiff: -2,
         numberOfLines: 0,
-        indentation: 2,// 缩进,默认2个汉字
+        indentation: 0,// 缩进,默认0个汉字
     };
 
     static propTypes = {
@@ -30,6 +30,7 @@ class HFParagraph extends Component {
         }
         return (
             <HFView ref={this.props.ref}
+                    style={[styles.view,this.props.viewStyle]}
                     innerView={
                     <HFText fontSizeDiff={this.props.fontSizeDiff} numberOfLines={this.props.numberOfLines} allowFontScaling={HFConfiguration.textAllowFontScaling} style={[styles.paragraph,this.props.style]} text={indentationText + this.props.text}/>
                     }
@@ -39,6 +40,7 @@ class HFParagraph extends Component {
 }
 
 const styles = StyleSheet.create({
+    view: {},
     paragraph: {
         color: HFConfiguration.textFontColor3,
     },

@@ -20,9 +20,7 @@ class Demo1 extends Component {
     render() {
         return (
             <HFPage
-                navigator={this.props.navigator}
-                flagNavigation={true}
-                navigation={{title:HFConfiguration.appName,flagLeft:true}}
+                navigation={{navigator:this.props.navigator,title:HFConfiguration.appName,flagLeft:true}}
                 innerView={
                     <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
                         <HFHugeButton text="红色主题" style={styles.buttonRed} onPress={this.toTheme.bind(this,'#dd3300')}/>

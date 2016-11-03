@@ -18,9 +18,7 @@ class DemoDataListView extends Component {
         return (
             <HFPage
                 flagNoScroll={true}
-                flagNavigation={true}
-                navigator={this.props.navigator}
-                navigation={{title:'分页列表视图',flagLeft:true}}
+                navigation={{navigator:this.props.navigator,title:'分页列表视图',flagLeft:true}}
                 innerView={
                     <HFDataPageView
                             flagReadCache={false}

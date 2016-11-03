@@ -18,7 +18,6 @@ class HFView extends Component {
 
 const styles = StyleSheet.create({
     outerView: {
-        alignSelf: 'stretch',
     },
 });
 

@@ -31,6 +31,8 @@ import DemoDataListView from './DemoDataListView';
 import DemoDataGridView from './DemoDataGridView';
 import DemoWebView from './DemoWebView';
 
+import Dialog from './../Utility/Dialog';
+
 class Demo extends Component {
 
     constructor(props) {
@@ -67,16 +69,16 @@ class Demo extends Component {
     }
 
     toCall() {
-        alert('点我干啥?');
+        Dialog.alert('点我干啥?');
     }
 
     render() {
         return (
             <HFPage
-                navigator={this.props.navigator}
-                flagNavigation={true}
-                navigation={{title:HFConfiguration.appName,flagRight:true,rightImageSource:require('./Image/demo_nav.png')}}
-                onRefresh={()=>{alert('您刚刚刷新了数据...');}}
+                navigation={{navigator:this.props.navigator,title:HFConfiguration.appName,flagRight:true,rightImageSource:require('./Image/demo_nav.png')}}
+                onRefresh={()=>{
+                    Dialog.alert('您刚刷新了数据...');
+                }}
                 innerView={
                     <View style={{flex:1,alignSelf:'stretch',flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
                         <HFHeading level={1} text='[设备]' style={{alignSelf:'flex-start',marginBottom:10}}/>
@@ -91,8 +93,8 @@ class Demo extends Component {
                         <HFHeading level={6} text='标题6' style={{color:'#cccccc'}}/>
                         <HFSeparator/>
                         <HFHeading level={1} text='[段落]' style={{alignSelf:'flex-start',marginBottom:10}}/>
-                        <HFParagraph numberOfLines={2} text='有缩进的,段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落'/>
-                        <HFParagraph numberOfLines={3} indentation={0} text='无缩进的,段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落'/>
+                        <HFParagraph numberOfLines={2} indentation={2} text='有缩进的,段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落'/>
+                        <HFParagraph numberOfLines={3} text='无缩进的,段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落段落'/>
                         <HFHeading level={4} text='[图像.占位图]' style={{alignSelf:'flex-start',marginBottom:10}}/>
                         <HFImage/>
                         <HFHeading level={4} text='[图像.定宽,自适应高度]' style={{alignSelf:'flex-start',marginBottom:10}}/>

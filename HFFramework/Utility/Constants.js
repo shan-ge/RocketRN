@@ -8,22 +8,6 @@ var Constants = {
     ios_version:'1.0.0',
     /////////缓存的基础数据
     //融云
-    storageKeyRongCloudToken: 'rongCloudToken',//融云的用户token
-    storageKeyUnreadMessageCount: 'unreadMessageCount',//存在未读消息
-    //其他
-    storageKeyIsLogin: 'isLogin',
-    storageKeyUserToken: 'loginUserToken',
-    storageKeyPushAllowed: 'pushAllowed',
-    storageKeyHasShownGuide: 'hasShownGuide',
-    storageKeyHasShownPEFAlert: 'hasShownPEFAlert',
-    storageKeyMdicineImageUrlPrefix: 'medicineImageUrlPrefix',
-    storageKeyMedicineList: 'medicineList',
-    storageKeyEmergencyMedicineList:'emergencyMedicineList',
-    storageKeyCauseReason: 'causeReason',
-    storageKeyMedicalRecordHospital: 'medicalRecordHospital',
-    storageKeyMedicalRecordDoctor: 'medicalRecordDoctor',
-    storageKeyMedicalRecordTreatmentTime: 'medicalRecordTreatmentTime',
-    storageKeyAreaData: 'areaData',//服务-家庭医生列表-地区数据
-    homeRefreshDate:'homeRefreshDate' //首页数据获取日期
+    storageKeyPageId: 'pageId',// 当前正在显示中的HFPage的唯一编号
 };
 module.exports = Constants;

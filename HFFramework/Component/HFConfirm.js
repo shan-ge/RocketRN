@@ -18,7 +18,7 @@ import {
     DeviceEventEmitter
 } from 'react-native';
 
-export default class HFConfirm extends Component {
+class HFConfirm extends Component {
 
     constructor(props) {
         super(props);
@@ -146,5 +146,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
 
     },
-
 });
+
+module.exports = HFConfirm;

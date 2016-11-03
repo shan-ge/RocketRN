@@ -6,7 +6,7 @@
 
 'use strict';
 import React, {Component} from 'react';
-import {HFView, HFText, HFBaseStyle, HFConfiguration, StyleSheet} from './../Framework';
+import {HFText, HFBaseStyle, HFConfiguration, StyleSheet} from './../Framework';
 
 class HFHeading extends Component {
 
@@ -26,7 +26,7 @@ class HFHeading extends Component {
     render() {
         let headingFontSize = HFConfiguration.textFontSize[HFConfiguration.dpiIndex] + (8 - this.props.level * 2);
         return (
-            <HFText style={[styles.heading,this.props.style,{fontSize:headingFontSize}]} text={this.props.text}/>
+            <HFText numberOfLines={this.props.numberOfLines} style={[styles.heading,this.props.style,{fontSize:headingFontSize}]} text={this.props.text}/>
         );
     }
 }
