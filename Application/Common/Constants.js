@@ -13,12 +13,7 @@ var Constants = {
     /////////缓存的基础数据
     storageKeyPageId: 'pageId',// 当前正在显示中的HFPage的唯一编号
     storageKeyIsLogin: 'isLogin',// 是否已经登录
-    storageKeyIsPerfectInfo: 'isPerfectInfo',// 是否已经完善信息
-    storageKeyIsCertification: 'isCertification',// 是否已经认证
-    storageKeyIsCertifying: 'isCertifying',// 是否在认证中
     storageKeyUserToken: 'loginUserToken',
     storageKeyUserInfo: 'loginUserInfo',
-    storageKeyDoctorInfo: 'loginDoctorInfo',
-    storageKeyDoctorCertify: 'loginDoctorCertify',
 };
 module.exports = Constants;

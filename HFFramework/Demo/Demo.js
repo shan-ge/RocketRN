@@ -36,6 +36,8 @@ import Dialog from './../Utility/Dialog';
 import Navigator from './../Utility/Navigator';
 import Bridge from './../Utility/Bridge';
 
+import Login from './../../Application/Component/Login/Login';
+
 class Demo extends Component {
 
     constructor(props) {
@@ -81,13 +83,36 @@ class Demo extends Component {
         }, '瞅你咋地', '认怂');
     }
 
+    toDialog() {
+        Dialog.dialog();
+    }
+
+    toLogin() {
+        Navigator.resetTo({
+            component: Login
+        }, this.props.navigator);
+    }
+
     render() {
         return (
             <HFPage
-                navigation={{navigator:this.props.navigator,title:HFConfiguration.appName,flagRight:true,rightText:'弹层',rightImageSource:require('./Image/demo_nav.png')}}
+                navigation={{
+                    navigator:this.props.navigator,
+                    title:HFConfiguration.appName,
+                    flagLeft:true,
+                    flagRight:true,
+                    leftText:'退出',
+                    rightText:'弹层',
+                    rightImageSource:require('./Image/demo_nav.png'),
+                    onLeftButtonPress:this.toLogin.bind(this),
+                    onRightButtonPress:this.toDialog.bind(this),
+                }}
                 onRefresh={()=>{
                     Dialog.alert('您刚刷新了数据...');
                 }}
+                dialogInnerView={
+                    <View style={{width:100,height:100,backgroundColor:'red'}}/>
+                }
                 innerView={
                     <View style={{flex:1,alignSelf:'stretch',flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
                         <HFHeading level={1} text='[设备]' style={{alignSelf:'flex-start',marginBottom:10}}/>

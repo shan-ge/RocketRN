@@ -9,9 +9,7 @@ import {View} from '../../../HFFramework/Framework';
 
 import ScrollableTabView, {DefaultTabBar} from 'react-native-scrollable-tab-view';
 import HFTabBar from './../../../HFFramework/Component/HFTabBar';
-import Mine from './../Mine/Mine';
-import PatientIndex from './../Patient/Index';
-import HomeDetails from './HomeDetails';
+import Demo from './../../../HFFramework/Demo/Demo';
 
 class Home extends Component {
 
@@ -38,9 +36,9 @@ class Home extends Component {
                     renderTabBar={() => <HFTabBar tabNames={tabNames} tabIconSize={tabIconSize} tabIcons={tabIcons} tabActiveIcons={tabActiveIcons}/>}
                     tabBarPosition='bottom'
                 >
-                    <HomeDetails navigator={navigator}/>
-                    <PatientIndex navigator={navigator}/>
-                    <Mine navigator={navigator}/>
+                    <Demo navigator={navigator}/>
+                    <Demo navigator={navigator}/>
+                    <Demo navigator={navigator}/>
                 </ScrollableTabView>
             </View>
         );

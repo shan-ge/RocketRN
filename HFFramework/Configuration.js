@@ -34,7 +34,7 @@ let buttonFontSize = [17, 17, 17, 18, 18];
 /************************************************************************************************************************/
 var Configuration = {
     // 应用
-    appName: '呼遇医生版',
+    appName: 'HFFramework',
     platform: Platform.OS,
     pixelRatio: PixelRatio.get(),
     dpiIndex: dpiIndex,
@@ -56,11 +56,11 @@ var Configuration = {
     pageBackground: '#f7f7f7',
     dialogBackground: 'rgba(0,0,0,0.2)',
     pageBodyPadding: [
-        [0, 0, 0, 0],// ldpi
-        [0, 0, 0, 0],// mdpi
-        [0, 0, 0, 0],// hdpi
-        [0, 0, 0, 0],// xhdpi
-        [0, 0, 0, 0]// xxhdpi
+        [0, 10, 0, 10],// ldpi
+        [0, 10, 0, 10],// mdpi
+        [0, 10, 0, 10],// hdpi
+        [0, 10, 0, 10],// xhdpi
+        [0, 10, 0, 10]// xxhdpi
     ],
     // 视图
     viewMargin: [

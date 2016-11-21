@@ -5,17 +5,10 @@
  */
 var Filter = {
     // 要判断用户登录的页面
-    toLogin: [
-        //'Information',
-        //'Safe',
-        //'Good',
-        //'AboutMine',
-        //'BusinessCard',
-        //'Share'
-    ],
+    toLogin: [],
     // 要判断用户信息完整性的页面
     toPerfectInfo: [],
     // 要判断用户已认证的页面
-    toCertification: ['BusinessCard'],
+    toCertification: [],
 };
 module.exports = Filter;

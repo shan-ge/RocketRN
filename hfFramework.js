@@ -3,11 +3,11 @@
  * 后发App框架示例
  */
 import React, {Component} from 'react';
-import {HFNavigatorConfig, Navigator, BackAndroid, AsyncStorage} from './HFFramework/Framework';
+import {HFNavigatorConfig, View, Navigator, StatusBar, BackAndroid, DeviceEventEmitter, AsyncStorage} from './HFFramework/Framework';
 import Storage from 'react-native-storage';
 import Toast from '@remobile/react-native-toast';
 
-import Index from './Application/Component/Index';
+import IndexPage from './Application/Component/IndexPage';
 
 var storage = new Storage({
     storageBackend: AsyncStorage,
@@ -73,7 +73,7 @@ class hfFramework extends Component {
                     translucent={true}
                 />
                 <Navigator
-                    initialRoute={{component: Index}}
+                    initialRoute={{component: IndexPage}}
                     configureScene={HFNavigatorConfig.configureScene}
                     renderScene={HFNavigatorConfig.renderScene}
                 />

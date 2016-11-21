@@ -1,11 +1,5 @@
 package com.hfframework;
 
-import com.facebook.react.ReactActivity;
-import com.reactlibrary.RNUUIDGeneratorPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
-import com.RNFetchBlob.RNFetchBlobPackage;
-import com.remobile.toast.RCTToastPackage;
-
 public class MainActivity extends ReactActivity {
 
     /**

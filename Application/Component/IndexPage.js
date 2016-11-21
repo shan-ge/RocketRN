@@ -16,18 +16,21 @@ import {
 } from  './../../HFFramework/Framework';
 import Login from './Login/Login';
 import Home from './Home/Home';
+import GuidePage from './GuidePage';
 import Constants from './../Common/Constants';
 const {width, height}=Dimensions.get('window');
+
 import Dialog from '../../HFFramework/Utility/Dialog';
 import Api from '../../HFFramework/Utility/Api';
 import Bridge from '../../HFFramework/Utility/Bridge';
 import RenderIf from '../../HFFramework/Utility/RenderIf';
 import Navigator from '../../HFFramework/Utility/Navigator';
 import Handler from '../../HFFramework/Utility/Handler';
+
 import Service from '../Common/Service';
 import DeviceInfo from 'react-native-device-info';
 
-class Index extends Component {
+class IndexPage extends Component {
 
     constructor(props) {
         super(props);
@@ -55,24 +58,34 @@ class Index extends Component {
                 Dialog.alertApiResponse(response, function () {
                     // 加载图
                     Bridge.readFile(Constants.fileHasShownGuide, function (result) {
-                        Handler.load(Constants.storageKeyIsLogin)
-                            .then(res=> {
-                                if (res === true) {
-                                    return Home;
-                                } else {
-                                    return Login
-                                }
-                            }).then(component=> {
-                            Bridge.writeFile(Constants.fileHasShownGuide, Constants.version, 0);
+                        if (result != null && result['message'] != '' && result['message'] == Constants.version) {
+                            Handler.load(Constants.storageKeyIsLogin)
+                                .then(res=> {
+                                    if (res === true) {
+                                        return Home;
+                                    } else {
+                                        return Login;
+                                    }
+                                }).then(component=> {
+                                setTimeout(function () {
+                                    Navigator.resetTo({
+                                        component: component,
+                                        passProps: {
+                                            navigator: navigator
+                                        }
+                                    }, navigator);
+                                }, 2000);
+                            });
+                        } else {
                             setTimeout(function () {
                                 Navigator.resetTo({
-                                    component: component,
+                                    component: GuidePage,
                                     passProps: {
                                         navigator: navigator
                                     }
                                 }, navigator);
                             }, 2000);
-                        });
+                        }
                     });
                 });
             })
@@ -116,4 +129,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = Index;
+module.exports = IndexPage;

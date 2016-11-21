@@ -10,6 +10,7 @@ import {
     HFImage,
     HFTextButton,
     HFImageButton,
+    HFText,
     StyleSheet,
     Platform,
     View
@@ -20,11 +21,8 @@ import Service from '../../Common/Service';
 import Api from '../../../HFFramework/Utility/Api';
 import Navigator from '../../../HFFramework/Utility/Navigator';
 import Toast from '@remobile/react-native-toast';
-import PerfectInfo from '../Perfect/PerfectInfo'
-import Register from './Register'
-import GetPassWord1 from './GetPassword1'
 import Dialog from '../../../HFFramework/Utility/Dialog';
-import Home from '../../Component/Home/Home'
+import Home from '../../Component/Home/Home';
 
 export default class Login extends Component {
 
@@ -46,9 +44,6 @@ export default class Login extends Component {
     componentWillMount() {
         Handler.removeAll();
         Handler.save(Constants.storageKeyIsLogin, false);
-        Handler.save(Constants.storageKeyIsPerfectInfo, false);
-        Handler.save(Constants.storageKeyIsCertification, false);
-        Handler.save(Constants.storageKeyIsCertifying, false);
     }
 
     canSubmit(username, password) {
@@ -84,15 +79,9 @@ export default class Login extends Component {
     }
 
     toRegister() {
-        Navigator.push({
-            component: Register
-        }, this.props.navigator)
     }
 
     toGetPassword() {
-        Navigator.push({
-            component: GetPassWord1
-        }, this.props.navigator)
     }
 
     onImagePress() {
@@ -112,74 +101,14 @@ export default class Login extends Component {
     }
 
     handlerSubmit() {
-        if (!this.state.pattern.test(this.refs.inputUsername.getValue())) {
-            Toast.showShortCenter('手机号码格式错误');
-            return false;
-        }
-        // this.refs.inputUsername.blur();
-        this.setState({
-            hugeButtonDisable: true,
-            isLoading: true
-        });
-        let param = {
-            action: 'login',
-            username: this.refs.inputUsername.getValue(),
-            password: this.refs.inputPassword.getValue()
-        };
-        var self = this;
-        Api.get(Service.login, param, false)
-            .then(res => {
-                if (!res) {
-                    self.setState({
-                        isLoading: false,
-                        hugeButtonDisable: false,
-                    });
-                    return false;
-                }
-                self.setState({
-                    isLoading: false
-                })
-                if (res.status === 1) {
-                    param.userId = res.userId;
-                    param.doctorId = res.doctorId;
-                    param.token = res.token;
-                    param.data = res.data;
-                    Service.userId = res.userId;
-                    Service.doctorId = res.doctorId;
-                    Service.token = res.token;
-                    Handler.save(Constants.storageKeyUserToken, param);
-                    Handler.save(Constants.storageKeyIsLogin, true);
-                    Handler.save(Constants.storageKeyIsPerfectInfo, !(res['needImprove'] && res['needImprove'] == true));
-                    Handler.save(Constants.storageKeyIsCertification, res['drStatus'] != null && res['drStatus'] == 2);
-                    Handler.save(Constants.storageKeyIsCertifying, res['drStatus'] != null && res['drStatus'] == 3);
-                    self.setState({
-                        hugeButtonDisable: true,
-                    });
-                    if (res['needImprove'] && res['needImprove'] == true) {
-                        Dialog.alert('您的信息未完善', null, null, function () {
-                            Navigator.resetTo({
-                                component: PerfectInfo,
-                                passProps: {
-                                    userInfo: res
-                                }
-                            }, self.props.navigator);
-                        });
-                    } else {
-                        Navigator.resetTo({
-                            component: Home,
-                            passProps: {
-                                navigator: self.props.navigator,
-                                userInfo: res
-                            }
-                        }, self.props.navigator);
-                    }
-                } else {
-                    Toast.showShortCenter(res.message);
-                    self.setState({
-                        hugeButtonDisable: false,
-                    });
-                }
-            })
+        Handler.save(Constants.storageKeyUserToken, '11111111111111');
+        Handler.save(Constants.storageKeyIsLogin, true);
+        Navigator.resetTo({
+            component: Home,
+            passProps: {
+                navigator: this.props.navigator,
+            }
+        }, this.props.navigator);
     }
 
     render() {
@@ -193,7 +122,6 @@ export default class Login extends Component {
                             innerView={
                                 <HFImage
                                     ratioWidth={300}
-                                    source={require('../../Image/logo11.png')}
                                 />
                             }
                         />
@@ -238,7 +166,7 @@ export default class Login extends Component {
                                 </View>
                             }
                         />
-
+                        <HFText style={{alignSelf:'center'}} text="请输入任意手机号格式,6位以上密码进行登录"/>
                         <HFHugeButton
                             text="登录"
                             disabled={this.state.hugeButtonDisable}

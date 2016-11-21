@@ -42,8 +42,6 @@ import Navigator from './../Utility/Navigator';
 import UUIDGenerator from 'react-native-uuid-generator';
 
 import Login from './../../Application/Component/Login/Login';
-import PerfectInfo from './../../Application/Component/Perfect/PerfectInfo';
-import Certification from './../../Application/Component/Perfect/Certification';
 
 class HFPage extends Component {
 
@@ -173,19 +171,6 @@ class HFPage extends Component {
                                 case 'toLogin':
                                     Toast.showShortCenter('请您登录后再使用');
                                     Navigator.resetTo({component: Login}, self.props.navigator);
-                                    break;
-                                case 'toPerfectInfo':
-                                    Dialog.confirm('请您完善信息后再使用', function () {
-                                        Navigator.push({component: PerfectInfo}, self.props.navigator);
-                                    }, '这就去完善');
-                                    break;
-                                case 'toCertification':
-                                    Dialog.confirm('请您完成认证后再使用', function () {
-                                        Navigator.push({component: Certification}, self.props.navigator);
-                                    }, '这就去认证');
-                                    break;
-                                case 'Certifying':
-                                    Toast.showShortCenter('您的信息正在审核中,暂时不能使用本功能,请耐心等待');
                                     break;
                             }
                         }

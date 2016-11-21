@@ -12,18 +12,42 @@ import {
     StatusBar
 } from 'react-native'
 import Swiper from 'react-native-swiper';
+import Login from './Login/Login';
 import Home from './Home/Home';
 const {width, height}=Dimensions.get('window');
+
+import Bridge from '../../HFFramework/Utility/Bridge';
+import Navigator from '../../HFFramework/Utility/Navigator';
+import Handler from '../../HFFramework/Utility/Handler';
+import Constants from './../Common/Constants';
 
 class GuidePage extends Component {
     constructor(props) {
         super(props);
     }
 
-    _onPress() {
-        this.props.navigator.resetTo({
-            component: Home
-        })
+    toFirstPage() {
+        //
+        Bridge.writeFile(Constants.fileHasShownGuide, Constants.version, 0);
+        //
+        let {navigator} = this.props;
+        Handler.load(Constants.storageKeyIsLogin)
+            .then(res=> {
+                if (res === true) {
+                    return Home;
+                } else {
+                    return Login;
+                }
+            }).then(component=> {
+            setTimeout(function () {
+                Navigator.resetTo({
+                    component: component,
+                    passProps: {
+                        navigator: navigator
+                    }
+                }, navigator);
+            }, 2000);
+        });
     }
 
     render() {
@@ -49,18 +73,13 @@ class GuidePage extends Component {
                     </View>
                     <View style={styles.row}>
                         <Image style={styles.image} source={require('../Image/Guide/3.png')}
-                               resizeMode={Image.resizeMode.contain}
-                        />
-                    </View>
-                    <View style={styles.row}>
-                        <Image style={styles.image} source={require('../Image/Guide/4.png')}
                                resizeMode={Image.resizeMode.contain}>
                             <View style={styles.bottom}>
                                 <TouchableOpacity
                                     style={styles.btn}
                                     underlayColor='transparent'
-                                    onPress={this._onPress.bind(this)}>
-                                    <Text style={styles.text}>后发医生</Text>
+                                    onPress={this.toFirstPage.bind(this)}>
+                                    <Text style={styles.text}>HFFramework</Text>
                                 </TouchableOpacity>
                             </View>
                         </Image>

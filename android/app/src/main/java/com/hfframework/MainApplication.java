@@ -7,6 +7,11 @@ import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
+import com.houfa.app.doctor.reactnative.ReactPackageBridge;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.lwansbrough.RCTCamera.RCTCameraPackage;
+import com.remobile.toast.RCTToastPackage;
+import com.zyu.ReactNativeWheelPickerPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +28,12 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-                    new RNFetchBlobPackage()
+                    new RCTCameraPackage(),
+                    new RNFetchBlobPackage(),
+                    new RCTToastPackage(),
+                    new RNDeviceInfo(),
+                    new ReactNativeWheelPickerPackage(),
+                    new ReactPackageBridge()
             );
         }
     };
