@@ -8,7 +8,7 @@
  * keyboardType                     : 键盘类型('default', 'email-address', 'numeric', 'phone-pad', 'ascii-capable', 'numbers-and-punctuation', 'url', 'number-pad', 'name-phone-pad', 'decimal-pad', 'twitter', 'web-search')
  * maxLength                        : 最大长度
  * autoFocus                        : 默认焦点
- * onChange                         : 文本改变后方法
+ * onChangeText                     : 文本改变后方法
  * value                            : 文本值
  * underlineColorAndroid            :
  * enablesReturnKeyAutomatically    :
@@ -19,7 +19,7 @@
  * ================================================================================================
  * TextInput详解
  *
- * autoCapitalize                   : 枚举类型，可选值有none,sentences,words,characters.当用户输入时，用于提示。
+ * autoCapitalize                   : 枚举类型，可选值有none,sentences,words,characters.当用户输入时，是否设置字母大写。
  * placeholder                      : 占位符，在输入前显示的文本内容。
  * value                            : 文本输入框的默认值。
  * placeholdertTextColor            : 占位符文本颜色。
@@ -54,6 +54,8 @@ export default class HFTextInput extends Component {
         autoFocus: false,
         secureTextEntry: false,
         enablesReturnKeyAutomatically: true,
+        editable: true,
+        focusing: false,
         flagInputCanAccess: false,// 当前输入框激活时,是否可以对文本进行复制和粘贴(对大文本输入可能有用)
         maxLength: 9999,
         placeholder: '请输入...',
@@ -67,6 +69,7 @@ export default class HFTextInput extends Component {
         multiline: React.PropTypes.bool,
         autoFocus: React.PropTypes.bool,
         secureTextEntry: React.PropTypes.bool,
+        editable: React.PropTypes.bool,
         enablesReturnKeyAutomatically: React.PropTypes.bool,
         flagInputCanAccess: React.PropTypes.bool,
         maxLength: React.PropTypes.number,
@@ -81,7 +84,6 @@ export default class HFTextInput extends Component {
         this.state = {
             isLoading: false,
             error: false,
-            iconSource: value && value != null && value != '' ? require('./../Image/Icon/clear.png') : null,
             inputValue: value && value != null && value != '' ? value : '',
             inputLayoutY: 0,
             textInputUUID: null,
@@ -103,7 +105,6 @@ export default class HFTextInput extends Component {
                 if (uuid == self.state.textInputUUID) {
                     self.setState({
                         inputValue: self.state.inputValue + value,
-                        iconSource: require('./../Image/Icon/clear.png')
                     });
                 }
             } else if (self.state.flagInputCanAccess && type == 'HFKeyboardSpacer.getContent') {
@@ -113,57 +114,69 @@ export default class HFTextInput extends Component {
     }
 
     componentWillUnmount() {
-        this._listeners.forEach(listener => listener.remove());
+        if (this._listeners != null) {
+            this._listeners.forEach(listener => listener.remove());
+        }
         if (this.hfTextInputListener != null) {
             this.hfTextInputListener.remove();
         }
     }
 
     handlerToggleClear(event) {
-        if (this.props.ref) {
-            this.refs[this.props.ref].clear();
-        } else {
+        if (this.props.editable) {
             this.refs['hfTextInput'].clear();
-        }
-        this.setState({
-            inputValue: null,
-            iconSource: null
-        });
-        // 调用父组件的方法
-        const {onChange} = this.props;
-        if (onChange) {
-            onChange(event);
+            this.setState({
+                inputValue: null,
+            });
+            // 调用父组件的方法
+            const {onChangeText} = this.props;
+            if (onChangeText) {
+                onChangeText('');
+            }
+            this.refs['hfTextInput'].focus();
         }
     }
 
-    handlerChange(event) {
-        let val = event.nativeEvent.text;
-        if (val != null && val.length > 0) {
+    onChangeText(value) {
+        if (value != null && value.length > 0) {
             this.setState({
-                inputValue: val,
-                iconSource: require('./../Image/Icon/clear.png')
+                inputValue: value,
             });
         } else {
             this.setState({
                 inputValue: null,
-                iconSource: null
             });
         }
         // 调用父组件的方法
-        const {onChange} = this.props;
-        if (onChange) {
-            onChange(event);
+        const {onChangeText} = this.props;
+        if (onChangeText) {
+            onChangeText(value == null ? '' : value);
         }
         if (this.state.flagInputCanAccess) {
             // 通知键盘扩展区,可以复制
-            DeviceEventEmitter.emit('HFKeyboardSpacer', 'HFTextInputFlagCopy', !this.props.secureTextEntry && val != null && val != '');
+            DeviceEventEmitter.emit('HFKeyboardSpacer', 'HFTextInputFlagCopy', !this.props.secureTextEntry && value != null && value != '');
         }
     }
 
-    handlerInputFocus(event) {
+    onEndEditing(event) {
+        let value = event.nativeEvent.text;
+        // 调用父组件的方法
+        const {onEndEditing} = this.props;
+        if (onEndEditing) {
+            onEndEditing(event, value);
+        }
+    }
+
+    onFocus() {
+        this.setState({
+            focusing: true
+        });
         // 通知HFPageBody,以将视图滚动到指定高度
         if (HFConfiguration.textInputFocusMarginTop[HFConfiguration.dpiIndex] >= 0) {
-            DeviceEventEmitter.emit('HFPageBody', 'HFTextInputScroll', this.state.inputLayoutY - HFConfiguration.textInputFocusMarginTop[HFConfiguration.dpiIndex]);
+            let y1 = this.state.inputLayoutY;
+            let y2 = HFConfiguration.textInputFocusMarginTop[HFConfiguration.dpiIndex];
+            let y = y1 > y2 ? y1 - y2 : 0;
+            DeviceEventEmitter.emit('HFPageBody', 'HFTextInputScroll', y);
         }
         // 通知扩展区是否允许复制和粘贴
         DeviceEventEmitter.emit('HFKeyboardSpacer', 'HFTextInputAccess', this.state.flagInputCanAccess);
@@ -176,9 +189,15 @@ export default class HFTextInput extends Component {
         }
     }
 
+    onBlur() {
+        this.setState({
+            focusing: false
+        });
+    }
+
     /**
      * 取得输入框的值
-     * 用法 let val = this.refs.inputRef.getValue();
+     * 用法 let value = this.refs.inputRef.getValue();
      * @returns {*}
      */
     getValue() {
@@ -194,37 +213,50 @@ export default class HFTextInput extends Component {
                 {RenderIf(this.props.flagImage && !this.props.multiline)(
                     <HFImage
                         style={[styles.image, this.props.imageStyle]}
+                        flagNoLoading={true}
                         source={this.props.imageSource}
                     />
                 )}
                 <TextInput
-                    ref={this.props.ref||'hfTextInput'}
+                    ref='hfTextInput'
                     clearButtonMode='never'
-                    style={[styles.input,HFBaseStyle.textInput,this.props.inputStyle]}
+                    autoCapitalize='none'
+                    autoCorrect={false}
+                    style={[HFBaseStyle.textInput,styles.input,this.props.inputStyle]}
                     value={this.state.inputValue}
+                    defaultValue={this.props.defaultValue}
                     multiline={this.props.multiline}
                     placeholder={this.props.placeholder}
-                    placeholderTextColor='#cccccc'
                     secureTextEntry={this.props.secureTextEntry}
                     keyboardType={this.props.keyboardType}
                     maxLength={this.props.maxLength}
                     autoFocus={this.props.autoFocus}
                     underlineColorAndroid={this.props.underlineColorAndroid}
                     enablesReturnKeyAutomatically={this.props.enablesReturnKeyAutomatically}
-                    onChange={this.handlerChange.bind(this)}
-                    onFocus={this.handlerInputFocus.bind(this)}
+                    editable={this.props.editable}
+                    onChangeText={this.onChangeText.bind(this)}
+                    onEndEditing={this.onEndEditing.bind(this)}
+                    onFocus={this.onFocus.bind(this)}
+                    onBlur={this.onBlur.bind(this)}
+                    placeholderTextColor={HFConfiguration.placeholderColor}
                 />
-                <TouchableOpacity style={[styles.button,this.props.iconStyle]}
-                                  underlayColor='white'
-                                  activeOpacity={0.4}
-                                  onPress={this.handlerToggleClear.bind(this)}
-                >
-                    <HFImage
-                        flagNoPlaceholder={true}
-                        style={[styles.icon, this.props.iconStyle]}
-                        source={this.state.iconSource}
-                    />
-                </TouchableOpacity>
+                {RenderIf(this.props.editable && this.state.focusing && this.state.inputValue)(
+                    <TouchableOpacity style={[styles.button,this.props.iconStyle]}
+                                      underlayColor='white'
+                                      activeOpacity={0.4}
+                                      onPress={this.handlerToggleClear.bind(this)}
+                    >
+                        <HFImage
+                            flagNoPlaceholder={true}
+                            flagNoLoading={true}
+                            style={styles.icon}
+                            source={require('./../Image/Icon/clear.png')}
+                        />
+                    </TouchableOpacity>
+                )}
+                {RenderIf(!(this.props.editable && this.state.focusing && this.state.inputValue))(
+                    <View style={{width:20,height:5}}/>
+                )}
             </View>
         );
     }
@@ -245,12 +277,14 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     button: {
-        width: 32,
+        width: 28,
         alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     image: {
-        width: 17.5,
-        height: 23.5,
+        width: HFConfiguration.imageIconSize[HFConfiguration.dpiIndex],
+        height: HFConfiguration.imageIconSize[HFConfiguration.dpiIndex],
         marginLeft: 10,
     },
     icon: {

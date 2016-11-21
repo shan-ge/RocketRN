@@ -28,6 +28,7 @@ import {
 var Icon = require('react-native-vector-icons/FontAwesome');
 
 export default class HFSwitch extends React.Component {
+
     static defaultProps = {
         label: '',
         labelBefore: false,

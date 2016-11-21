@@ -107,7 +107,7 @@ export default class HFCheckbox extends Component {
         }
 
         return (
-            <TouchableHighlight ref={this.props.ref} activeOpacity={100} style={this.props.style} onPress={this.toggle.bind(this)}
+            <TouchableHighlight activeOpacity={100} style={this.props.style} onPress={this.toggle.bind(this)}
                                 underlayColor='white'>
                 {container}
             </TouchableHighlight>

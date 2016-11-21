@@ -22,6 +22,22 @@ var DateUtil = {
         let dateStr = ((date.getMonth() + 1) <= 9 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1)) + '.' + (date.getDate() <= 9 ? '0' + date.getDate() : date.getDate());
         return dateStr;
     },
+    // MM-dd
+    getDateString3(date){
+        if (!date || date == null) {
+            return null;
+        }
+        let dateStr = ((date.getMonth() + 1) <= 9 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1)) + '-' + (date.getDate() <= 9 ? '0' + date.getDate() : date.getDate());
+        return dateStr;
+    },
+    // yyyy
+    getDateString4(date){
+        if (!date || date == null) {
+            return null;
+        }
+        let dateStr = date.getFullYear();
+        return dateStr;
+    },
     // yyyy-MM-dd HH:mm:ss
     getDateTimeString(date){
         if (!date || date == null) {
@@ -188,6 +204,23 @@ var DateUtil = {
             //return '还没到凌晨';
         }
         return null;
+    },
+    //计算年龄
+    calculateAge(birthday) {
+        if (birthday != null && birthday != '') {
+            let ary = birthday.split('-');
+            let now = new Date();
+            let age = now.getFullYear() - ary[0];
+            if (ary[1] > (now.getMonth() + 1)) {
+                age -= 1
+            } else {
+                if (ary[1] == (now.getMonth() + 1) && ary[2] > now.getDate()) {
+                    age -= 1
+                }
+            }
+            return age;
+        }
     }
+
 };
 module.exports = DateUtil;

@@ -40,7 +40,5 @@ buck-out/
 android/app/libs
 android/keystores/debug.keystore
 
-#特别要加入git的
-!node_modules/react-native-swipeout/index.js
-!node_modules/react-native-gifted-spinner/GiftedSpinner.js
-!node_modules/react-native-uuid-generator/index.js
+#特别的
+/Application/Common/Config.js

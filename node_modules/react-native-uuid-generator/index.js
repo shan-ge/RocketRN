@@ -1,7 +1,6 @@
 import { NativeModules } from 'react-native';
 
 const { RNUUIDGenerator } = NativeModules;
-
 export default {
     getRandomUUID(callback) {
         if (RNUUIDGenerator != undefined && RNUUIDGenerator != null) {

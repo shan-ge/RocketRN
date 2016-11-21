@@ -25,6 +25,7 @@ class HFConfirm extends Component {
         buttonText: React.PropTypes.string,
         cancelText: React.PropTypes.string,
         callback: React.PropTypes.func,
+        cancelCallback: React.PropTypes.func,
     };
 
     constructor(props) {
@@ -41,6 +42,9 @@ class HFConfirm extends Component {
 
     onCancel() {
         Dialog.confirmCancel();
+        if (this.props.cancelCallback) {
+            this.props.cancelCallback();
+        }
     }
 
     render() {
@@ -60,15 +64,15 @@ class HFConfirm extends Component {
                                 level={2}
                                 numberOfLines={1}
                                 text={this.props.title}
-                                style={{alignSelf:'center',color:HFConfiguration.textFontColor2,marginTop:HFConfiguration.viewMargin[HFConfiguration.dpiIndex][0]}}
+                                style={{alignSelf:'center',color:HFConfiguration.textFontColor2,marginTop:10}}
                             />
-                            <HFSeparator/>
+                            <HFSeparator style={{marginTop:10,marginBottom:20}}/>
                             <HFParagraph
                                 numberOfLines={10}
                                 text={this.props.text}
                                 style={styles.text}
                             />
-                            <HFSeparator style={{marginBottom:0}}/>
+                            <HFSeparator style={{marginTop:20,marginBottom:0}}/>
                             <View style={styles.buttonView}>
                                 <HFTextButton
                                     numberOfLines={1}
@@ -103,10 +107,10 @@ var styles = StyleSheet.create({
         alignSelf: 'stretch',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(0,0,0,0.5)',
+        backgroundColor: HFConfiguration.dialogBackground,
     },
     subView: {
-        minWidth: 250,
+        width: HFConfiguration.windowWidth - 100,
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
@@ -114,8 +118,8 @@ var styles = StyleSheet.create({
         borderRadius: 5,
         borderWidth: 0.5,
         borderColor: '#e4e4e4',
-        marginLeft: 80,
-        marginRight: 80,
+        marginLeft: 50,
+        marginRight: 50,
     },
     text: {
         marginLeft: 10,
@@ -129,7 +133,7 @@ var styles = StyleSheet.create({
     },
     button: {
         flex: 1,
-        marginTop: 10,
+        marginTop: 0,
         marginLeft: 20,
         marginRight: 20,
         justifyContent: 'center',

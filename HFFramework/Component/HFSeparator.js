@@ -1,5 +1,5 @@
 /**
- * Created by shange on 16/8/10. 输入框 左侧label image图片模块
+ * Created by shange on 16/8/10. 分隔线
  *
  * 行元素,相当于<hr/>
  */
@@ -11,7 +11,7 @@ import {HFView, HFConfiguration, StyleSheet} from './../Framework';
 class HFSeparator extends Component {
     render() {
         return (
-            <HFView ref={this.props.ref} style={[styles.hr, this.props.style]}/>
+            <HFView style={[styles.hr, this.props.style]}/>
         );
     }
 }

@@ -17,8 +17,7 @@ import {HFText, HFConfiguration, HFBaseStyle, TouchableOpacity, StyleSheet} from
 class HFHugeButton extends Component {
     render() {
         return (
-            <TouchableOpacity ref={this.props.ref}
-                              style={[styles.button,HFBaseStyle.button,this.props.disabled && styles.disabled,!(this.props.disabled) && styles.enabled,this.props.style]}
+            <TouchableOpacity style={[styles.button,HFBaseStyle.button,this.props.disabled && styles.disabled,!(this.props.disabled) && styles.enabled,this.props.style]}
                               disabled={this.props.disabled?this.props.disabled:false}
                               underlayColor='white'
                               activeOpacity={0.4}
@@ -33,6 +32,8 @@ class HFHugeButton extends Component {
 const styles = StyleSheet.create({
     button: {
         marginTop: HFConfiguration.buttonHugeMarginTop,
+        marginLeft: HFConfiguration.buttonHugeMarginLeftRight[HFConfiguration.dpiIndex],
+        marginRight: HFConfiguration.buttonHugeMarginLeftRight[HFConfiguration.dpiIndex],
         height: HFConfiguration.buttonHugeHeight,
         flexDirection: 'row',
         borderWidth: 1,
@@ -41,14 +42,12 @@ const styles = StyleSheet.create({
         opacity: 30,
         justifyContent: 'center'
     },
-    enabled: {
-    },
+    enabled: {},
     disabled: {
         backgroundColor: '#d9d9d9',
         borderColor: '#d9d9d9',
     },
     buttonText: {
-        fontSize: 16,
         color: 'white',
         alignSelf: 'center'
     }

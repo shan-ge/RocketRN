@@ -29,8 +29,7 @@ class HFParagraph extends Component {
             indentationText += '    ';
         }
         return (
-            <HFView ref={this.props.ref}
-                    style={[styles.view,this.props.viewStyle]}
+            <HFView style={[styles.view,this.props.viewStyle]}
                     innerView={
                     <HFText fontSizeDiff={this.props.fontSizeDiff} numberOfLines={this.props.numberOfLines} allowFontScaling={HFConfiguration.textAllowFontScaling} style={[styles.paragraph,this.props.style]} text={indentationText + this.props.text}/>
                     }

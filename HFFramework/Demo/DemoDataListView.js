@@ -3,7 +3,7 @@
  * 后发App框架示例
  */
 import React, {Component} from 'react';
-import {HFPage, HFText, HFDataListView, HFHugeButton, HFConfiguration, View, StyleSheet} from './../Framework';
+import {HFPage, HFText, HFDataListView, HFConfiguration, View, StyleSheet} from './../Framework';
 
 import Configuration from './../Configuration';
 
@@ -23,7 +23,7 @@ class DemoDataListView extends Component {
                     <HFDataListView
                             flagReadCache={false}
                             fetchUrl='/product/insurancePackList'
-                            fetchParam={{}}
+                            fetchParam={{'userId':1}}
                             renderRowView={()=>{
                                 return (
                                     <View>
@@ -38,23 +38,6 @@ class DemoDataListView extends Component {
     }
 }
 
-const styles = StyleSheet.create({
-    buttonRed: {
-        backgroundColor: '#dd3300',
-        borderColor: '#dd3300',
-    },
-    buttonGreen: {
-        backgroundColor: '#00cf92',
-        borderColor: '#00cf92',
-    },
-    buttonOrange: {
-        backgroundColor: '#ff6d2d',
-        borderColor: '#ff6d2d',
-    },
-    buttonBlack: {
-        backgroundColor: '#333333',
-        borderColor: '#333333',
-    },
-});
+const styles = StyleSheet.create({});
 
 module.exports = DemoDataListView;

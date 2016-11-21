@@ -3,9 +3,11 @@
  * 后发App框架示例
  */
 import React, {Component} from 'react';
-import {HFNavigatorConfig, Navigator, AsyncStorage} from './HFFramework/Framework';
-import Demo from './HFFramework/Demo/Demo';
+import {HFNavigatorConfig, Navigator, BackAndroid, AsyncStorage} from './HFFramework/Framework';
 import Storage from 'react-native-storage';
+import Toast from '@remobile/react-native-toast';
+
+import Index from './Application/Component/Index';
 
 var storage = new Storage({
     storageBackend: AsyncStorage,
@@ -26,15 +28,56 @@ class hfFramework extends Component {
 
     constructor(props) {
         super(props);
+        this.navigator = null;
+
+        ErrorUtils.setGlobalHandler((err, isFatal) => {
+            if (err != null) {
+                console.error(err);
+            }
+        });
+    }
+
+    componentWillMount() {
+        let self = this;
+        this.rootListener = DeviceEventEmitter.addListener('navigator', function (navigator) {
+            self.navigator = navigator;
+        });
+
+        BackAndroid.addEventListener('hardwareBsackPress', function () {
+            if (self.navigator && self.navigator.getCurrentRoutes().length > 1) {
+                self.navigator.pop();
+                return true;
+            }
+            if (self.lastBackPressed && (self.lastBackPressed + 2000 >= Date.now())) {
+                //最近2秒内按过back键，可以退出应用。
+                BackAndroid.exitApp();
+                return true;
+            }
+            self.lastBackPressed = Date.now();
+            Toast.showShortCenter('再按一次退出应用!');
+            return true;
+        });
+    }
+
+    componentWillUnmount() {
+        this.rootListener.remove();
+        BackAndroid.removeEventListener();
     }
 
     render() {
         return (
-            <Navigator
-                initialRoute={{component: Demo}}
-                configureScene={HFNavigatorConfig.configureScene}
-                renderScene={HFNavigatorConfig.renderScene}
-            />
+            <View style={{flex:1,alignSelf:'stretch'}}>
+                <StatusBar
+                    backgroundColor='rgba(0, 0, 0, 1)'
+                    barStyle="default"
+                    translucent={true}
+                />
+                <Navigator
+                    initialRoute={{component: Index}}
+                    configureScene={HFNavigatorConfig.configureScene}
+                    renderScene={HFNavigatorConfig.renderScene}
+                />
+            </View>
         );
     }
 }

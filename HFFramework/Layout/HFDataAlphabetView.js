@@ -136,7 +136,7 @@ class SectionItem extends Component {
     render() {
         return (
             <Text
-                style={{color:'#00cf92',textAlign:'right',height:HFConfiguration.windowHeight/26}}>{this.props.title}</Text>
+                style={{color:'#cccccc',textAlign:'right',height:HFConfiguration.windowHeight/26}}>{this.props.title}</Text>
         );
     }
 }

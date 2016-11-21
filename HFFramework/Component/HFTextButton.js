@@ -13,26 +13,48 @@ class HFTextButton extends Component {
     static defaultProps = {
         disabled: false,
         fontSizeDiff: -3,
+        numberOfLines: 1,
     };
 
     static propTypes = {
         disabled: React.PropTypes.bool,
         fontSizeDiff: React.PropTypes.number,
+        numberOfLines: React.PropTypes.number,
     };
+
+    componentWillReceiveProps(newProps) {
+        this.setState({
+            disabled: newProps.disabled,
+            fontSizeDiff: newProps.fontSizeDiff,
+            text: newProps.text,
+            numberOfLines: newProps.numberOfLines,
+            onPress: newProps.onPress,
+        });
+    }
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            disabled: this.props.disabled,
+            fontSizeDiff: this.props.fontSizeDiff,
+            text: this.props.text,
+            numberOfLines: this.props.numberOfLines,
+            onPress: this.props.onPress,
+        };
+    }
 
     render() {
         return (
-            <TouchableOpacity ref={this.props.ref}
-                              style={[styles.button,this.props.style]}
+            <TouchableOpacity style={[styles.button,this.props.style]}
                               underlayColor='white'
                               activeOpacity={0.4}
-                              disabled={this.props.disabled}
-                              onPress={this.props.onPress}
+                              disabled={this.state.disabled}
+                              onPress={this.state.onPress}
             >
-                <HFText fontSizeDiff={this.props.fontSizeDiff}
-                        text={this.props.text}
-                        numberOfLines={this.props.numberOfLines}
-                        style={[styles.text,{fontSize:HFConfiguration.buttonFontSize[HFConfiguration.dpiIndex] + this.props.fontSizeDiff},this.props.disabled && styles.disabled,!(this.props.disabled) && styles.enabled,this.props.textStyle]}
+                <HFText fontSizeDiff={this.state.fontSizeDiff}
+                        text={this.state.text}
+                        numberOfLines={this.state.numberOfLines}
+                        style={[styles.text,{fontSize:HFConfiguration.buttonFontSize[HFConfiguration.dpiIndex] + this.state.fontSizeDiff},this.state.disabled && styles.disabled,!(this.state.disabled) && styles.enabled,this.props.textStyle]}
                 />
             </TouchableOpacity>
         );

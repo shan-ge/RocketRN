@@ -17,6 +17,7 @@ class HFImageButton extends Component {
         flagLeftText: false,
         flagRightText: false,
         fontSizeDiff: -3,
+        numberOfLines: 1,
     };
 
     static propTypes = {
@@ -26,31 +27,65 @@ class HFImageButton extends Component {
         leftText: React.PropTypes.string,
         rightText: React.PropTypes.string,
         fontSizeDiff: React.PropTypes.number,
+        numberOfLines: React.PropTypes.number,
     };
+
+    componentWillReceiveProps(newProps) {
+        this.setState({
+            source: newProps.source,
+            uri: newProps.uri,
+            disabled: newProps.disabled,
+            flagLeftText: newProps.flagLeftText,
+            flagRightText: newProps.flagRightText,
+            leftText: newProps.leftText,
+            rightText: newProps.rightText,
+            fontSizeDiff: newProps.fontSizeDiff,
+            numberOfLines: newProps.numberOfLines,
+        });
+    }
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            numberOfLines: this.props.numberOfLines,
+            source: this.props.source,
+            uri: this.props.uri,
+            disabled: this.props.disabled,
+            fontSizeDiff: this.props.fontSizeDiff,
+            flagLeftText: this.props.flagLeftText,
+            flagRightText: this.props.flagRightText,
+            leftText: this.props.leftText,
+            rightText: this.props.rightText,
+            onPress: this.props.onPress,
+        };
+    }
 
     render() {
         return (
-            <TouchableOpacity ref={this.props.ref}
-                              style={[styles.button,HFBaseStyle.button,this.props.disabled && styles.disabled,!(this.props.disabled) && styles.enabled,this.props.style]}
-                              underlayColor='white'
-                              activeOpacity={0.4}
-                              disabled={this.props.disabled}
-                              onPress={this.props.onPress}
+            <TouchableOpacity
+                style={[styles.button,HFBaseStyle.button,this.state.disabled && styles.disabled,!(this.state.disabled) && styles.enabled,this.props.style]}
+                underlayColor='white'
+                activeOpacity={0.4}
+                disabled={this.state.disabled}
+                onPress={this.state.onPress}
             >
-                {RenderIf(this.props.flagLeftText)(
-                    <HFText fontSizeDiff={this.props.fontSizeDiff}
-                            text={this.props.leftText}
-                            style={[styles.leftText,HFBaseStyle.buttonText,{fontSize:HFConfiguration.buttonFontSize[HFConfiguration.dpiIndex] + this.props.fontSizeDiff},this.props.leftTextStyle]}
+                {RenderIf(this.state.flagLeftText)(
+                    <HFText fontSizeDiff={this.state.fontSizeDiff}
+                            text={this.state.leftText}
+                            numberOfLines={this.state.numberOfLines}
+                            style={[styles.leftText,HFBaseStyle.buttonText,{fontSize:HFConfiguration.buttonFontSize[HFConfiguration.dpiIndex] + this.state.fontSizeDiff},this.props.leftTextStyle]}
                     />
                 )}
                 <HFImage
                     style={[styles.image, this.props.imageStyle]}
-                    source={this.props.source}
+                    source={this.state.source}
+                    uri={this.state.uri}
                 />
-                {RenderIf(this.props.flagRightText)(
-                    <HFText fontSizeDiff={this.props.fontSizeDiff}
-                            text={this.props.rightText}
-                            style={[styles.rightText,HFBaseStyle.buttonText,{fontSize:HFConfiguration.buttonFontSize[HFConfiguration.dpiIndex] + this.props.fontSizeDiff},this.props.rightTextStyle]}
+                {RenderIf(this.state.flagRightText)(
+                    <HFText fontSizeDiff={this.state.fontSizeDiff}
+                            text={this.state.rightText}
+                            numberOfLines={this.state.numberOfLines}
+                            style={[styles.rightText,HFBaseStyle.buttonText,{fontSize:HFConfiguration.buttonFontSize[HFConfiguration.dpiIndex] + this.state.fontSizeDiff},this.props.rightTextStyle]}
                     />
                 )}
             </TouchableOpacity>
@@ -69,8 +104,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    enabled: {
-    },
+    enabled: {},
     disabled: {
         backgroundColor: '#d9d9d9',
         borderColor: '#d9d9d9',

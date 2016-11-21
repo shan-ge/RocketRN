@@ -4,39 +4,28 @@
 ## 组件版本
 - React ```15.3.2```
 - ReactNative ```0.36.0```
+- IOS ```^8.0```
+- Android ```^4.0```
 - 第三方控件,请见package.json
 
 ## 框架的目标
-- 适应未来的ReactNative版本
+- 适应未来的ReactNative/IOS/Android版本
 - 适应不同的终端及分辨率
 - 自定义组件管理
-- 页面样式的控制
-- 导航的控制
+- 页面样式的统一控制和灵活切换
+- 路由和拦截器的控制
 - 数据交互的管理
 - 第三方组件引用的版本控制
 - 用户操作指引
 - 文字字体缩放控制
 - 图片的友好显示
 - 键盘的弹出和关闭
-- 减少警告和闪退
 - 埋点日志
+- 减少警告和闪退
 
 ## 特殊配置
 - 锁定屏幕旋转
 - 华为的虚拟按键
-
-## 需要安装的插件
-- 列表视图 ```npm install --save react-native-gifted-listview```
-- 左划按钮 ```npm install --save react-native-swipeout```
-- 附件上传 ```npm install --save react-native-fetch-blob```
-- 消息提示 ```npm install --save @remobile/react-native-toast```
-- 应用缓存 ```npm install --save react-native-storage```
-- UUID生成器 ```npm install --save react-native-uuid-generator```
-
-## 当前版本需要特别加入到git的文件(详见.gitignore)
-- node_modules/react-native-swipeout/index.js
-- node_modules/react-native-gifted-spinner/GiftedSpinner.js
-- node_modules/react-native-uuid-generator/index.js
 
 --------
 
@@ -65,7 +54,7 @@
 ## ./Component/组件说明
 |  名称 | 路径 | 功能说明 |
 |  -------- | -------- | -------- |
-|  **图像** | HFImage | 可本地可远程,缓存远程图片,自适应尺寸,有加载动画,获取图像失败则显示占位图 |
+|  **图像** | HFImage | 可本地可远程,缓存远程图片,自适应尺寸,有加载动画,获取图像失败则显示占位图,可点击查看大图 |
 |  **文本** | HFText | 从配置中获取字体样式,缩放控制.字体大小通过偏移量fontSizeDiff来设置其它尺寸 |
 |  视图 | HFView | 可统一设置内外边距 |
 |  文本段落 | HFParagraph | 显示一段文字 |
@@ -113,3 +102,21 @@
 |  按需加载 | RenderIf | 当符合条件时才加载指定内容 |
 |  服务地址 | Service | 各个请求方法的后台路径 |
 |  待.. | 补.. | 充.. |
+
+--------
+
+## ./Utility/Api及Navigator的返回码说明(适用于请求和页面跳转，前后端保持一致)
+|  返回码 | 说明 | 结果 | 消息中心 |
+|  -------- | -------- | -------- | -------- |
+|  0 | 请求成功但数据为空 | 查询流程成功,但数据为空 | 无 |
+|  1 | 请求成功 | 增删改查成功 | 无 |
+|  2~99 | 其他一般返回码 | 业务自定义 | 无 |
+|  <font color=yellow>以下返回码</font> | <font color=yellow>均由消息中心控制，</font> | <font color=yellow>各个业务页面对这些失败的返回码</font> | <font color=yellow>不做处理。</font> |
+|  100~199 | 操作级别 | 100 刷新太过频繁，请稍等一会 | Toast短提示 |
+|  200~299 | 网络级别 | 200 您当前正使用移动数据网络，是否继续？（大流量访问开始之前） <br/> 210 网络连接失败 | Confirm提示/Toast短提示 |
+|  300~399 | 会话级别 | 300 登录失效，请重新登录 <br/> 310 该账号已在其它设备登录，请重新登录 <br/> 320 用户状态异常，请切换账号试试 <br/> 330 请您先完善信息 <br/> 340 请您先完成认证 | Toast短提示，跳转到登录页/反馈页/完善信息页/认证页 |
+|  400~499 | 权限级别 | 400 您无权使用该功能 <br/> 410 您无权查看该数据 | Toast短提示 |
+|  500~599 | 服务级别 | 500 后台返回异常 | Toast短提示 |
+|  800~899 | 预言级别 | 预留的通知和事件，不确定未来会发生什么的保留接口 | Toast长提示 |
+|  900~999 | 预言级别 | 预留的通知和事件，不确定未来会发生什么的保留接口 | Alert需要点击确定 |
+|  1000~1099 | 应用级别 | 1000 无法获取客户端版本，请重新下载 <br/> 1010 客户端版本过低，请更新 <br/> 1020 客户端有误,请重新下载 | Confirm提示，确定到应用市场，取消退出 |

@@ -32,6 +32,9 @@ const Framework = {
     get HFBaseStyle() {
         return require('./Styles/BaseStyle');
     },
+    get HFNavigatorConfig() {
+        return require('./Utility/NavigatorConfig');
+    },
     /**
      * 布局工具
      */
@@ -77,6 +80,9 @@ const Framework = {
     get HFSeparator() {
         return require('./Component/HFSeparator');
     },
+    get HFSeparatorArea() {
+        return require('./Component/HFSeparatorArea');
+    },
     get HFView() {
         return require('./Component/HFView');
     },
@@ -107,8 +113,17 @@ const Framework = {
     get HFTextInput() {
         return require('./Component/HFTextInput');
     },
-    get HFTimePicker() {
-        return require('./Component/HFTimePicker');
+    get HFRowInput() {
+        return require('./Component/HFRowInput');
+    },
+    get HFRowBox() {
+        return require('./Component/HFRowBox');
+    },
+    /**
+     * 选择器
+     */
+    get HFPicker() {
+        return require('./Picker/HFPicker');
     },
     /**
      * 弹出框工具
@@ -118,6 +133,9 @@ const Framework = {
     },
     get HFConfirm() {
         return require('./Component/HFConfirm');
+    },
+    get HFDialog() {
+        return require('./Component/HFDialog');
     },
     /**
      * 键盘工具
@@ -141,13 +159,10 @@ const Framework = {
         return require('./Component/HFTextButton');
     },
     /**
-     * 方法类工具
+     * 配置类工具
      */
-    get HFDateUtil() {
-        return require('./Utility/DateUtil');
-    },
-    get HFNavigatorConfig() {
-        return require('./Utility/NavigatorConfig');
+    get HFMultiOptionPicker() {
+        return require('./Picker/HFMultiOptionPicker');
     },
     /****************************************************************/
     /** ReactNative **/

@@ -71,9 +71,9 @@ class HFDataEmptyView extends Component {
                                 refreshing={this.state.refreshing}
                                 onRefresh={this.onRefresh.bind(this)}
                                 title="重新加载"
-                                titleColor={HFConfiguration.mainColor}
-                                tintColor={HFConfiguration.mainColor}
-                                colors={[HFConfiguration.mainColor]}
+                                titleColor={'#cccccc'}
+                                tintColor={'#cccccc'}
+                                colors={['#cccccc']}
                             />
                         }
                 >

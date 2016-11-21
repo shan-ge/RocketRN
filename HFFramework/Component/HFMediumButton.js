@@ -26,8 +26,7 @@ class HFMediumButton extends Component {
 
     render() {
         return (
-            <TouchableOpacity ref={this.props.ref}
-                              style={[styles.button,HFBaseStyle.button,this.props.disabled && styles.disabled,!(this.props.disabled) && styles.enabled,this.props.style]}
+            <TouchableOpacity style={[styles.button,HFBaseStyle.button,this.props.disabled && styles.disabled,!(this.props.disabled) && styles.enabled,this.props.style]}
                               disabled={this.props.disabled?this.props.disabled:false}
                               underlayColor='white'
                               activeOpacity={0.4}

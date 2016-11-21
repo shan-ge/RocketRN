@@ -9,8 +9,8 @@ import {HFBaseStyle, HFConfiguration, View, StyleSheet} from './../Framework';
 class HFView extends Component {
     render() {
         return (
-            <View ref={this.props.ref} style={[styles.outerView,HFBaseStyle.view,this.props.style]}>
-                {this.props.innerView}
+            <View style={[styles.outerView,HFBaseStyle.view,this.props.style]}>
+                {this.props.innerView||this.props.children}
             </View>
         );
     }

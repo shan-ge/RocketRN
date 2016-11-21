@@ -28,22 +28,6 @@ class DemoWebView extends Component {
 }
 
 const styles = StyleSheet.create({
-    buttonRed: {
-        backgroundColor: '#dd3300',
-        borderColor: '#dd3300',
-    },
-    buttonGreen: {
-        backgroundColor: '#00cf92',
-        borderColor: '#00cf92',
-    },
-    buttonOrange: {
-        backgroundColor: '#ff6d2d',
-        borderColor: '#ff6d2d',
-    },
-    buttonBlack: {
-        backgroundColor: '#333333',
-        borderColor: '#333333',
-    },
 });
 
 module.exports = DemoWebView;

@@ -28,15 +28,16 @@ class HFDataListView extends Component {
 
     static defaultProps = {
         flagReadCache: false,// 是否读取缓存
-        flagIsGrid: false,// 是否网格视图
         emptyImageSource: require('./../Image/no_history.png'),
         emptyImageWidthHeightRatio: 1080 / 551,// 空视图的宽高比,宽度由框架来控制,开发者只给出比例即可
     };
 
     static propTypes = {
+        // 下面两者必有其一
+        fetchUrl: React.PropTypes.string,// 请求的链接
+        fetchData: React.PropTypes.array,// 请求的数据
+        //
         flagReadCache: React.PropTypes.bool,// 是否读取缓存
-        flagIsGrid: React.PropTypes.bool,// 是否网格视图
-        fetchUrl: React.PropTypes.string.isRequired,// 请求的链接(必须)
         emptyImageWidthHeightRatio: React.PropTypes.number,// 空视图图片的宽高比
         // 视图
         renderRowView: React.PropTypes.func.isRequired,// 行视图(必须)
@@ -61,77 +62,106 @@ class HFDataListView extends Component {
         // 请求数据
         this.fetchData();
         // 网格视图经测试经常无法正常渲染,由下面方法解决
-        if (this.props.flagIsGrid) {
-            if (TimerIndex) {
-                clearInterval(TimerIndex);
-            }
-            TimerCount = 0;
-            TimerIndex = setInterval(() => {
-                // 如果不在这个页面了,这个值就是undefined
-                if (TimerCount <= 9) {
-                    TimerCount++;
-                    if (this.refs.dataListView) {
-                        this.refs.dataListView.scrollTo({
-                            x: 0,
-                            y: (TimerCount % 2 == 0 ? 0.5 : 0),
-                            animated: true
-                        });
-                    }
-                } else {
-                    if (TimerIndex) {
-                        clearInterval(TimerIndex);
-                    }
-                }
-            }, 200);
+        if (TimerIndex) {
+            clearInterval(TimerIndex);
         }
+        TimerCount = 0;
+        TimerIndex = setInterval(() => {
+            // 如果不在这个页面了,这个值就是undefined
+            if (TimerCount < 9) {
+                TimerCount++;
+                if (this.refs.dataListView) {
+                    this.refs.dataListView.scrollTo({
+                        x: 0,
+                        y: (TimerCount % 2 == 0 ? 0.5 : 0),
+                        animated: true
+                    });
+                }
+            } else {
+                if (TimerIndex) {
+                    clearInterval(TimerIndex);
+                }
+            }
+        }, 10);
     }
 
     componentWillUnMount() {
-        if (this.props.flagIsGrid && TimerIndex) {
+        if (imerIndex) {
             clearInterval(TimerIndex);
         }
     }
 
     fetchData() {
-        var self = this;
-        return new Promise(function (resolve, reject) {
-            var fetchUrl = self.props.fetchUrl;
-            Api.get(fetchUrl, self.props.fetchParam, self.props.flagReadCache)
-                .then(res => {
-                    if (res && res['status'] == 1) {
-                        let allDatas = res['data'];
-                        if (allDatas) {
-                            let ds = self.state.ds;
-                            self.setState({
-                                allDatas: allDatas,
-                                dataSource: ds.cloneWithRows(allDatas),
+        if (this.props.fetchUrl != null && this.props.fetchUrl != '') {
+            var self = this;
+            return new Promise(function (resolve, reject) {
+                var fetchUrl = self.props.fetchUrl;
+                Api.get(fetchUrl, self.props.fetchParam, self.props.flagReadCache)
+                    .then(res => {
+                        if (res && res['status'] == 1) {
+                            let allDatas = res['data'];
+                            if (allDatas) {
+                                let ds = self.state.ds;
+                                self.setState({
+                                    allDatas: allDatas,
+                                    dataSource: ds.cloneWithRows(allDatas),
+                                });
+                            }
+                        } else if (res && res['status'] == 0) {
+                            Toast.showShortCenter('列表为空!');
+                        } else {
+                            Toast.showShortCenter('未能加载列表,' + res['message']);
+                        }
+                        if (self.refs.dataListView) {
+                            self.refs.dataListView.scrollTo({
+                                x: 0,
+                                y: 0,
+                                animated: true
                             });
                         }
-                    } else if (res && res['status'] == 0) {
-                        Toast.showShortCenter('列表为空!');
-                    } else {
-                        Toast.showShortCenter('未能加载列表,' + res['message']);
-                    }
+                        resolve();
+                    }).catch(e => {
+                    Toast.showShortCenter('加载列表失败!');
                     resolve();
-                }).catch(e => {
-                Toast.showShortCenter('加载列表失败!');
+                })
+            });
+        } else if (this.props.fetchData != null && this.props.fetchData.length > 0) {
+            let ds = this.state.ds;
+            let allDatas = this.props.fetchData;
+            var self = this;
+            return new Promise(function (resolve, reject) {
+                self.setState({
+                    allDatas: allDatas,
+                    dataSource: ds.cloneWithRows(allDatas),
+                });
+                if (self.refs.dataListView) {
+                    self.refs.dataListView.scrollTo({
+                        x: 0,
+                        y: 0,
+                        animated: true
+                    });
+                }
                 resolve();
-            })
-        });
+            });
+        } else {
+            return new Promise(function (resolve, reject) {
+                resolve();
+            });
+        }
     }
 
     renderRowView(event, dataRow, sectionID, rowID, key) {
         if (dataRow == null) {
-            return <View style={[styles.innerView,this.state.dataGridRowStyle,{height:100}]}/>;
+            return <View key={key} style={[styles.innerView,this.state.dataGridRowStyle,{height:100}]}/>;
         }
         if (this.props.renderRowView) {
             return (
-                <View style={[styles.innerView,this.state.dataGridRowStyle]}>
+                <View key={key} style={[styles.innerView,this.state.dataGridRowStyle]}>
                     {this.props.renderRowView(event, dataRow, sectionID, rowID, key)}
                 </View>
             );
         } else {
-            return <View style={[styles.innerView,this.state.dataGridRowStyle,{height:100}]}/>;
+            return <View key={key} style={[styles.innerView,this.state.dataGridRowStyle,{height:100}]}/>;
         }
     }
 
@@ -159,20 +189,21 @@ class HFDataListView extends Component {
                 {RenderIf(this.state.allDatas != null && this.state.allDatas.length > 0)(
                     <ListView
                         ref="dataListView"
+                        showsVerticalScrollIndicator={false}
                         style={styles.outerView}
                         contentContainerStyle={this.props.contentContainerStyle}
                         enableEmptySections={true}
                         dataSource={this.state.dataSource}
                         renderRow={(dataRow, sectionID, rowID)=>this.renderRowView(this, dataRow, sectionID, rowID, 'dataRow_' + rowID)}
-                        renderSeparator={(sectionID, rowID)=>this.renderDataRowSeparator(this,'separator'+'_'+rowID)}
+                        renderSeparator={(sectionID, rowID)=>this.renderDataRowSeparator(this,'separator_'+rowID)}
                         refreshControl={
                             <RefreshControl
                                 refreshing={this.state.refreshing}
                                 onRefresh={this.fetchData.bind(this)}
                                 title="重新加载"
-                                titleColor={HFConfiguration.mainColor}
-                                tintColor={HFConfiguration.mainColor}
-                                colors={[HFConfiguration.mainColor]}
+                                titleColor={'#cccccc'}
+                                tintColor={'#cccccc'}
+                                colors={['#cccccc']}
                             />
                         }
                     />

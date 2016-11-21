@@ -16,8 +16,11 @@ class HFDataGridView extends Component {
     };
 
     static propTypes = {
+        // 下面两者必有其一
+        fetchUrl: React.PropTypes.string,// 请求的链接
+        fetchData: React.PropTypes.array,// 请求的数据
+        //
         flagReadCache: React.PropTypes.bool,// 是否读取缓存
-        fetchUrl: React.PropTypes.string.isRequired,// 请求的链接(必须)
         columnCount: React.PropTypes.number.isRequired,// 每行要显示的列数
         emptyImageWidthHeightRatio: React.PropTypes.number,// 空视图图片的宽高比
         // 视图
@@ -40,11 +43,11 @@ class HFDataGridView extends Component {
         return (
             <HFDataListView
                 flagNoSeparator={true}
-                flagIsGrid={true}
+                fetchUrl={this.props.fetchUrl}
+                fetchData={this.props.fetchData}
                 style={[styles.outerView,this.props.style]}
                 contentContainerStyle={[styles.listView,this.props.style]}
                 dataGridRowStyle={[styles.dataGridRowStyle,{width:this.state.gridRowWidth},this.props.dataGridRowStyle]}
-                fetchUrl={this.props.fetchUrl}
                 flagReadCache={this.props.flagReadCache}
                 emptyImageSource={this.props.emptyImageSource}
                 emptyImageWidthHeightRatio={this.props.emptyImageWidthHeightRatio}

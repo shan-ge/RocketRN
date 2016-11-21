@@ -9,7 +9,6 @@
  *          key 键对值,获取key相关的数据
  */
 import {AsyncStorage, Platform} from 'react-native';
-import Constants from './Constants';
 const Handler = {
     keys: [],
     save(key, param, expires){

@@ -5,7 +5,7 @@
 
 'use strict';
 import React, {Component} from 'react';
-import {HFSeparator, HFBaseStyle, HFConfiguration, HFImage, HFImageButton, View, ListView, DeviceEventEmitter, TouchableOpacity, StyleSheet} from './../Framework';
+import {HFSeparator,HFSeparatorArea, HFBaseStyle, HFConfiguration, HFImage, HFImageButton,HFHugeButton,View, ListView, DeviceEventEmitter, TouchableOpacity, StyleSheet} from './../Framework';
 
 import Toast from '@remobile/react-native-toast';
 import GiftedListView from 'react-native-gifted-listview';
@@ -36,25 +36,31 @@ class HFDataPageView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            hasMoreData: false
+            hasMoreData: true
         };
         self = this;
     }
 
     fetchData(page = 1, callback, options) {
         var fetchUrl = self.props.fetchUrl;
-        if (page == 1) {
-            DeviceEventEmitter.emit('HFDataPageView', 'hasMoreData', true);
+        var fetchParam = self.props.fetchParam;
+        var param = {'pageNumber':page};
+        if(fetchParam != null){
+            param = fetchParam;
+            param.pageNumber = page;
         }
-        Api.get(fetchUrl, {pageNumber: page}, self.props.flagReadCache)
+        Api.get(fetchUrl, param, self.props.flagReadCache)
             .then(res => {
-                if (res && res['status'] == 1) {
+                if (res && res['status'] == 1 && res['data']) {
+                    if(self.props.getTotalCount){
+                        self.props.getTotalCount(res['data']['total']);
+                    }
                     let allDatas = res['data'];
                     if (allDatas['pages'] != null && parseInt(allDatas['pages']) <= page) {
-                        DeviceEventEmitter.emit('HFDataPageView', 'hasMoreData', false);
+                        self.setState({hasMoreData:false});
                     } else if (allDatas['pageNum'] != null && allDatas['pageNum'] < page) {
                         if (page > 1) {
-                            DeviceEventEmitter.emit('HFDataPageView', 'hasMoreData', false);
+                            self.setState({hasMoreData:false});
                         }
                         callback([]);
                         return false;
@@ -70,18 +76,15 @@ class HFDataPageView extends Component {
                     Toast.showShortCenter('未能加载列表,' + res['message']);
                     callback([]);
                 }
-            }).catch(e => {
-            Toast.showShortCenter('加载列表失败!');
-            callback([]);
-        })
+            })
     }
 
-    renderRowView(event, dataRow, sectionID, rowID, key) {
+    renderRowView(dataRow, sectionID, rowID, key) {
         if (dataRow == null) {
             return null;
         }
         if (this.props.renderRowView) {
-            return this.props.renderRowView(event, dataRow, sectionID, rowID, key);
+            return this.props.renderRowView(dataRow, sectionID, rowID, key);
         } else {
             return null;
         }
@@ -93,7 +96,7 @@ class HFDataPageView extends Component {
             return null;
         } else {
             return (
-                <HFSeparator key={key} style={this.props.separatorStyle}/>
+                <HFSeparatorArea key={key} style={this.props.separatorStyle}/>
             )
         }
     }
@@ -106,19 +109,16 @@ class HFDataPageView extends Component {
                     style={styles.outerView}
                     enableEmptySections={true}
                     renderSeparator={(sectionID,rowID)=>this.renderDataRowSeparator(this,'separator'+'_'+rowID)}
-                    rowView={(dataRow, sectionID, rowID)=>this.renderRowView(this, dataRow, sectionID, rowID, 'dataRow_' + rowID)}
+                    rowView={(dataRow, sectionID, rowID)=>this.renderRowView(dataRow, sectionID, rowID, 'dataRow_' + rowID)}
                     onFetch={this.fetchData}
                     firstLoader={true}
                     pagination={true}
                     refreshable={true}
                     withSections={false}
-                    refreshableTitle="重新加载"
-                    refreshableTintColor={HFConfiguration.mainColor}
-                    refreshableProgressBackgroundColor={HFConfiguration.mainColor}
-                    refreshableColors={[HFConfiguration.mainColor]}
+                    refreshableProgressBackgroundColor={'#cccccc'}
                     emptyView={(refreshCallback)=>{
-                        if(this.props.renderEmptyView){
-                            return this.props.renderEmptyView;
+                        if(this.props.renderEmptyView(refreshCallback)){
+                            return this.props.renderEmptyView(refreshCallback);
                         }else{
                             let w = HFConfiguration.windowWidth;
                             let h = parseInt(HFConfiguration.windowWidth / this.props.emptyImageWidthHeightRatio);
@@ -135,10 +135,10 @@ class HFDataPageView extends Component {
                     }}
                     paginationWaitingView={(paginateCallback) => {
                         return (
-                            <View>
+                            <View style={{backgroundColor:'#f7f7f7'}}>
                                 {RenderIf(this.state.hasMoreData)(
                                 <HFHugeButton
-                                    style={{margin:0,marginBottom:30,borderRadius:0,borderWidth:0,backgroundColor:'#e4e4e4'}}
+                                    style={{marginTop:0,marginBottom:0,borderRadius:0,borderWidth:0,backgroundColor:'#f7f7f7'}}
                                     textStyle={{color:HFConfiguration.textFontColor3}} onPress={paginateCallback} text='点击加载更多'/>
                                 )}
                             </View>

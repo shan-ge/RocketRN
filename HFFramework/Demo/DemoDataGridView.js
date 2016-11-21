@@ -22,12 +22,12 @@ class DemoDataGridView extends Component {
                 innerView={
                     <HFDataGridView
                             flagReadCache={false}
-                            columnCount={3}
+                            columnCount={5}
                             fetchUrl='/product/insurancePackList'
                             fetchParam={{}}
                             renderRowView={()=>{
                                 return (
-                                    <View style={{height:100,backgroundColor:'white'}}>
+                                    <View style={{height:150,backgroundColor:'red'}}>
                                         <HFText text="后发"/>
                                     </View>
                                 );
@@ -40,22 +40,6 @@ class DemoDataGridView extends Component {
 }
 
 const styles = StyleSheet.create({
-    buttonRed: {
-        backgroundColor: '#dd3300',
-        borderColor: '#dd3300',
-    },
-    buttonGreen: {
-        backgroundColor: '#00cf92',
-        borderColor: '#00cf92',
-    },
-    buttonOrange: {
-        backgroundColor: '#ff6d2d',
-        borderColor: '#ff6d2d',
-    },
-    buttonBlack: {
-        backgroundColor: '#333333',
-        borderColor: '#333333',
-    },
 });
 
 module.exports = DemoDataGridView;

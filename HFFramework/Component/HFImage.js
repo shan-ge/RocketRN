@@ -6,12 +6,16 @@
 import React, {Component} from 'react';
 import {HFBaseStyle, HFConfiguration, Image, ActivityIndicator, StyleSheet} from './../Framework';
 
+import RenderIf from './../Utility/RenderIf';
+
 class HFImage extends Component {
 
     static defaultProps = {
         // 占位图
         placeholderSource: require('./../Image/no_image.png'),
-        flagNoPlaceholder: false,
+        flagNoPlaceholder: false,// 是否显示占位图
+        flagNoLoading: false,// 是否显示加载动画
+        resizeMode: "cover",
         // 下面二者不会同时生效
         source: null,
         uri: null,
@@ -23,6 +27,7 @@ class HFImage extends Component {
     static propTypes = {
         uri: React.PropTypes.string,
         flagNoPlaceholder: React.PropTypes.bool,
+        flagNoLoading: React.PropTypes.bool,
         ratioWidth: React.PropTypes.number,
         ratioHeight: React.PropTypes.number,
     };
@@ -92,12 +97,14 @@ class HFImage extends Component {
         return (
             <Image
                 source={source}
-                resizeMode="contain"
+                resizeMode={this.props.resizeMode}
                 style={[styles.image,{width:this.state.imageWidth,height:this.state.imageHeight},this.props.style]}
                 onLoadStart={() => this.setState({imageLoading: true})}
                 onLoad={() => this.setState({imageLoading: false})}
             >
-                <ActivityIndicator animating={this.state.imageLoading} size="small"/>
+                {RenderIf(!this.props.flagNoLoading)(
+                    <ActivityIndicator animating={this.state.imageLoading} size="small"/>
+                )}
             </Image>
         )
     }

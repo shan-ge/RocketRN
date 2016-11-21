@@ -9,6 +9,7 @@ import dismissKeyboard from 'react-native/Libraries/Utilities/dismissKeyboard';
 import RenderIf from './../Utility/RenderIf';
 
 export default class HFKeyboardSpacer extends Component {
+
     static propTypes = {
         topSpacing: PropTypes.number,
         onToggle: PropTypes.func,
@@ -54,21 +55,23 @@ export default class HFKeyboardSpacer extends Component {
         //
         var self = this;
         this.hfKeyboardSpacerListener = DeviceEventEmitter.addListener('HFKeyboardSpacer', function (type, value) {
-            if (type == 'HFTextInputUUID') {// 获取当前激活状态的输入框
-                self.setState({textInputUUID: value});
-            } else if (type == 'HFTextInputAccess') {// 获取当前激活状态输入框的配置,是否可以显示复制和粘贴
-                self.setState({flagInputCanAccess: value});
-            } else if (type == 'HFTextInputValue') {// 获取当前激活状态输入框的值,并设置到剪贴板中
-                if (value != null && value != '') {
-                    Clipboard.setString(value);
+            if (self.refs.keyboardView) {
+                if (type == 'HFTextInputUUID') {// 获取当前激活状态的输入框
+                    self.setState({textInputUUID: value});
+                } else if (type == 'HFTextInputAccess') {// 获取当前激活状态输入框的配置,是否可以显示复制和粘贴
+                    self.setState({flagInputCanAccess: value});
+                } else if (type == 'HFTextInputValue') {// 获取当前激活状态输入框的值,并设置到剪贴板中
+                    if (value != null && value != '') {
+                        Clipboard.setString(value);
+                        self.setState({
+                            copiedString: value,
+                        });
+                    }
+                } else if (type == 'HFTextInputFlagCopy') {// 判断当前激活状态输入框的值,是否可以复制
                     self.setState({
-                        copiedString: value,
+                        flagCanCopy: value,
                     });
                 }
-            } else if (type == 'HFTextInputFlagCopy') {// 判断当前激活状态输入框的值,是否可以复制
-                self.setState({
-                    flagCanCopy: value,
-                });
             }
         })
     }
@@ -102,35 +105,43 @@ export default class HFKeyboardSpacer extends Component {
         const keyboardSpace = frames.endCoordinates.height;
         // 会加上一个关闭键盘的按钮高度
         let spaceHeight = keyboardSpace > 0 ? (Platform.OS == 'android' ? this.props.topSpacing + 40 : keyboardSpace + this.props.topSpacing + 40) : 0;
-        this.setState({
-            keyboardSpace: spaceHeight,
-            isKeyboardOpened: true
-        }, this.props.onToggle(true, spaceHeight));
-        // 自动滚动(已废弃)
-        if (Platform.OS == 'ios' && this.props.scrollView != null) {
-            if (spaceHeight > 0) {
-                this.props.scrollView.scrollTo({
-                    x: 0,
-                    y: (this.props.scrollHeight != null && this.props.scrollHeight >= 0 ? this.props.scrollHeight : 100),
-                    animated: true
-                });
-            } else {
-                this.props.scrollView.scrollTo({x: 0, y: 0, animated: true});
-            }
+        if (this.refs.keyboardView) {
+            this.setState({
+                keyboardSpace: spaceHeight,
+                isKeyboardOpened: true
+            }, this.props.onToggle(true, spaceHeight));
         }
+        // 自动滚动(已废弃)
+        /*
+         if (Platform.OS == 'ios' && this.props.scrollView != null) {
+         if (spaceHeight > 0) {
+         this.props.scrollView.scrollTo({
+         x: 0,
+         y: (this.props.scrollHeight != null && this.props.scrollHeight >= 0 ? this.props.scrollHeight : 100),
+         animated: true
+         });
+         } else {
+         this.props.scrollView.scrollTo({x: 0, y: 0, animated: true});
+         }
+         }
+         */
         this.regetClipboardContent();
     }
 
     resetKeyboardSpace() {
         // 关闭高度
-        this.setState({
-            keyboardSpace: 0,
-            isKeyboardOpened: false
-        }, this.props.onToggle(false, 0));
-        // 上划滚动层(已废弃)
-        if (Platform.OS == 'ios' && this.props.scrollView) {
-            this.props.scrollView.scrollTo({x: 0, y: 0, animated: true});
+        if (this.refs.keyboardView) {
+            this.setState({
+                keyboardSpace: 0,
+                isKeyboardOpened: false
+            }, this.props.onToggle(false, 0));
         }
+        // 上划滚动层(已废弃)
+        /*
+         if (Platform.OS == 'ios' && this.props.scrollView) {
+         this.props.scrollView.scrollTo({x: 0, y: 0, animated: true});
+         }
+         */
     }
 
     // 密码输入框不可复制
@@ -140,14 +151,18 @@ export default class HFKeyboardSpacer extends Component {
     }
 
     setContent() {
-        this.setState({flagCanCopy: true});
+        if (this.refs.keyboardView) {
+            this.setState({flagCanCopy: true});
+        }
         DeviceEventEmitter.emit('HFTextInput', 'HFKeyboardSpacer.setContent' + this.state.textInputUUID, this.state.copiedString);
     }
 
     async regetClipboardContent() {
         try {
-            var content = await Clipboard.getString();
-            this.setState({copiedString: content});
+            if (this.refs.keyboardView) {
+                var content = await Clipboard.getString();
+                this.setState({copiedString: content});
+            }
         } catch (e) {
         }
     }
@@ -162,7 +177,7 @@ export default class HFKeyboardSpacer extends Component {
                         <View style={styles.keyboardHorizontalRow}/>
                         <View style={styles.keyboardButton}>
                             <Image
-                                style={{width:34,height:23,marginLeft:10}}
+                                style={{width:23,height:23,marginLeft:10}}
                                 source={require('./../Image/Icon/logo.png')}
                                 resizeMode={Image.resizeMode.stretch}
                             />

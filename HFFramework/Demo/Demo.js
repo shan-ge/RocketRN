@@ -17,6 +17,7 @@ import {HFHeading,
     HFTextButton,
     HFConfiguration,
     HFParagraph,
+    HFPicker,
     HFTextInput,
     HFSeparator,
     HFView,
@@ -32,6 +33,8 @@ import DemoDataGridView from './DemoDataGridView';
 import DemoWebView from './DemoWebView';
 
 import Dialog from './../Utility/Dialog';
+import Navigator from './../Utility/Navigator';
+import Bridge from './../Utility/Bridge';
 
 class Demo extends Component {
 
@@ -42,29 +45,29 @@ class Demo extends Component {
 
     toPage(type) {
         if (type == 'NextPage') {
-            this.props.navigator.push({
+            Navigator.push({
                 component: Demo1,
-            })
+            }, this.props.navigator);
         } else if (type == 'PageView') {
-            this.props.navigator.push({
+            Navigator.push({
                 component: DemoDataPageView,
-            })
+            }, this.props.navigator);
         } else if (type == 'AlphabetView') {
-            this.props.navigator.push({
+            Navigator.push({
                 component: DemoDataAlphabetView,
-            })
+            }, this.props.navigator);
         } else if (type == 'ListView') {
-            this.props.navigator.push({
+            Navigator.push({
                 component: DemoDataListView,
-            })
+            }, this.props.navigator);
         } else if (type == 'GridView') {
-            this.props.navigator.push({
+            Navigator.push({
                 component: DemoDataGridView,
-            })
+            }, this.props.navigator);
         } else if (type == 'WebView') {
-            this.props.navigator.push({
+            Navigator.push({
                 component: DemoWebView,
-            })
+            }, this.props.navigator);
         }
     }
 
@@ -74,8 +77,8 @@ class Demo extends Component {
 
     toConfirm() {
         Dialog.confirm('你瞅啥?', function () {
-            Dialog.alert('你屌,我服!', '好的');
-        }, '瞅你咋地');
+            Dialog.alert('你屌,我服!', '好的呢');
+        }, '瞅你咋地', '认怂');
     }
 
     render() {
@@ -108,12 +111,20 @@ class Demo extends Component {
                         <HFImage ratioWidth={100} uri="https://facebook.github.io/react/img/logo_og.png"/>
                         <HFImage ratioWidth={150} uri="https://facebook.github.io/react/img/logo_og.png"/>
                         <HFImage ratioWidth={200} uri="https://facebook.github.io/react/img/logo_og.png"/>
-                        <HFImage ratioWidth={300} uri="https://facebook.github.io/react/img/logo_og.png"/>
+                        <HFImage ratioHeight={20} uri="https://facebook.github.io/react/img/logo_og.png"/>
+                        <HFSeparator/>
+                        <HFHeading level={1} text='[表单]' style={{alignSelf:'flex-start',marginBottom:10}}/>
+                        <HFHugeButton text="进入表单" onPress={()=>this.toPage('NextPage')}/>
+                        <HFSeparator/>
+                        <HFHeading level={1} text='[本地文件]' style={{alignSelf:'flex-start',marginBottom:10}}/>
+                        <HFHugeButton text="覆盖写文件" onPress={()=>{Bridge.writeFile('demo.txt','overwrite '+(new Date()).getTime(),0,function(result){alert(JSON.stringify(result));})}}/>
+                        <HFHugeButton text="追加写文件" onPress={()=>{Bridge.writeFile('demo.txt','append '+(new Date()).getTime(),1,function(result){alert(JSON.stringify(result));})}}/>
+                        <HFHugeButton text="读文件" onPress={()=>{Bridge.readFile('demo.txt',function(result){alert(JSON.stringify(result))});}}/>
                         <HFSeparator/>
                         <HFHeading level={1} text='[输入框]' style={{alignSelf:'flex-start',marginBottom:10}}/>
-                        <HFTextInput placeholder='请输入账号...' keyboardType="numeric" maxLength={11} flagImage={true}/>
+                        <HFTextInput placeholder='请输入账号...' keyboardType="numeric" maxLength={11} flagImage={true} imageSource={require('./../Image/Icon/hospital.png')}/>
                         <HFSeparator style={{marginTop:0,marginBottom:0}}/>
-                        <HFTextInput placeholder='请输入密码...' secureTextEntry={true} flagImage={true} imageSource={require('./Image/lock_green.png')}/>
+                        <HFTextInput placeholder='请输入密码...' secureTextEntry={true} flagImage={true} imageSource={require('./../Image/Icon/hospital.png')}/>
                         <HFSeparator style={{marginTop:0,marginBottom:0}}/>
                         <HFTextInput multiline={true} flagInputCanAccess={true} value="这个输入框的文本,可以在键盘区域进行复制和粘贴" style={{height:100}} inputStyle={{height:80}}/>
                         <HFSeparator/>
@@ -141,23 +152,6 @@ class Demo extends Component {
     }
 }
 
-const styles = StyleSheet.create({
-    buttonRed: {
-        backgroundColor: '#dd3300',
-        borderColor: '#dd3300',
-    },
-    buttonGreen: {
-        backgroundColor: '#00cf92',
-        borderColor: '#00cf92',
-    },
-    buttonOrange: {
-        backgroundColor: '#ff6d2d',
-        borderColor: '#ff6d2d',
-    },
-    buttonBlack: {
-        backgroundColor: '#333333',
-        borderColor: '#333333',
-    },
-});
+const styles = StyleSheet.create({});
 
 module.exports = Demo;

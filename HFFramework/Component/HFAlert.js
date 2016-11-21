@@ -54,15 +54,15 @@ class HFAlert extends Component {
                                 level={2}
                                 numberOfLines={1}
                                 text={this.props.title}
-                                style={{alignSelf:'center',color:HFConfiguration.textFontColor2,marginTop:HFConfiguration.viewMargin[HFConfiguration.dpiIndex][0]}}
+                                style={{alignSelf:'center',color:HFConfiguration.textFontColor2,marginTop:10}}
                             />
-                            <HFSeparator/>
+                            <HFSeparator style={{marginTop:10,marginBottom:20}}/>
                             <HFParagraph
                                 numberOfLines={10}
                                 text={this.props.text}
                                 style={styles.text}
                             />
-                            <HFSeparator/>
+                            <HFSeparator style={{marginTop:20,marginBottom:10}}/>
                             <HFTextButton
                                 numberOfLines={1}
                                 fontSizeDiff={-1}
@@ -77,7 +77,8 @@ class HFAlert extends Component {
             </View>
         );
     }
-};
+}
+;
 
 var styles = StyleSheet.create({
     outerView: {
@@ -85,10 +86,10 @@ var styles = StyleSheet.create({
         alignSelf: 'stretch',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(0,0,0,0.5)',
+        backgroundColor: HFConfiguration.dialogBackground,
     },
     subView: {
-        minWidth: 250,
+        width: HFConfiguration.windowWidth - 100,
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
@@ -96,18 +97,19 @@ var styles = StyleSheet.create({
         borderRadius: 5,
         borderWidth: 0.5,
         borderColor: '#e4e4e4',
-        marginLeft: 80,
-        marginRight: 80,
+        marginLeft: 50,
+        marginRight: 50,
     },
     text: {
         marginLeft: 10,
         marginRight: 10,
+        color:"#333"
     },
     button: {
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'stretch',
-        marginBottom: HFConfiguration.viewMargin[HFConfiguration.dpiIndex][2],
+        marginBottom: 10,
     },
     buttonText: {
         color: HFConfiguration.mainColor,

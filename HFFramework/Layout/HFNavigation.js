@@ -18,7 +18,9 @@
 
 'use strict';
 import React, {Component} from 'react';
-import {HFBaseStyle, HFConfiguration, HFText, HFImage, View, TouchableOpacity, StyleSheet} from './../Framework';
+import {HFBaseStyle, HFConfiguration, HFText, HFImage, DeviceEventEmitter, View, TouchableOpacity, StyleSheet} from './../Framework';
+
+import dismissKeyboard from 'react-native/Libraries/Utilities/dismissKeyboard';
 
 import RenderIf from './../Utility/RenderIf';
 
@@ -40,7 +42,13 @@ class HFNavigation extends Component {
         onRightButtonPress: React.PropTypes.func
     };
 
+    componentWillMount() {
+        let navigator = this.props.navigator;
+        DeviceEventEmitter.emit('navigator', navigator);
+    }
+
     onLeftButtonPress() {
+        dismissKeyboard();
         if (this.props.onLeftButtonPress) {
             this.props.onLeftButtonPress();
         } else {
@@ -53,53 +61,111 @@ class HFNavigation extends Component {
     }
 
     render() {
-        return (
-            <View ref='navigation' style={[styles.content,HFBaseStyle.navigation]}>
-                {RenderIf(this.props.flagLeft)(
-                    <TouchableOpacity
-                        style={styles.left}
-                        disabled={this.props.leftDisabled}
-                        onPress={this.onLeftButtonPress.bind(this)}
-                    >
-                        {RenderIf(this.props.leftImageSource == null && this.props.leftText == null)(
-                            <HFImage source={require('./../Image/Icon/left.png')}
-                                     style={[styles.image,HFBaseStyle.navigationImage]}/>
-                        )}
-                        {RenderIf(this.props.leftImageSource != null)(
-                            <HFImage source={this.props.leftImageSource}
-                                     style={[styles.image,HFBaseStyle.navigationImage]}/>
-                        )}
-                        {RenderIf(this.props.leftText != null)(
-                            <HFText style={[styles.text,HFBaseStyle.navigationText]} text={this.props.leftText}/>
-                        )}
-                    </TouchableOpacity>
-                )}
-                {RenderIf(!this.props.flagLeft)(
-                    <View style={styles.left}></View>
-                )}
-                <View style={styles.title}>
-                    <HFText style={[styles.text,HFBaseStyle.navigationText]} text={this.props.title}/>
+        if (this.props.leftView != undefined && this.props.leftView != null) {
+            return (
+                <View ref='navigation' style={[styles.content,HFBaseStyle.navigation]}>
+                    <View style={[styles.left,{flex:5},this.props.leftViewStyle]}>
+                        {this.props.leftView}
+                    </View>
+                    {RenderIf(this.props.flagRight)(
+                        <TouchableOpacity
+                            style={styles.right}
+                            disabled={this.props.rightDisabled}
+                            onPress={this.props.onRightButtonPress!=null?this.props.onRightButtonPress.bind(this):()=>{}}
+                        >
+                            {RenderIf(this.props.rightImageSource != null)(
+                                <HFImage source={this.props.rightImageSource}
+                                         style={[styles.image,HFBaseStyle.navigationImage]}/>
+                            )}
+                            {RenderIf(this.props.rightText != null)(
+                                <HFText style={[styles.text,HFBaseStyle.navigationText]} text={this.props.rightText}/>
+                            )}
+                        </TouchableOpacity>
+                    )}
+                    {RenderIf(!this.props.flagRight)(
+                        <View style={styles.right}></View>
+                    )}
                 </View>
-                {RenderIf(this.props.flagRight)(
-                    <TouchableOpacity
-                        style={styles.right}
-                        disabled={this.props.rightDisabled}
-                        onPress={this.props.onRightButtonPress!=null?this.props.onRightButtonPress.bind(this):()=>{}}
-                    >
-                        {RenderIf(this.props.rightImageSource != null)(
-                            <HFImage source={this.props.rightImageSource}
-                                     style={[styles.image,HFBaseStyle.navigationImage]}/>
-                        )}
-                        {RenderIf(this.props.rightText != null)(
-                            <HFText style={[styles.text,HFBaseStyle.navigationText]} text={this.props.rightText}/>
-                        )}
-                    </TouchableOpacity>
-                )}
-                {RenderIf(!this.props.flagRight)(
-                    <View style={styles.right}></View>
-                )}
-            </View>
-        );
+            );
+        } else if (this.props.rightView != undefined && this.props.rightView != null) {
+            return (
+                <View ref='navigation' style={[styles.content,HFBaseStyle.navigation]}>
+                    {RenderIf(this.props.flagLeft)(
+                        <TouchableOpacity
+                            style={styles.left}
+                            disabled={this.props.leftDisabled}
+                            onPress={this.onLeftButtonPress.bind(this)}
+                        >
+                            {RenderIf(this.props.leftImageSource == null && this.props.leftText == null)(
+                                <HFImage source={require('./../Image/Icon/left.png')}
+                                         style={[styles.image,HFBaseStyle.navigationImage]}/>
+                            )}
+                            {RenderIf(this.props.leftImageSource != null)(
+                                <HFImage source={this.props.leftImageSource}
+                                         style={[styles.image,HFBaseStyle.navigationImage]}/>
+                            )}
+                            {RenderIf(this.props.leftText != null)(
+                                <HFText style={[styles.text,HFBaseStyle.navigationText]} text={this.props.leftText}/>
+                            )}
+                        </TouchableOpacity>
+                    )}
+                    {RenderIf(!this.props.flagLeft)(
+                        <View style={styles.left}></View>
+                    )}
+                    <View style={[styles.right,{flex:5},this.props.rightViewStyle]}>
+                        {this.props.rightView}
+                    </View>
+                </View>
+            );
+        } else {
+            return (
+                <View ref='navigation' style={[styles.content,HFBaseStyle.navigation]}>
+                    {RenderIf(this.props.flagLeft)(
+                        <TouchableOpacity
+                            style={styles.left}
+                            disabled={this.props.leftDisabled}
+                            onPress={this.onLeftButtonPress.bind(this)}
+                        >
+                            {RenderIf(this.props.leftImageSource == null && this.props.leftText == null)(
+                                <HFImage source={require('./../Image/Icon/left.png')}
+                                         style={[styles.image,HFBaseStyle.navigationImage]}/>
+                            )}
+                            {RenderIf(this.props.leftImageSource != null)(
+                                <HFImage source={this.props.leftImageSource}
+                                         style={[styles.image,HFBaseStyle.navigationImage]}/>
+                            )}
+                            {RenderIf(this.props.leftText != null)(
+                                <HFText style={[styles.text,HFBaseStyle.navigationText]} text={this.props.leftText}/>
+                            )}
+                        </TouchableOpacity>
+                    )}
+                    {RenderIf(!this.props.flagLeft)(
+                        <View style={styles.left}></View>
+                    )}
+                    <View style={styles.title}>
+                        <HFText style={[styles.text,HFBaseStyle.navigationText]} text={this.props.title}/>
+                    </View>
+                    {RenderIf(this.props.flagRight)(
+                        <TouchableOpacity
+                            style={styles.right}
+                            disabled={this.props.rightDisabled}
+                            onPress={this.props.onRightButtonPress!=null?this.props.onRightButtonPress.bind(this):()=>{}}
+                        >
+                            {RenderIf(this.props.rightImageSource != null)(
+                                <HFImage source={this.props.rightImageSource}
+                                         style={[styles.image,HFBaseStyle.navigationImage]}/>
+                            )}
+                            {RenderIf(this.props.rightText != null)(
+                                <HFText style={[styles.text,HFBaseStyle.navigationText]} text={this.props.rightText}/>
+                            )}
+                        </TouchableOpacity>
+                    )}
+                    {RenderIf(!this.props.flagRight)(
+                        <View style={styles.right}></View>
+                    )}
+                </View>
+            );
+        }
     }
 }
 
@@ -115,7 +181,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'flex-start',
         justifyContent: 'center',
-        paddingLeft: 16,
+        paddingLeft: 10,
     },
     right: {
         flex: 1,
@@ -130,7 +196,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     text: {
-        fontSize: 16,
         color: '#ffffff',
     },
     image: {

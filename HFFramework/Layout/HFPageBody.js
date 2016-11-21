@@ -70,7 +70,7 @@ class HFPageBody extends Component {
     render() {
         if (this.props.flagNoScroll) {// 适用于内部带有刷新组件的页面.如GiftedListView,ScrollView.(此时不设置HFBaseStyle.page)
             return (
-                <View ref={this.props.ref} style={[styles.bodyView]}>
+                <View style={[styles.bodyView]}>
                     <View style={[styles.bodyView,this.props.style]}>
                         {this.props.innerView}
                     </View>
@@ -84,8 +84,7 @@ class HFPageBody extends Component {
             );
         } else {
             return (// 适用于外部刷新的页面
-                <ScrollView ref={this.props.ref}
-                            showsVerticalScrollIndicator={false}
+                <ScrollView showsVerticalScrollIndicator={false}
                             style={[styles.bodyView]}
                             keyboardDismissMode="none"
                             keyboardShouldPersistTaps={true}
@@ -96,9 +95,9 @@ class HFPageBody extends Component {
                                 refreshing={this.state.refreshing}
                                 onRefresh={this.onRefresh.bind(this)}
                                 title="重新加载"
-                                titleColor={HFConfiguration.mainColor}
-                                tintColor={HFConfiguration.mainColor}
-                                colors={[HFConfiguration.mainColor]}
+                                titleColor={'#cccccc'}
+                                tintColor={'#cccccc'}
+                                colors={['#cccccc']}
                             />
                             :
                             null

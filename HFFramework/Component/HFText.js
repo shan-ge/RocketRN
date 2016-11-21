@@ -27,11 +27,11 @@ class HFText extends Component {
 
     render() {
         return (
-            <Text ref={this.props.ref}
-                  allowFontScaling={HFConfiguration.textAllowFontScaling}
+            <Text allowFontScaling={HFConfiguration.textAllowFontScaling}
                   numberOfLines={this.props.numberOfLines}
+                  onPress={this.props.onPress}
                   style={[HFBaseStyle.text, {fontSize:HFConfiguration.mainFontSize + this.props.fontSizeDiff}, this.props.style]}>
-                {this.props.text}
+                {this.props.text||this.props.children}
             </Text>
         );
     }

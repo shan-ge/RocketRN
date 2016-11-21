@@ -16,6 +16,8 @@ const BaseStyle = StyleSheet.create({
     navigation: {
         height: Configuration.navigationHeight[dpiIndex],
         backgroundColor: Configuration.navigationBackground,
+        borderBottomWidth: Configuration.navigationBorderBottomWidth,
+        borderBottomColor: Configuration.navigationBorderBottomColor,
     },
     navigationText: {
         fontSize: Configuration.navigationFontSize[dpiIndex],
@@ -62,12 +64,30 @@ const BaseStyle = StyleSheet.create({
     textInput: {
         fontFamily: Configuration.textInputFontFamily,
         fontSize: Configuration.textInputFontSize[dpiIndex],
-        height: Configuration.textInputViewHeight[dpiIndex],
+        height: Configuration.textInputViewHeight[dpiIndex] - 2,
         color: Configuration.textInputFontColor,
     },
     icon: {
         width: Configuration.imageIconSize[dpiIndex],
         height: Configuration.imageIconSize[dpiIndex],
-    }
+    },
+    datePickerInput: {
+        width: Configuration.windowWidth,
+        alignItems: 'flex-end',
+        justifyContent: 'center',
+        paddingTop: 0,
+        paddingBottom: 0,
+        paddingLeft: 0,
+        paddingRight: 0,
+        borderWidth: 0,
+    },
+    datePickerDate: {
+        fontFamily: Configuration.textInputFontFamily,
+        fontSize: Configuration.textInputFontSize[dpiIndex],
+        color: Configuration.textInputFontColor,
+    },
+    datePickerPlaceholder: {
+        color: Configuration.placeholderColor,
+    },
 });
 module.exports = BaseStyle;
