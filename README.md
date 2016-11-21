@@ -2,10 +2,10 @@
 使用ReactNative技术的App端整体框架解决方案
 
 ## 组件版本
-- React ```15.3.2```
-- ReactNative ```0.36.0```
-- IOS ```^8.0```
-- Android ```^4.0```
+- React `15.3.2`
+- ReactNative `0.36.0`
+- IOS `^8.0`
+- Android `^4.0`
 - 第三方控件,请见package.json
 
 ## 框架的目标
@@ -13,7 +13,7 @@
 - 适应不同的终端及分辨率
 - 自定义组件管理
 - 页面样式的统一控制和灵活切换
-- 路由和拦截器的控制
+- 路由和会话拦截器的控制
 - 数据交互的管理
 - 第三方组件引用的版本控制
 - 用户操作指引
@@ -24,18 +24,47 @@
 - 减少警告和闪退
 
 ## 特殊配置
-- 锁定屏幕旋转
-- 华为的虚拟按键
+- 已锁定屏幕旋转
+- 已解决华为的虚拟按键
+
+--------
+## 设计初衷
+
+  在第一次使用RN技术开发一个App之后，我感受到了RN的能力。其实在这之前，我们团队还曾使用ApiCloud技术（给H5页面嵌套一个IOS/Android的壳）进行移动端产品的研发。作为全栈开发的团队，编写H5页面对我们来说实在是得心应手，但也不可避免的暴露出很多问题：H5毕竟是网页，在讲究体验至上、在意细节的移动端着实有些暗淡；一些调用原生组件的方法只能使用第三方类库，往往并不符合需求或匹配样式；内存占用过大时，出现的闪退问题是无从解决的；处于安全性的考虑，被别人技术绑架也是很危险的。
+
+  在我们上个项目开始时，RN的官方版本还停留在0.28.0，短短两个多月后都已经发展到0.36.0了，这得感谢广大爱好者的贡献。可以说RN是网页前端转型为移动开发者的最快途径，仍然（看起来）是Html+Css+JS的经典组合，上手很容易。每种组件和方法对接Native模块，而实在无法实现的功能还可以相应的去开发Native的部分（再不济就嵌套一个WebView用H5来实现），然后通过交互来实现相互调用，确实是很方便。当然RN的技术还不算成熟，还有很多bug待解决，还有更多的组件需要被贡献，这需要广大爱好者的共同努力。
+
+  在上个项目里，我们并没有找到开源的第三方整体框架，这种需求有点类似在网页开发时，对JQueryUI/Bootstrap/AngularJS之类的需求。因此我们在开发时，出现了颜色、字号、高度、组件、边框、圆角、边距、尺寸等等各种样式不统一的问题。此外还有功能报错、警告的隐患，闪退的风险，日志记录不规范，组件适应力不强，在不同分辨率下显示天差地别，IOS和Android下样式差异过大，IOS字体放大，用户会话控制过乱，键盘遮挡页面等等好多问题。项目开发周期一个多月，临上线前三天连续通宵解决了两百余个bug，样式调节的成本也很高。
+
+  痛定思痛，在上个项目结束后短暂的休息时间里（大约一周时间），在为了预防以后的项目不要重蹈覆辙，我因此开发出了此套基于RN的App框架，目的是解决之前的功能和样式问题。在我们的新项目里，从UI设计到上线共耗时一周，极大的提高了效率。在本框架里，大部分由我从零编写，当然也少不了同事的功劳，此外还有引用的第三方组件（我对其中一些组件进行了更改，已同步到我的fork中），后面我也会继续完善这个框架，加入更多的功能进来。
+
+  最后，对框架的性能还没有进行深入的测试，希望大家留言交流。
+
+---
+## 使用效果
+![使用效果](HFFramework/Image/readme/design_rule.jpg)
+--------
+
+## 安装方法
+
+我默认您已初识ReactNative的技术，否则请移步到[ReactNative](https://github.com/facebook/react-native)
+
+- 1、下载本项目
+- 2、进入到本项目路径下，并执行`npm install`
+- 3、执行 `rnpm link`
+- 4、`react-native start`
+- 5、`react-native run-ios` / `react-native run-android`
+
+在/HFFramework/Configuration.js文件中，可以分别设置在不同分辨率下的显示样式。在查看效果时，您可以使用各种类型的真机，也可以启动指定类型的虚拟机，如 `react-native run-ios --simulator 'iPhone 6s Plus'`。
 
 --------
 
-## 目录说明
+## 项目目录说明
 * **hfFramework/** <font color=gray>项目根目录</font>
     * **android/** <font color=gray>安卓原生目录</font>
     * **ios/** <font color=gray>苹果原生目录</font>
     * **Application/** <font color=gray>App应用目录,所有页面相关页面写在这里</font>
     * **HFFramework/** <font color=gray>框架目录</font>
-        * **Bridge** <font color=gray>桥接原生</font>
         * **Component** <font color=gray>自定义组件</font>
         * **Demo** <font color=gray>功能示例</font>
         * **Image** <font color=gray>引用的图像</font>
@@ -43,7 +72,7 @@
         * **Picker** <font color=gray>选择器</font>
         * **Styles** <font color=gray>样式</font>
         * **Utility** <font color=gray>工具类</font>
-        * *Configuration.js* <font color=gray>```重要配置页,每次开发新App都需要设置```</font>
+        * *Configuration.js* <font color=gray>`重要配置页,每次开发新App都需要设置`</font>
         * *Framework.js* <font color=gray>引用框架页,所有页面引用组件都在这里进行.详见*./Demo/Demo.js*</font>
     * *index.ios.js* <font color=gray>苹果索引页,指向*hfFramework.js*</font>
     * *index.android.js* <font color=gray>安卓索引页,指向*hfFramework.js*</font>

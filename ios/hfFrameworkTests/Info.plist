@@ -2,6 +2,16 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>UILaunchImageFile</key>
+	<string></string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>HFFramework需要使用您的相册</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>HFFramework需要使用您的位置</string>
+	<key>NSCameraUsageDescription</key>
+	<string>HFFramework需要使用您的相机</string>
+	<key>CFBundleDisplayName</key>
+	<string>HFFramework</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>

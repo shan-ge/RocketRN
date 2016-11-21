@@ -1,18 +1,16 @@
 /**
- * Created by chengzhencai on 16/9/21.过度页面
+ * Created by shange on 2016/11/21.索引页
  */
 import React, {Component} from 'react';
 import {
+    HFPage,
+    HFMediumButton,
     View,
     StatusBar,
     Image,
     StyleSheet,
     Platform,
     Dimensions
-} from 'react-native';
-import {
-    HFPage,
-    HFMediumButton
 } from  './../../HFFramework/Framework';
 import Login from './Login/Login';
 import Home from './Home/Home';
