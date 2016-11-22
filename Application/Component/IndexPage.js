@@ -47,13 +47,11 @@ class IndexPage extends Component {
         //
         Constants.version = DeviceInfo.getVersion();
         Service.platform = Platform.OS === 'ios' ? Constants.platform_ios : Constants.platform_android;
-        /**
-         * 检测版本号
-         */
         let {navigator} = this.props;
-        Api.post(Service.getVersionInfo)
-            .then(response=> {
-                Dialog.alertApiResponse(response, function () {
+        // 检测版本号,是否需要升级
+        //Api.post(Service.getVersionInfo)
+        //    .then(response=> {
+        //        Dialog.alertApiResponse(response, function () {
                     // 加载图
                     Bridge.readFile(Constants.fileHasShownGuide, function (result) {
                         if (result != null && result['message'] != '' && result['message'] == Constants.version) {
@@ -85,8 +83,8 @@ class IndexPage extends Component {
                             }, 2000);
                         }
                     });
-                });
-            })
+        //        });
+        //    })
     }
 
     render() {

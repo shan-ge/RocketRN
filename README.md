@@ -42,7 +42,8 @@
 
 ---
 ## 使用效果
-![使用效果](HFFramework/Image/readme/design_rule.jpg)
+<img src="/HFFramework/Image/ReadMe/1.png" width="310" height="552" />
+<img src="/HFFramework/Image/ReadMe/2.png" width="310" height="552" />
 --------
 
 ## 安装方法
