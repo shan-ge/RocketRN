@@ -42,8 +42,8 @@
 
 ---
 ## 使用效果
-<img src="/HFFramework/Image/ReadMe/1.png" width="310" height="552" style="display:block;float:left;margin:20px;" />
-<img src="/HFFramework/Image/ReadMe/2.png" width="310" height="552" style="display:block;float:left;margin:20px;" />
+<img src="/HFFramework/Image/ReadMe/1.png" width="310" height="552"/>
+<img src="/HFFramework/Image/ReadMe/2.png" width="310" height="552"/>
 --------
 
 ## 安装方法
