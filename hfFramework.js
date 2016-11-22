@@ -29,7 +29,6 @@ class hfFramework extends Component {
     constructor(props) {
         super(props);
         this.navigator = null;
-
         ErrorUtils.setGlobalHandler((err, isFatal) => {
             if (err != null) {
                 console.error(err);
