@@ -53,9 +53,7 @@ class GuidePage extends Component {
     render() {
         return (
             <View style={{flex:1}}>
-                <StatusBar
-                    hidden={true}
-                />
+                <StatusBar hidden={true}/>
                 <Swiper style={styles.wrapper}
                         sdot={<View style={{backgroundColor:'rgba(255,255,255,.3)', width: 13, height: 13,borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
                         activeDot={<View style={{backgroundColor: '#f1f1f1', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
@@ -63,17 +61,17 @@ class GuidePage extends Component {
                         loop={false}>
                     <View style={styles.row}>
                         <Image style={styles.image} source={require('../Image/Guide/1.png')}
-                               resizeMode={Image.resizeMode.contain}
+                               resizeMode={Image.resizeMode.cover}
                         />
                     </View>
                     <View style={styles.row}>
                         <Image style={styles.image} source={require('../Image/Guide/2.png')}
-                               resizeMode={Image.resizeMode.contain}
+                               resizeMode={Image.resizeMode.cover}
                         />
                     </View>
                     <View style={styles.row}>
                         <Image style={styles.image} source={require('../Image/Guide/3.png')}
-                               resizeMode={Image.resizeMode.contain}>
+                               resizeMode={Image.resizeMode.cover}>
                             <View style={styles.bottom}>
                                 <TouchableOpacity
                                     style={styles.btn}

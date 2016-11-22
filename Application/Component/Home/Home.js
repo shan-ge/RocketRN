@@ -16,7 +16,7 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            tabNames: ['工作站', '患者', '我的'],// 选项卡名
+            tabNames: ['tab1', 'tab2', 'tab3'],// 选项卡名
             tabIconSize: 25,
             tabIcons: [require('./../../Image/Icon/workstation1.png'), require('./../../Image/Icon/patient1.png'), require('./../../Image/Icon/mine1.png')],// 图标(未激活)
             tabActiveIcons: [require('./../../Image/Icon/workstation2.png'), require('./../../Image/Icon/patient2.png'), require('./../../Image/Icon/mine2.png')],// 图标(激活)
