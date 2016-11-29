@@ -2,11 +2,11 @@
 使用ReactNative技术的App端整体框架解决方案
 
 ## 组件版本
-- HFFramework `1.3.0`[更新日志](./changelog.md)
-- React `15.3.2`
-- ReactNative `0.37.0`
-- IOS `^8.0`
-- Android `^4.0`
+- 本框架HFFramework `1.3.0` [更新日志](./changelog.md)
+- 使用框架 React `15.3.2`
+- 使用框架 ReactNative `0.37.0`
+- 运行环境 IOS `^8.0`
+- 运行环境 Android `^4.0`
 - 第三方控件,请见package.json
 
 ## 框架的目标
