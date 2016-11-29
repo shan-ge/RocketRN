@@ -23,7 +23,7 @@ class DemoForm extends Component {
 
     toPicker() {
         let self = this;
-        Picker.picker('sex', '请选择性别', [{value: 0, text: '男'}, {value: 1, text: '女'}], 1, function (value, text) {
+        Picker.picker('sex', '请选择性别', [{value: 1, text: '男'}, {value: 2, text: '女'}], 1, function (value, text) {
             self.setState({
                 sex: text
             });
@@ -70,7 +70,6 @@ class DemoForm extends Component {
                             innerViewType='textInput'
                             flagNoRightArrow={true}
                             onChange={(value, text)=>{Toast.showShortCenter(value)}}
-                            placeholder='未完善'
                             text='姓名(textInput)'
                             value='SuperMan'
                         />
@@ -82,7 +81,6 @@ class DemoForm extends Component {
                                     component: HospitalSelector,
                                 })
                             }}
-                            placeholder='未完善'
                             text='医院(selection)'
                             value='协和医院'
                         />
@@ -90,17 +88,15 @@ class DemoForm extends Component {
                             source={require('./../Image/Icon/hospital.png')}
                             innerViewType='picker'
                             onChange={(value, text)=>{Toast.showShortCenter('性别,value='+value+',text='+text)}}
-                            placeholder='未完善'
                             text='性别(picker)'
                             value='女'
-                            selectValue={1}
-                            data={[{value: 0, text: '男'}, {value: 1, text: '女'}]}
+                            selectValue={2}
+                            data={[{value: 1, text: '男'}, {value: 2, text: '女'}]}
                         />
                         <HFRowInput
                             source={require('./../Image/Icon/hospital.png')}
                             innerViewType='datePicker'
                             onChange={(value, text)=>{Toast.showShortCenter('生日:'+value)}}
-                            placeholder='未完善'
                             text='生日(date)'
                             value='1990-01-01'
                         />
@@ -108,7 +104,6 @@ class DemoForm extends Component {
                             source={require('./../Image/Icon/hospital.png')}
                             innerViewType='datetimePicker'
                             onChange={(value, text)=>{Toast.showShortCenter('时间'+value)}}
-                            placeholder='未完善'
                             text='时间(datetime)'
                             value='2016-10-01 08:30'
                         />
@@ -116,7 +111,6 @@ class DemoForm extends Component {
                             source={require('./../Image/Icon/hospital.png')}
                             innerViewType='image'
                             onPress={()=>{Toast.showShortCenter('打开图片选择页面')}}
-                            placeholder='未完善'
                             text='图片(images)'
                             data={['https://facebook.github.io/react/img/logo_og.png','https://facebook.github.io/react/img/logo_og.png','https://facebook.github.io/react/img/logo_og.png','https://facebook.github.io/react/img/logo_og.png','https://facebook.github.io/react/img/logo_og.png','https://facebook.github.io/react/img/logo_og.png','https://facebook.github.io/react/img/logo_og.png']}
                         />
@@ -124,7 +118,6 @@ class DemoForm extends Component {
                             source={require('./../Image/Icon/hospital.png')}
                             innerViewType='view'
                             onPress={()=>{Toast.showShortCenter('打开某个页面')}}
-                            placeholder='未完善'
                             text='状态(view)'
                             innerView={
                                 <View style={{flex:1,alignItems:'flex-end'}}>

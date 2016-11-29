@@ -208,7 +208,9 @@ export default class HFTextInput extends Component {
         return (
             <View
                 style={[styles.container,HFBaseStyle.textInputView,this.props.style]}
-                onLayout={(event)=>{this.setState({inputLayoutY:event.nativeEvent.layout.y})}}
+                onLayout={(event)=>{
+                    this.setState({inputLayoutY:event.nativeEvent.layout.y});
+                }}
             >
                 {RenderIf(this.props.flagImage && !this.props.multiline)(
                     <HFImage
