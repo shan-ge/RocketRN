@@ -147,7 +147,6 @@ export default class HFKeyboardSpacer extends Component {
     // 密码输入框不可复制
     copyContent() {
         DeviceEventEmitter.emit('HFTextInput', 'HFKeyboardSpacer.getContent', null);
-        this.regetClipboardContent();
     }
 
     setContent() {

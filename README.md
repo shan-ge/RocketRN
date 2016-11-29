@@ -7,7 +7,7 @@
 - 使用框架 ReactNative `0.37.0`
 - 运行环境 IOS `^8.0`
 - 运行环境 Android `^4.0`
-- 第三方控件,请见package.json
+- 第三方控件,请见 [package.json](./package.json)
 
 ## 框架的目标
 - 适应未来的ReactNative/IOS/Android版本

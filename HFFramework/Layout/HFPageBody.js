@@ -11,7 +11,6 @@ import RenderIf from './../Utility/RenderIf';
 class HFPageBody extends Component {
 
     static defaultProps = {
-        ref: 'hfPageBody',
         flagNoScroll: false,
         pagePaddingBottom: 0,
     };
@@ -33,8 +32,8 @@ class HFPageBody extends Component {
         this.hfPageBodyListener = DeviceEventEmitter.addListener('HFPageBody', function (type, value) {
             if (type == 'HFTextInputScroll') {// 接收HFTextInputScroll的监听,当焦点聚焦到输入框时,将输入框滚动到指定的高度
                 // 当前页面是可以滚动的
-                if ((self.props.flagNoScroll == null || !self.props.flagNoScroll) && self.refs[self.props.ref]) {
-                    self.refs[self.props.ref].scrollTo({
+                if (self.props.flagNoScroll == null || !self.props.flagNoScroll) {
+                    self.refs.hfPageBody.scrollTo({
                         x: 0,
                         y: value,
                         animated: true
@@ -70,7 +69,10 @@ class HFPageBody extends Component {
     render() {
         if (this.props.flagNoScroll) {// 适用于内部带有刷新组件的页面.如GiftedListView,ScrollView.(此时不设置HFBaseStyle.page)
             return (
-                <View style={[styles.bodyView]}>
+                <View
+                    ref="hfPageBody"
+                    style={[styles.bodyView]}
+                >
                     <View style={[styles.bodyView,this.props.style]}>
                         {this.props.innerView}
                     </View>
@@ -85,11 +87,12 @@ class HFPageBody extends Component {
         } else {
             return (// 适用于外部刷新的页面
                 <ScrollView
-                            style={[styles.bodyView]}
-                            showsVerticalScrollIndicator={false}
-                            keyboardDismissMode="none"
-                            keyboardShouldPersistTaps={true}
-                            refreshControl={
+                    ref="hfPageBody"
+                    style={[styles.bodyView]}
+                    showsVerticalScrollIndicator={false}
+                    keyboardDismissMode="none"
+                    keyboardShouldPersistTaps={true}
+                    refreshControl={
                             this.props.onRefresh != undefined && this.props.onRefresh != null
                             ?
                             <RefreshControl

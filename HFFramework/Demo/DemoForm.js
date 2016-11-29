@@ -40,6 +40,12 @@ class DemoForm extends Component {
                         <HFSeparator/>
                         <HFTextInput/>
                         <HFSeparator/>
+                        <HFTextInput/>
+                        <HFSeparator/>
+                        <HFTextInput/>
+                        <HFSeparator/>
+                        <HFTextInput multiline={true} flagInputCanAccess={true} value="" style={{height:100}} inputStyle={{height:80}}/>
+                        <HFSeparator/>
                         <DatePicker
                             customStyles={{dateInput:HFBaseStyle.datePickerInput,dateText:HFBaseStyle.datePickerDate,placeholderText:HFBaseStyle.datePickerPlaceholder}}
                             date={this.state.date}
