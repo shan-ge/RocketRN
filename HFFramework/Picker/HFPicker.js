@@ -168,16 +168,18 @@ class HFPicker extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         height: HFConfiguration.pickerHeight,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white'
     },
+    editorView: {
+        backgroundColor: '#f1f1f1',
+    },
     modalStyle: {
         flex: 1,
         justifyContent: 'flex-end',
-        backgroundColor: 'rgba(0,0,0,.5)'
+        backgroundColor: HFConfiguration.dialogBackground
     },
     subView: {
         backgroundColor: '#fff',
@@ -203,9 +205,6 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
     },
-    editorView: {
-        backgroundColor: '#f1f1f1'
-    }
 });
 
 module.exports = HFPicker;

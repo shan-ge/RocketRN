@@ -122,7 +122,7 @@ export default class HFTextInput extends Component {
         }
     }
 
-    handlerToggleClear(event) {
+    onChangeClear(event) {
         if (this.props.editable) {
             this.refs['hfTextInput'].clear();
             this.setState({
@@ -244,7 +244,7 @@ export default class HFTextInput extends Component {
                     <TouchableOpacity style={[styles.button,this.props.iconStyle]}
                                       underlayColor='white'
                                       activeOpacity={0.4}
-                                      onPress={this.handlerToggleClear.bind(this)}
+                                      onPress={this.onChangeClear.bind(this)}
                     >
                         <HFImage
                             flagNoPlaceholder={true}

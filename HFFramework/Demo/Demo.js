@@ -25,7 +25,7 @@ import {HFHeading,
     View,
     StyleSheet} from './../Framework';
 
-import Demo1 from './Demo1';
+import Demo1 from './DemoForm';
 import DemoDataPageView from './DemoDataPageView';
 import DemoDataAlphabetView from './DemoDataAlphabetView';
 import DemoDataListView from './DemoDataListView';

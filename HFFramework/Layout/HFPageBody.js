@@ -84,8 +84,9 @@ class HFPageBody extends Component {
             );
         } else {
             return (// 适用于外部刷新的页面
-                <ScrollView showsVerticalScrollIndicator={false}
+                <ScrollView
                             style={[styles.bodyView]}
+                            showsVerticalScrollIndicator={false}
                             keyboardDismissMode="none"
                             keyboardShouldPersistTaps={true}
                             refreshControl={

@@ -11,7 +11,7 @@ import HospitalSelector from './../../Application/Component/Picker/HospitalSelec
 
 import Picker from './../Utility/Picker';
 
-class Demo1 extends Component {
+class DemoForm extends Component {
 
     constructor(props) {
         super(props);
@@ -141,4 +141,4 @@ const styles = StyleSheet.create({
     },
 });
 
-module.exports = Demo1;
+module.exports = DemoForm;

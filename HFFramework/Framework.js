@@ -171,11 +171,11 @@ const Framework = {
     get ActivityIndicator() {
         return require('ActivityIndicator');
     },
-    get ActivityIndicatorIOS() {
-        return require('ActivityIndicatorIOS');
-    },
     get ART() {
         return require('ReactNativeART');
+    },
+    get Button() {
+        return require('Button');
     },
     get DatePickerIOS() {
         return require('DatePickerIOS');
@@ -231,9 +231,6 @@ const Framework = {
     get Slider() {
         return require('Slider');
     },
-    get SliderIOS() {
-        return require('SliderIOS');
-    },
     get SnapshotViewIOS() {
         return require('SnapshotViewIOS');
     },
@@ -251,12 +248,6 @@ const Framework = {
     },
     get SwipeableListView() {
         return require('SwipeableListView');
-    },
-    get SwitchAndroid() {
-        return require('SwitchAndroid');
-    },
-    get SwitchIOS() {
-        return require('SwitchIOS');
     },
     get TabBarIOS() {
         return require('TabBarIOS');
@@ -320,9 +311,6 @@ const Framework = {
     get AppState() {
         return require('AppState');
     },
-    get AppStateIOS() {
-        return require('AppStateIOS');
-    },
     get AsyncStorage() {
         return require('AsyncStorage');
     },
@@ -350,9 +338,6 @@ const Framework = {
     get ImagePickerIOS() {
         return require('ImagePickerIOS');
     },
-    get IntentAndroid() {
-        return require('IntentAndroid');
-    },
     get InteractionManager() {
         return require('InteractionManager');
     },
@@ -364,9 +349,6 @@ const Framework = {
     },
     get Linking() {
         return require('Linking');
-    },
-    get LinkingIOS() {
-        return require('LinkingIOS');
     },
     get NativeEventEmitter() {
         return require('NativeEventEmitter');

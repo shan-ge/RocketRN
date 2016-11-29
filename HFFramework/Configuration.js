@@ -54,7 +54,7 @@ var Configuration = {
     separatorLineColor: '#e4e4e4',// 分隔线颜色
     // 页面(不会影响数据展示页DataView)
     pageBackground: '#f7f7f7',
-    dialogBackground: 'rgba(0,0,0,0.2)',
+    dialogBackground: 'rgba(0, 0, 0, 0.2)',
     pageBodyPadding: [
         [0, 0, 0, 0],// ldpi
         [0, 0, 0, 0],// mdpi

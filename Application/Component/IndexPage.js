@@ -108,7 +108,6 @@ class IndexPage extends Component {
                                 source={require('./../Image/Guide/startPage.png')}
                                 resizeMode="stretch"
                             />
-                            <HFMediumButton/>
                         </View>
                     </View>
                 }

@@ -190,7 +190,7 @@ class HFPage extends Component {
         if (this.props.flagSpinner != null && this.props.flagSpinner == true) {
             spinner = <View style={styles.loadingView}>
                 <HFImage
-                    source={require('../Image/loading3.gif')}
+                    source={require('../Image/loading.gif')}
                     style={{width:100,height:100}}
                 />
             </View>
