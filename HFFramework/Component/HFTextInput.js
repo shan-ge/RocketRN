@@ -175,8 +175,9 @@ export default class HFTextInput extends Component {
         if (HFConfiguration.textInputFocusMarginTop[HFConfiguration.dpiIndex] >= 0) {
             let y1 = this.state.inputLayoutY;
             let y2 = HFConfiguration.textInputFocusMarginTop[HFConfiguration.dpiIndex];
-            let y = y1 > y2 ? y1 - y2 : 0;
-            DeviceEventEmitter.emit('HFPageBody', 'HFTextInputScroll', y);
+            if (y1 > y2) {
+                DeviceEventEmitter.emit('HFPageBody', 'HFTextInputScroll', y1 - y2);
+            }
         }
         // 通知扩展区是否允许复制和粘贴
         DeviceEventEmitter.emit('HFKeyboardSpacer', 'HFTextInputAccess', this.state.flagInputCanAccess);

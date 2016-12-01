@@ -42,8 +42,6 @@ class DemoForm extends Component {
                         <HFSeparator/>
                         <HFTextInput/>
                         <HFSeparator/>
-                        <HFTextInput/>
-                        <HFSeparator/>
                         <HFTextInput multiline={true} flagInputCanAccess={true} value="" style={{height:100}} inputStyle={{height:80}}/>
                         <HFSeparator/>
                         <DatePicker
