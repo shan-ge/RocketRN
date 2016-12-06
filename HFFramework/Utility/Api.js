@@ -1,6 +1,8 @@
 /**
  * Created by chengzhencai on 16/8/8.http请求数据
  * Updated by shange on 2016/10/25 新增方法
+ *
+ * 在后台交互时,会先查询缓存,然后查询后台.总共返回1~2次结果.
  */
 import React from 'react'
 import {
