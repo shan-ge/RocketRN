@@ -186,6 +186,10 @@ class HFPage extends Component {
     }
 
     render() {
+        //
+        Handler.save(Constants.storageKeyPageId, this.state.pageId);
+        Constants.navigator = this.props.navigation['navigator'];
+        //
         let spinner = null;
         if (this.props.flagSpinner != null && this.props.flagSpinner == true) {
             spinner = <View style={styles.loadingView}>
@@ -200,8 +204,6 @@ class HFPage extends Component {
                 ref="pageView"
                 style={[styles.outerView, this.props.style]}
                 onLayout={()=>{
-                    Handler.save(Constants.storageKeyPageId, this.state.pageId);
-                    Constants.navigator = this.props.navigation['navigator'];
                 }}
             >
                 {/** 导航(常驻页面顶部) **/}

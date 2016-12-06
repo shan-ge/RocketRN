@@ -36,14 +36,20 @@ class HFConfirm extends Component {
     onPress() {
         Dialog.confirmCancel();
         if (this.props.callback) {
-            this.props.callback();
+            var callback = this.props.callback;
+            setTimeout(function () {
+                callback();
+            }, 100);
         }
     }
 
     onCancel() {
         Dialog.confirmCancel();
         if (this.props.cancelCallback) {
-            this.props.cancelCallback();
+            var cancelCallback = this.props.cancelCallback;
+            setTimeout(function () {
+                cancelCallback();
+            }, 100);
         }
     }
 

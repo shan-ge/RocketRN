@@ -16,13 +16,11 @@ import RenderIf from './../Utility/RenderIf';
 class HFDataAlphabetView extends Component {
 
     static defaultProps = {
-        flagReadCache: false,// 是否读取缓存
         emptyImageSource: require('./../Image/no_history.png'),
         emptyImageWidthHeightRatio: 1080 / 551,// 空视图的宽高比,宽度由框架来控制,开发者只给出比例即可
     };
 
     static propTypes = {
-        flagReadCache: React.PropTypes.bool,// 是否读取缓存
         fetchUrl: React.PropTypes.string.isRequired,// 请求的链接(必须)
         emptyImageWidthHeightRatio: React.PropTypes.number,// 空视图图片的宽高比
         // 视图
@@ -46,26 +44,25 @@ class HFDataAlphabetView extends Component {
         var self = this;
         return new Promise(function (resolve, reject) {
             var fetchUrl = self.props.fetchUrl;
-            Api.get(fetchUrl, self.props.fetchParam, self.props.flagReadCache)
-                .then(res => {
-                    if (res && res['status'] == 1) {
-                        let allDatas = res['data'];
-                        if (allDatas) {
-                            //
-                            self.setState({
-                                allDatas: allDatas,
-                            });
-                        }
-                    } else if (res && res['status'] == 0) {
-                        Toast.showShortCenter('列表为空!');
-                    } else {
-                        Toast.showShortCenter('未能加载列表,' + res['message']);
+            Api.get(fetchUrl, self.props.fetchParam, function(res) {
+                if (res && res['status'] == 1) {
+                    let allDatas = res['data'];
+                    if (allDatas) {
+                        //
+                        self.setState({
+                            allDatas: allDatas,
+                        });
                     }
-                    resolve();
-                }).catch(e => {
-                Toast.showShortCenter('加载列表失败!');
+                } else if (res && res['status'] == 0) {
+                    Toast.showShortCenter('列表为空!');
+                } else {
+                    Toast.showShortCenter('未能加载列表,' + res['message']);
+                }
                 resolve();
-            })
+            }).catch(e => {
+            Toast.showShortCenter('加载列表失败!');
+            resolve();
+            });
         });
     }
 

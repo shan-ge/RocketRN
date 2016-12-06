@@ -67,7 +67,7 @@ class AreaSelector extends Component {
                             if (this.props.callback) {
                                 this.props.callback(dataRow);
                             }
-                            this.props.navigator.jumpBack();
+                            this.props.navigator.pop();
                         }}
                     />
                 }

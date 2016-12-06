@@ -32,7 +32,10 @@ class HFDialog extends Component {
     onPress() {
         Dialog.dialogCancel();
         if (this.props.callback) {
-            this.props.callback();
+            var callback = this.props.callback;
+            setTimeout(function () {
+                callback();
+            }, 100);
         }
     }
 

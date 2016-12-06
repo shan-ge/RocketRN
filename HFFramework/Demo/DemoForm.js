@@ -10,6 +10,7 @@ import DatePicker from 'react-native-datepicker';
 import HospitalSelector from './../../Application/Component/Picker/HospitalSelector';
 
 import Picker from './../Utility/Picker';
+import Dialog from './../Utility/Dialog';
 
 class DemoForm extends Component {
 
@@ -30,10 +31,25 @@ class DemoForm extends Component {
         });
     }
 
+    toDialog() {
+        Dialog.dialog();
+    }
+
     render() {
         return (
             <HFPage
-                navigation={{navigator:this.props.navigator,title:'表单',flagLeft:true}}
+                navigation={{
+                    navigator:this.props.navigator,
+                    title:'表单',
+                    flagLeft:true,
+                    flagRight:true,
+                    rightText:'弹层',
+                    rightImageSource:require('./Image/demo_nav.png'),
+                    onRightButtonPress:this.toDialog.bind(this),
+                }}
+                dialogInnerView={
+                    <View style={{width:100,height:100,backgroundColor:'blue'}}/>
+                }
                 innerView={
                     <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
                         <HFHeading level={1} text='[输入框]' style={{alignSelf:'flex-start',marginBottom:10}}/>

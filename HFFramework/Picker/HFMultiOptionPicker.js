@@ -177,7 +177,7 @@ class HFMultiOptionPicker extends Component {
             if (this.props.callback) {
                 this.props.callback(dataRow);
             } else {
-                this.props.navigator.jumpBack();
+                this.props.navigator.pop();
             }
         } else {
             // 逐级向下搜索
@@ -241,7 +241,7 @@ class HFMultiOptionPicker extends Component {
             this.props.callback(dataRow);
         } else {
             dismissKeyboard();
-            this.props.navigator.jumpBack();
+            this.props.navigator.pop();
         }
     }
 

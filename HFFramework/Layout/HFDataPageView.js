@@ -17,14 +17,12 @@ var self;
 class HFDataPageView extends Component {
 
     static defaultProps = {
-        flagReadCache: false,// 是否读取缓存
         flagNoSeparator: false,// 是否隐藏分割线
         emptyImageSource: require('./../Image/no_history.png'),
         emptyImageWidthHeightRatio: 1080 / 551,
     };
 
     static propTypes = {
-        flagReadCache: React.PropTypes.bool,// 是否读取缓存
         flagNoSeparator: React.PropTypes.bool,// 是否隐藏分割线
         fetchUrl: React.PropTypes.string.isRequired,// 请求的链接(必须)
         emptyImageWidthHeightRatio: React.PropTypes.number,// 空视图图片的宽高比
@@ -49,34 +47,33 @@ class HFDataPageView extends Component {
             param = fetchParam;
             param.pageNumber = page;
         }
-        Api.get(fetchUrl, param, self.props.flagReadCache)
-            .then(res => {
-                if (res && res['status'] == 1 && res['data']) {
-                    if(self.props.getTotalCount){
-                        self.props.getTotalCount(res['data']['total']);
-                    }
-                    let allDatas = res['data'];
-                    if (allDatas['pages'] != null && parseInt(allDatas['pages']) <= page) {
+        Api.get(fetchUrl, param, function(res) {
+            if (res && res['status'] == 1 && res['data']) {
+                if(self.props.getTotalCount){
+                    self.props.getTotalCount(res['data']['total']);
+                }
+                let allDatas = res['data'];
+                if (allDatas['pages'] != null && parseInt(allDatas['pages']) <= page) {
+                    self.setState({hasMoreData:false});
+                } else if (allDatas['pageNum'] != null && allDatas['pageNum'] < page) {
+                    if (page > 1) {
                         self.setState({hasMoreData:false});
-                    } else if (allDatas['pageNum'] != null && allDatas['pageNum'] < page) {
-                        if (page > 1) {
-                            self.setState({hasMoreData:false});
-                        }
-                        callback([]);
-                        return false;
                     }
-                    if (allDatas && allDatas['list'] != null && allDatas['list'].length > 0) {
-                        callback(allDatas['list']);
-                    } else {
-                        callback([]);
-                    }
-                } else if (res && res['status'] == 0) {
                     callback([]);
+                    return false;
+                }
+                if (allDatas && allDatas['list'] != null && allDatas['list'].length > 0) {
+                    callback(allDatas['list']);
                 } else {
-                    Toast.showShortCenter('未能加载列表,' + res['message']);
                     callback([]);
                 }
-            })
+            } else if (res && res['status'] == 0) {
+                callback([]);
+            } else {
+                Toast.showShortCenter('未能加载列表,' + res['message']);
+                callback([]);
+            }
+        });
     }
 
     renderRowView(dataRow, sectionID, rowID, key) {

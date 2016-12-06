@@ -6,6 +6,7 @@ import {Navigator} from 'react-native'
 const NavigatorConfig = {
     configureScene(route) {
         var conf = Navigator.SceneConfigs.PushFromRight;
+        /*
         conf.gestures = {
             'jumpBack': {
                 'isDetachable': false,
@@ -19,6 +20,7 @@ const NavigatorConfig = {
                 'direction': 'left-to-right'
             }
         };
+        */
         return conf;
     },
     renderScene(route, navigator) {

@@ -55,7 +55,7 @@ class HFNavigation extends Component {
             if (this.props.navigator) {
                 // 没用pop,是为了防止setState时报警
                 // NavigatorConfig.js
-                this.props.navigator.jumpBack();
+                this.props.navigator.pop();
             }
         }
     }

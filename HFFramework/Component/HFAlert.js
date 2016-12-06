@@ -33,7 +33,10 @@ class HFAlert extends Component {
     onPress() {
         Dialog.alertCancel();
         if (this.props.callback) {
-            this.props.callback();
+            var callback = this.props.callback;
+            setTimeout(function () {
+                callback();
+            }, 100);
         }
     }
 

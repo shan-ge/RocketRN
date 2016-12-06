@@ -49,42 +49,41 @@ class IndexPage extends Component {
         Service.platform = Platform.OS === 'ios' ? Constants.platform_ios : Constants.platform_android;
         let {navigator} = this.props;
         // 检测版本号,是否需要升级
-        //Api.post(Service.getVersionInfo)
-        //    .then(response=> {
-        //        Dialog.alertApiResponse(response, function () {
-                    // 加载图
-                    Bridge.readFile(Constants.fileHasShownGuide, function (result) {
-                        if (result != null && result['message'] != '' && result['message'] == Constants.version) {
-                            Handler.load(Constants.storageKeyIsLogin)
-                                .then(res=> {
-                                    if (res === true) {
-                                        return Home;
-                                    } else {
-                                        return Login;
-                                    }
-                                }).then(component=> {
-                                setTimeout(function () {
-                                    Navigator.resetTo({
-                                        component: component,
-                                        passProps: {
-                                            navigator: navigator
-                                        }
-                                    }, navigator);
-                                }, 2000);
-                            });
-                        } else {
+        Api.post(Service.getVersionInfo, {}, function(response) {
+            Dialog.alertApiResponse(response, function () {
+                // 加载图
+                Bridge.readFile(Constants.fileHasShownGuide, function (result) {
+                    if (result != null && result['message'] != '' && result['message'] == Constants.version) {
+                        Handler.load(Constants.storageKeyIsLogin)
+                            .then(res=> {
+                                if (res === true) {
+                                    return Home;
+                                } else {
+                                    return Login;
+                                }
+                            }).then(component=> {
                             setTimeout(function () {
                                 Navigator.resetTo({
-                                    component: GuidePage,
+                                    component: component,
                                     passProps: {
                                         navigator: navigator
                                     }
                                 }, navigator);
                             }, 2000);
-                        }
-                    });
-        //        });
-        //    })
+                        });
+                    } else {
+                        setTimeout(function () {
+                            Navigator.resetTo({
+                                component: GuidePage,
+                                passProps: {
+                                    navigator: navigator
+                                }
+                            }, navigator);
+                        }, 2000);
+                    }
+                });
+            });
+        });
     }
 
     render() {

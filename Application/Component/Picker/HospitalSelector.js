@@ -49,38 +49,37 @@ class HospitalSelector extends Component {
     fetchArea() {
         var self = this;
         return new Promise(function (resolve, reject) {
-            Api.get(Service.getAreaData, {}, true)
-                .then(res => {
-                    if (res && res['status'] == 1) {
-                        let allDatas = [];
-                        let provinceData = {
-                            flex: 1,
-                            datas: res['data']['provinceList']
-                        };
-                        let cityData = {
-                            flex: 2,
-                            datas: res['data']['cityList']
-                        };
-                        allDatas.push(provinceData);
-                        allDatas.push(cityData);
+            Api.get(Service.getAreaData, {}, function (res) {
+                if (res && res['status'] == 1) {
+                    let allDatas = [];
+                    let provinceData = {
+                        flex: 1,
+                        datas: res['data']['provinceList']
+                    };
+                    let cityData = {
+                        flex: 2,
+                        datas: res['data']['cityList']
+                    };
+                    allDatas.push(provinceData);
+                    allDatas.push(cityData);
+                    self.setState({
+                        areaMultiDatas: allDatas,
+                    });
+                    if (ShowType == 0) {
                         self.setState({
-                            areaMultiDatas: allDatas,
+                            multiDatas: allDatas,
                         });
-                        if (ShowType == 0) {
-                            self.setState({
-                                multiDatas: allDatas,
-                            });
-                        }
-                    } else if (res && res['status'] == 0) {
-                        Toast.showShortCenter('列表为空!');
-                    } else {
-                        Toast.showShortCenter('未能加载列表,' + res['message']);
                     }
-                    resolve();
-                }).catch(e => {
+                } else if (res && res['status'] == 0) {
+                    Toast.showShortCenter('列表为空!');
+                } else {
+                    Toast.showShortCenter('未能加载列表,' + res['message']);
+                }
+                resolve();
+            }).catch(e => {
                 Toast.showShortCenter('加载地区失败!');
                 resolve();
-            })
+            });
         });
     }
 
@@ -94,33 +93,32 @@ class HospitalSelector extends Component {
             param['hospitalName'] = this.state.hospitalName;
         }
         return new Promise(function (resolve, reject) {
-            Api.get(Service.getHospitalList, param, false)
-                .then(res => {
-                    if (res && res['status'] == 1) {
-                        let allDatas = [];
-                        let hosipitalData = {
-                            flex: 1,
-                            datas: res['data']
-                        };
-                        allDatas.push(hosipitalData);
+            Api.get(Service.getHospitalList, param, function (res) {
+                if (res && res['status'] == 1) {
+                    let allDatas = [];
+                    let hosipitalData = {
+                        flex: 1,
+                        datas: res['data']
+                    };
+                    allDatas.push(hosipitalData);
+                    self.setState({
+                        hosipitalMultiDatas: allDatas,
+                    });
+                    if (ShowType == 1) {
                         self.setState({
-                            hosipitalMultiDatas: allDatas,
+                            multiDatas: allDatas,
                         });
-                        if (ShowType == 1) {
-                            self.setState({
-                                multiDatas: allDatas,
-                            });
-                        }
-                    } else if (res && res['status'] == 0) {
-                        Toast.showShortCenter('列表为空!');
-                    } else {
-                        Toast.showShortCenter('未能加载列表,' + res['message']);
                     }
-                    resolve();
-                }).catch(e => {
+                } else if (res && res['status'] == 0) {
+                    Toast.showShortCenter('列表为空!');
+                } else {
+                    Toast.showShortCenter('未能加载列表,' + res['message']);
+                }
+                resolve();
+            }).catch(e => {
                 Toast.showShortCenter('加载医院失败!');
                 resolve();
-            })
+            });
         });
     }
 
@@ -184,7 +182,7 @@ class HospitalSelector extends Component {
                         rightText:'取消',
                         onRightButtonPress:function(){
                             dismissKeyboard();
-                            this.props.navigator.jumpBack();
+                            this.props.navigator.pop();
                         },
                         leftViewStyle:{alignSelf:'flex-end'},
                         leftView:(
@@ -225,7 +223,7 @@ class HospitalSelector extends Component {
                                     if (this.props.callback) {
                                         this.props.callback(dataRow);
                                     }
-                                    this.props.navigator.jumpBack();
+                                    this.props.navigator.pop();
                                 }
                             }}
                         />
@@ -288,4 +286,6 @@ const styles = StyleSheet.create({
     },
 });
 
-module.exports = HospitalSelector;
+module
+    .
+    exports = HospitalSelector;

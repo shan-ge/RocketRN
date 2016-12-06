@@ -32,28 +32,27 @@ class DepartmentSelector extends Component {
         if (this.state.hospitalId != null) {
             param['hospitalId'] = this.state.hospitalId;
             return new Promise(function (resolve, reject) {
-                Api.get(Service.getHospitalDepartmentList, param, false)
-                    .then(res => {
-                        if (res && res['status'] == 1) {
-                            let allDatas = [];
-                            let datas = {
-                                flex: 1,
-                                datas: res['data']
-                            };
-                            allDatas.push(datas);
-                            self.setState({
-                                departmentMultiDatas: allDatas,
-                            });
-                        } else if (res && res['status'] == 0) {
-                            Toast.showShortCenter('列表为空!');
-                        } else {
-                            Toast.showShortCenter('未能加载列表,' + res['message']);
-                        }
-                        resolve();
-                    }).catch(e => {
+                Api.get(Service.getHospitalDepartmentList, param, function (res) {
+                    if (res && res['status'] == 1) {
+                        let allDatas = [];
+                        let datas = {
+                            flex: 1,
+                            datas: res['data']
+                        };
+                        allDatas.push(datas);
+                        self.setState({
+                            departmentMultiDatas: allDatas,
+                        });
+                    } else if (res && res['status'] == 0) {
+                        Toast.showShortCenter('列表为空!');
+                    } else {
+                        Toast.showShortCenter('未能加载列表,' + res['message']);
+                    }
+                    resolve();
+                }).catch(e => {
                     Toast.showShortCenter('加载科室失败!');
                     resolve();
-                })
+                });
             });
         } else {
             this.setState({
@@ -77,7 +76,7 @@ class DepartmentSelector extends Component {
                             if (this.props.callback) {
                                 this.props.callback(dataRow);
                             }
-                            this.props.navigator.jumpBack();
+                            this.props.navigator.pop();
                         }}
                     />
                 }

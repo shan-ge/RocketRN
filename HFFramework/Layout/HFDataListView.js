@@ -27,7 +27,6 @@ var TimerIndex, TimerCount = 0;
 class HFDataListView extends Component {
 
     static defaultProps = {
-        flagReadCache: false,// 是否读取缓存
         emptyImageSource: require('./../Image/no_history.png'),
         emptyImageWidthHeightRatio: 1080 / 551,// 空视图的宽高比,宽度由框架来控制,开发者只给出比例即可
     };
@@ -37,7 +36,6 @@ class HFDataListView extends Component {
         fetchUrl: React.PropTypes.string,// 请求的链接
         fetchData: React.PropTypes.array,// 请求的数据
         //
-        flagReadCache: React.PropTypes.bool,// 是否读取缓存
         emptyImageWidthHeightRatio: React.PropTypes.number,// 空视图图片的宽高比
         // 视图
         renderRowView: React.PropTypes.func.isRequired,// 行视图(必须)
@@ -96,34 +94,34 @@ class HFDataListView extends Component {
             var self = this;
             return new Promise(function (resolve, reject) {
                 var fetchUrl = self.props.fetchUrl;
-                Api.get(fetchUrl, self.props.fetchParam, self.props.flagReadCache)
-                    .then(res => {
-                        if (res && res['status'] == 1) {
-                            let allDatas = res['data'];
-                            if (allDatas) {
-                                let ds = self.state.ds;
-                                self.setState({
-                                    allDatas: allDatas,
-                                    dataSource: ds.cloneWithRows(allDatas),
-                                });
-                            }
-                        } else if (res && res['status'] == 0) {
-                            Toast.showShortCenter('列表为空!');
-                        } else {
-                            Toast.showShortCenter('未能加载列表,' + res['message']);
-                        }
-                        if (self.refs.dataListView) {
-                            self.refs.dataListView.scrollTo({
-                                x: 0,
-                                y: 0,
-                                animated: true
+                Api.get(fetchUrl, self.props.fetchParam, function (res) {
+                    alert(JSON.stringify(res))
+                    if (res && res['status'] == 1) {
+                        let allDatas = res['data'];
+                        if (allDatas) {
+                            let ds = self.state.ds;
+                            self.setState({
+                                allDatas: allDatas,
+                                dataSource: ds.cloneWithRows(allDatas),
                             });
                         }
-                        resolve();
-                    }).catch(e => {
+                    } else if (res && res['status'] == 0) {
+                        Toast.showShortCenter('列表为空!');
+                    } else {
+                        Toast.showShortCenter('未能加载列表,' + res['message']);
+                    }
+                    if (self.refs.dataListView) {
+                        self.refs.dataListView.scrollTo({
+                            x: 0,
+                            y: 0,
+                            animated: true
+                        });
+                    }
+                    resolve();
+                }).catch(e => {
                     Toast.showShortCenter('加载列表失败!');
                     resolve();
-                })
+                });
             });
         } else if (this.props.fetchData != null && this.props.fetchData.length > 0) {
             let ds = this.state.ds;
