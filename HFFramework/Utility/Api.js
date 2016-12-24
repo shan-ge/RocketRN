@@ -23,13 +23,13 @@ var Linking = require("Linking");
 var AppUpdateShowing = false;
 
 function toQueryString(obj) {
-    let result = obj ? Object.keys(obj).sort().map(function(key) {
+    let result = obj ? Object.keys(obj).sort().map(function (key) {
         var val = obj[key];
         if (typeof val === 'undefined') {
             return null;
         }
         if (Array.isArray(val)) {
-            return val.sort().map(function(val2) {
+            return val.sort().map(function (val2) {
                 return encodeURIComponent(key) + '=' + encodeURIComponent(val2);
             }).join('&');
         }
@@ -42,8 +42,8 @@ function toQueryString(obj) {
 }
 // 超时封装
 function fetchTimeout(ms, promise) {
-    return new Promise(function(resolve, reject) {
-        setTimeout(function() {
+    return new Promise(function (resolve, reject) {
+        setTimeout(function () {
             reject(new Error("timeout"))
         }, ms);
         promise.then(resolve, reject)
@@ -64,7 +64,7 @@ var Api = {
     },
     /**
      * post 请求后台
-     * 
+     *
      * @param  {string}         请求链接后缀
      * @param  {object}         请求的参数
      * @param  {Function}       回调函数
@@ -126,7 +126,7 @@ var Api = {
     },
     /**
      * get 请求后台
-     * 
+     *
      * @param  {string}         请求链接后缀
      * @param  {object}         请求的参数
      * @param  {Function}       回调函数
@@ -181,7 +181,7 @@ var Api = {
         }
     },
     upload(images, isAnnex) {
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             let files = images.map((item, index) => {
                 return {
                     name: index + '',
@@ -214,8 +214,8 @@ var Api = {
         })
     },
     getNowDate() {
-        return new Promise(function(resolve, reject) {
-            fetchTimeout(2000, fetch(Config.host + Service.getNowDate)).then(function(res) {
+        return new Promise(function (resolve, reject) {
+            fetchTimeout(2000, fetch(Config.host + Service.getNowDate)).then(function (res) {
                 if (res != null && res['status'] == 200 && res['_bodyText'] != null) {
                     let bodyText = res['_bodyText'];
                     let r = JSON.parse(bodyText);
@@ -227,7 +227,7 @@ var Api = {
                 } else {
                     resolve(new Date());
                 }
-            }).catch(function(e) {
+            }).catch(function (e) {
                 resolve(new Date());
             })
         })

@@ -101,6 +101,18 @@ const Framework = {
     get HFHeading() {
         return require('./Component/HFHeading');
     },
+    get HFPhotos() {
+        return require('./Component/HFPhotos');
+    },
+    get HFPhotoCamera() {
+        return require('./Component/HFPhotoCamera');
+    },
+    get HFPhotosDetail() {
+        return require('./Layout/HFPhotoUploadView');
+    },
+    get HFPhotosView() {
+        return require('./Component/HFPhotosView');
+    },
     /**
      * 输入工具
      */
@@ -124,6 +136,12 @@ const Framework = {
      */
     get HFPicker() {
         return require('./Picker/HFPicker');
+    },
+    get HFMultiOptionPicker() {
+        return require('./Picker/HFMultiOptionPicker');
+    },
+    get HFCameraRollPicker() {
+        return require('./Picker/HFCameraRollPicker');
     },
     /**
      * 弹出框工具
@@ -157,12 +175,6 @@ const Framework = {
     },
     get HFTextButton() {
         return require('./Component/HFTextButton');
-    },
-    /**
-     * 配置类工具
-     */
-    get HFMultiOptionPicker() {
-        return require('./Picker/HFMultiOptionPicker');
     },
     /****************************************************************/
     /** ReactNative **/

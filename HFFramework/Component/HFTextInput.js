@@ -41,7 +41,7 @@
 
 'use strict';
 import React, {Component} from 'react';
-import {HFImage, HFConfiguration, HFBaseStyle, TouchableOpacity, View, TextInput, DeviceEventEmitter, StyleSheet} from './../Framework';
+import {HFImage, HFText, HFConfiguration, HFBaseStyle, TouchableOpacity, View, TextInput, DeviceEventEmitter, StyleSheet} from './../Framework';
 
 import RenderIf from './../Utility/RenderIf';
 import UUIDGenerator from 'react-native-uuid-generator';
@@ -50,6 +50,7 @@ export default class HFTextInput extends Component {
 
     static defaultProps = {
         flagImage: false,// 如果有图像,则不能是多行输入
+        flagUnit: false,// 输入框单位
         multiline: false,
         autoFocus: false,
         secureTextEntry: false,
@@ -66,6 +67,7 @@ export default class HFTextInput extends Component {
 
     static propTypes = {
         flagImage: React.PropTypes.bool,
+        flagUnit: React.PropTypes.bool,
         multiline: React.PropTypes.bool,
         autoFocus: React.PropTypes.bool,
         secureTextEntry: React.PropTypes.bool,
@@ -89,6 +91,15 @@ export default class HFTextInput extends Component {
             textInputUUID: null,
             flagInputCanAccess: this.props.flagInputCanAccess,
         };
+    }
+
+    componentWillReceiveProps(newProps) {
+        if (newProps && newProps.value) {
+            let value = newProps.value;
+            this.setState({
+                inputValue: value != null && value != '' ? value + '' : '',
+            });
+        }
     }
 
     componentWillMount() {
@@ -243,6 +254,12 @@ export default class HFTextInput extends Component {
                     onBlur={this.onBlur.bind(this)}
                     placeholderTextColor={HFConfiguration.placeholderColor}
                 />
+                {RenderIf(this.props.flagUnit)(
+                    <HFText
+                        style={[styles.unit, this.props.unitStyle]}
+                        text={this.props.unit}
+                    />
+                )}
                 {RenderIf(this.props.editable && this.state.focusing && this.state.inputValue)(
                     <TouchableOpacity style={[styles.button,this.props.iconStyle]}
                                       underlayColor='white'
@@ -287,6 +304,10 @@ const styles = StyleSheet.create({
     },
     image: {
         width: HFConfiguration.imageIconSize[HFConfiguration.dpiIndex],
+        height: HFConfiguration.imageIconSize[HFConfiguration.dpiIndex],
+        marginLeft: 10,
+    },
+    unit: {
         height: HFConfiguration.imageIconSize[HFConfiguration.dpiIndex],
         marginLeft: 10,
     },

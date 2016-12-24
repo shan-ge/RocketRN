@@ -3,11 +3,29 @@
  * 后发App框架示例
  */
 import React, {Component} from 'react';
-import {HFNavigatorConfig, View, Navigator, StatusBar, BackAndroid, DeviceEventEmitter, AsyncStorage} from './HFFramework/Framework';
+import {HFNavigatorConfig, View, Navigator, StatusBar, BackAndroid, DeviceEventEmitter, AsyncStorage, NetInfo} from './HFFramework/Framework';
 import Storage from 'react-native-storage';
 import Toast from '@remobile/react-native-toast';
 
 import IndexPage from './Application/Component/IndexPage';
+
+/**
+ * 网络环境发生变化
+ *
+ * none - 设备处于离线状态。
+ * wifi - 设备处于联网状态且通过wifi链接，或者是一个iOS的模拟器。
+ * cell - 设备是通过Edge、3G、WiMax或是LTE网络联网的。
+ * unknown - 发生错误，网络状况不可知
+ *
+ * @param reach
+ */
+function handleNetInfoChange(reach) {
+    if (reach == 'cell') {
+        Toast.showShortCenter("您的网络环境已变为:" + reach + ".");
+    } else if (reach == 'none' || reach == 'unknow') {
+        Toast.showShortCenter("您已断开网络连接.");
+    }
+}
 
 var storage = new Storage({
     storageBackend: AsyncStorage,
@@ -41,7 +59,12 @@ class hfFramework extends Component {
         this.rootListener = DeviceEventEmitter.addListener('navigator', function (navigator) {
             self.navigator = navigator;
         });
-
+        // 网络环境
+        NetInfo.addEventListener(
+            'change',
+            handleNetInfoChange
+        );
+        // 安卓下返回键监听
         BackAndroid.addEventListener('hardwareBsackPress', function () {
             if (self.navigator && self.navigator.getCurrentRoutes().length > 1) {
                 self.navigator.pop();
@@ -61,6 +84,10 @@ class hfFramework extends Component {
     componentWillUnmount() {
         this.rootListener.remove();
         BackAndroid.removeEventListener();
+        NetInfo.removeEventListener(
+            'change',
+            handleNetInfoChange
+        );
     }
 
     render() {

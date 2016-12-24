@@ -105,6 +105,9 @@ class HFImage extends Component {
                 {RenderIf(!this.props.flagNoLoading)(
                     <ActivityIndicator animating={this.state.imageLoading} size="small"/>
                 )}
+                {RenderIf(this.props.children)(
+                    this.props.children
+                )}
             </Image>
         )
     }

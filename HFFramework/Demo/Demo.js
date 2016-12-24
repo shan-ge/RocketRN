@@ -25,7 +25,7 @@ import {HFHeading,
     View,
     StyleSheet} from './../Framework';
 
-import Demo1 from './DemoForm';
+import DemoForm from './DemoForm';
 import DemoDataPageView from './DemoDataPageView';
 import DemoDataAlphabetView from './DemoDataAlphabetView';
 import DemoDataListView from './DemoDataListView';
@@ -46,29 +46,35 @@ class Demo extends Component {
     }
 
     toPage(type) {
-        if (type == 'NextPage') {
+        if (type == 'PageForm') {
             Navigator.push({
-                component: Demo1,
+                component: DemoForm,
+                componentName: 'DemoForm',
             }, this.props.navigator);
         } else if (type == 'PageView') {
             Navigator.push({
                 component: DemoDataPageView,
+                componentName: 'DemoDataPageView',
             }, this.props.navigator);
         } else if (type == 'AlphabetView') {
             Navigator.push({
                 component: DemoDataAlphabetView,
+                componentName: 'DemoDataAlphabetView',
             }, this.props.navigator);
         } else if (type == 'ListView') {
             Navigator.push({
                 component: DemoDataListView,
+                componentName: 'DemoDataListView',
             }, this.props.navigator);
         } else if (type == 'GridView') {
             Navigator.push({
                 component: DemoDataGridView,
+                componentName: 'DemoDataGridView',
             }, this.props.navigator);
         } else if (type == 'WebView') {
             Navigator.push({
                 component: DemoWebView,
+                componentName: 'DemoWebView',
             }, this.props.navigator);
         }
     }
@@ -139,7 +145,7 @@ class Demo extends Component {
                         <HFImage ratioHeight={20} uri="https://facebook.github.io/react/img/logo_og.png"/>
                         <HFSeparator/>
                         <HFHeading level={1} text='[表单]' style={{alignSelf:'flex-start',marginBottom:10}}/>
-                        <HFHugeButton text="进入表单" onPress={()=>this.toPage('NextPage')}/>
+                        <HFHugeButton text="进入表单" onPress={()=>this.toPage('PageForm')}/>
                         <HFSeparator/>
                         <HFHeading level={1} text='[本地文件]' style={{alignSelf:'flex-start',marginBottom:10}}/>
                         <HFHugeButton text="覆盖写文件" onPress={()=>{Bridge.writeFile('demo.txt','overwrite '+(new Date()).getTime(),0,function(result){alert(JSON.stringify(result));})}}/>
@@ -147,9 +153,11 @@ class Demo extends Component {
                         <HFHugeButton text="读文件" onPress={()=>{Bridge.readFile('demo.txt',function(result){alert(JSON.stringify(result))});}}/>
                         <HFSeparator/>
                         <HFHeading level={1} text='[输入框]' style={{alignSelf:'flex-start',marginBottom:10}}/>
-                        <HFTextInput placeholder='请输入账号...' keyboardType="numeric" maxLength={11} flagImage={true} imageSource={require('./../Image/Icon/hospital.png')}/>
+                        <HFTextInput placeholder='请输入邮箱...' keyboardType="email-address" maxLength={11} flagImage={true} imageSource={require('./../Image/Icon/hospital.png')}/>
                         <HFSeparator style={{marginTop:0,marginBottom:0}}/>
                         <HFTextInput placeholder='请输入密码...' secureTextEntry={true} flagImage={true} imageSource={require('./../Image/Icon/hospital.png')}/>
+                        <HFSeparator style={{marginTop:0,marginBottom:0}}/>
+                        <HFTextInput placeholder='请输入金额...' keyboardType="numeric" flagImage={true} imageSource={require('./../Image/Icon/hospital.png')} flagUnit={true} unit="元"/>
                         <HFSeparator style={{marginTop:0,marginBottom:0}}/>
                         <HFTextInput multiline={true} flagInputCanAccess={true} value="这个输入框的文本,可以在键盘区域进行复制和粘贴" style={{height:100}} inputStyle={{height:80}}/>
                         <HFSeparator/>
@@ -157,11 +165,9 @@ class Demo extends Component {
                         <HFTextButton text="这是一段可响应点击事件的文本" style={{marginTop:HFConfiguration.buttonImageMarginTop}} onPress={this.toAlert}/>
                         <HFImageButton flagLeftText={true} flagRightText={true} leftText="左" rightText="右" source={require('./Image/demo_nav.png')} onPress={this.toAlert}/>
                         <HFMediumButton text="提示确认" onPress={this.toConfirm}/>
-                        <HFHugeButton text="下一页" onPress={()=>this.toPage('NextPage')}/>
                         <HFTextButton disabled={true} text="这是一段可响应点击事件的文本" style={{marginTop:HFConfiguration.buttonImageMarginTop}} onPress={this.toAlert}/>
                         <HFImageButton disabled={true} flagLeftText={true} flagRightText={true} leftText="左" rightText="右" source={require('./Image/demo_nav.png')} onPress={this.toAlert}/>
                         <HFMediumButton disabled={true} text="提示确认" onPress={this.toConfirm}/>
-                        <HFHugeButton disabled={true} text="下一页" onPress={()=>this.toPage('NextPage')}/>
                         <HFSeparator/>
                         <HFHeading level={1} text='[视图]' style={{alignSelf:'flex-start',marginBottom:10}}/>
                         <HFHugeButton text="分页列表视图" onPress={()=>this.toPage('PageView')}/>
@@ -176,7 +182,5 @@ class Demo extends Component {
         );
     }
 }
-
-const styles = StyleSheet.create({});
 
 module.exports = Demo;

@@ -16,49 +16,48 @@ import Constants from './../../Application/Common/Constants';
 'use strict';
 var FilterMap = null;
 var Navigator = {
-    pop(nav){
-        // 关闭键盘
-        dismissKeyboard();
-        // 路由
-        let navigator = nav ? nav : Constants.navigator;
-        if (navigator) {
-            navigator.pop();
-        }
-    },
-    jumpBack(nav){
-        // 关闭键盘
-        dismissKeyboard();
-        // 路由
-        let navigator = nav ? nav : Constants.navigator;
-        if (navigator) {
-            navigator.jumpBack();
-        }
-    },
-    resetTo(param, nav){
-        // 关闭键盘
-        dismissKeyboard();
-        // 路由
-        let navigator = nav ? nav : Constants.navigator;
-        if (navigator) {
-            let component = param['component'];
-            param['passProps'] = param['passProps'] != null ? param['passProps'] : {};
-            param['passProps']['navigator'] = navigator;
-            navigator.resetTo({
-                component: component
-            })
-        }
-    },
-    push(param, nav) {
-        // 关闭键盘
-        dismissKeyboard();
-        // 拦截器
-        let navigator = nav ? nav : Constants.navigator;
-        if (navigator) {
-            if (param != null && param['component'] != null) {
+        pop(nav){
+            // 关闭键盘
+            dismissKeyboard();
+            // 路由
+            let navigator = nav ? nav : Constants.navigator;
+            if (navigator) {
+                navigator.pop();
+            }
+        },
+        jumpBack(nav){
+            // 关闭键盘
+            dismissKeyboard();
+            // 路由
+            let navigator = nav ? nav : Constants.navigator;
+            if (navigator) {
+                navigator.jumpBack();
+            }
+        },
+        resetTo(param, nav){
+            // 关闭键盘
+            dismissKeyboard();
+            // 路由
+            let navigator = nav ? nav : Constants.navigator;
+            if (navigator) {
                 let component = param['component'];
                 param['passProps'] = param['passProps'] != null ? param['passProps'] : {};
                 param['passProps']['navigator'] = navigator;
-                let componentName = component['displayName'];
+                navigator.resetTo({
+                    component: component
+                })
+            }
+        },
+        push(param, nav) {
+            // 关闭键盘
+            dismissKeyboard();
+            // 拦截器
+            let navigator = nav ? nav : Constants.navigator;
+            if (navigator && param && param['component'] && param['componentName']) {
+                let component = param['component'];
+                let componentName = param['componentName'];
+                param['passProps'] = param['passProps'] != null ? param['passProps'] : {};
+                param['passProps']['navigator'] = navigator;
                 let result = this.verifyComponentTarget(componentName);
                 if (result == 1) {
                     Handler.load(Constants.storageKeyIsLogin)
@@ -139,32 +138,34 @@ var Navigator = {
                         callback: param['callback'],
                     });
                 }
+            } else {
+                DeviceEventEmitter.emit('HFPage', 'UserFilter', 'Component');
             }
+        },
+        verifyComponentTarget(componentName) {
+            if (FilterMap == null) {
+                FilterMap = new Map();
+                let list1 = Filter.toLogin;
+                let list2 = Filter.toPerfectInfo;
+                let list3 = Filter.toCertification;
+                for (let i = 0; i < list1.length; i++) {
+                    FilterMap.set(list1[i], 1);
+                }
+                for (let i = 0; i < list2.length; i++) {
+                    FilterMap.set(list2[i], 2);
+                }
+                for (let i = 0; i < list3.length; i++) {
+                    FilterMap.set(list3[i], 3);
+                }
+                return this.verifyComponentTarget(componentName);
+            } else {
+                let r = FilterMap.get(componentName);
+                if (r != null) {
+                    return r;
+                }
+            }
+            return 0;
         }
-    },
-    verifyComponentTarget(componentName){
-        if (FilterMap == null) {
-            FilterMap = new Map();
-            let list1 = Filter.toLogin;
-            let list2 = Filter.toPerfectInfo;
-            let list3 = Filter.toCertification;
-            for (let i = 0; i < list1.length; i++) {
-                FilterMap.set(list1[i], 1);
-            }
-            for (let i = 0; i < list2.length; i++) {
-                FilterMap.set(list2[i], 2);
-            }
-            for (let i = 0; i < list3.length; i++) {
-                FilterMap.set(list3[i], 3);
-            }
-            return this.verifyComponentTarget(componentName);
-        } else {
-            let r = FilterMap.get(componentName);
-            if (r != null) {
-                return r;
-            }
-        }
-        return 0;
     }
-};
+    ;
 module.exports = Navigator;

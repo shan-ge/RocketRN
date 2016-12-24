@@ -33,15 +33,20 @@ import {HFNavigation,
 
 var { width, height } = Dimensions.get('window');
 import Toast from '@remobile/react-native-toast';
+import ActionSheet from 'react-native-actionsheet';
+import UUIDGenerator from 'react-native-uuid-generator';
 
 import Constants from './../../Application/Common/Constants';
+import Login from './../../Application/Component/Login/Login';
+
+import HFPhotos from './../Component/HFPhotos';
+import HFCameraPhoto from './../Component/HFPhotoCamera';
+
 import RenderIf from './../Utility/RenderIf';
 import Handler from './../Utility/Handler';
 import Dialog from './../Utility/Dialog';
 import Navigator from './../Utility/Navigator';
-import UUIDGenerator from 'react-native-uuid-generator';
 
-import Login from './../../Application/Component/Login/Login';
 
 class HFPage extends Component {
 
@@ -85,7 +90,7 @@ class HFPage extends Component {
             // dialog
             dialogVisible: false,
             dialogTitle: '提示',
-            dialogButtonText : '我知道了',
+            dialogButtonText: '我知道了',
             dialogCallback: null,
             // picker
             pickerVisible: false,
@@ -94,7 +99,23 @@ class HFPage extends Component {
             pickerDatas: null,
             pickerValue: null,
             pickerCallback: null,
+            // photo
+            photoCallback: null,
         };
+    }
+
+    componentWillReceiveProps(newProps) {
+        if (this.refs.pageView && newProps && newProps.dialogInnerView) {
+            this.setState({
+                dialogInnerView: null
+            });
+            var self = this;
+            setTimeout(function () {
+                self.setState({
+                    dialogInnerView: newProps.dialogInnerView
+                });
+            }, 10);
+        }
     }
 
     componentWillMount() {
@@ -166,11 +187,29 @@ class HFPage extends Component {
                             self.setState({
                                 pickerVisible: false,
                             });
+                        } else if (type == 'PhotoUtil') {
+                            if (self.PhotoActionSheet) {
+                                if (value && value['callback']) {
+                                    self.setState({
+                                        photoCallback: value['callback'],
+                                    });
+                                } else {
+                                    self.setState({
+                                        photoCallback: null,
+                                    });
+                                }
+                                self.PhotoActionSheet.show();
+                            } else {
+                                Toast.showShortCenter('未找到照片组件');
+                            }
                         } else if (type == 'UserFilter') {// 拦截器
                             switch (value) {
                                 case 'toLogin':
                                     Toast.showShortCenter('请您登录后再使用');
                                     Navigator.resetTo({component: Login}, self.props.navigator);
+                                    break;
+                                case 'Component':
+                                    Toast.showShortCenter('参数不全,请确认已经传入Component,ComponentName和Navigator');
                                     break;
                             }
                         }
@@ -185,8 +224,25 @@ class HFPage extends Component {
         }
     }
 
+    handlerPhotoActionSheetPress(index) {
+        let component, componentName;
+        if (index === 2) {
+            component = HFPhotos;
+            componentName = 'HFPhotos';
+        } else if (index === 1) {
+            component = HFCameraPhoto;
+            componentName = 'HFCameraPhoto';
+        } else {
+            return false;
+        }
+        Navigator.push({
+            component: component,
+            componentName: componentName,
+        }, this.props.navigation['navigator']);
+    }
+
     render() {
-        //
+        // 不用onLayout,是因为从其他页面返回时,onLayout并不会执行
         Handler.save(Constants.storageKeyPageId, this.state.pageId);
         Constants.navigator = this.props.navigation['navigator'];
         //
@@ -203,8 +259,6 @@ class HFPage extends Component {
             <View
                 ref="pageView"
                 style={[styles.outerView, this.props.style]}
-                onLayout={()=>{
-                }}
             >
                 {/** 导航(常驻页面顶部) **/}
                 {RenderIf(!this.props.flagNoNavigation)(
@@ -282,6 +336,14 @@ class HFPage extends Component {
                     onToggle={(flagVisible, height)=>{
                         DeviceEventEmitter.emit('HFTabBar', 'HFKeyboardSpacer', !flagVisible);
                     }}
+                />
+                {/** 照相机 **/}
+                <ActionSheet
+                    ref={(o) => this.PhotoActionSheet = o}
+                    options={['取消', '拍照',  '从手机相册选择']}
+                    cancelButtonIndex={0}
+                    tintColor={HFConfiguration.textFontColor}
+                    onPress={this.handlerPhotoActionSheetPress.bind(this)}
                 />
             </View>
         );
